@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Nav, Navbar, Modal, Form } from 'react-bootstrap';
 import Map from '../googleMap/googleMap.jsx';
 import AdminPanel from '../adminPanel/adminPanel.jsx';
@@ -7,18 +7,19 @@ import UserPanel from '../userPanel/userPanel.jsx';
 const navbar = () => {
   const [showModal, setShowModal] = useState(false);
   const [data, setData] = useState([]);
+  const [drone, setDrone] = useState([]);
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [password2, setPassword2] = useState('');
-  const [certificate, setCertificate] = useState('');
+  const [certificate, setCertificate] = useState('null');
   const [owner, setOwner] = useState(false);
 
   const [page, setPage] = useState('map');
   const [action, setAction] = useState('signIn');
 
-  const getData = async () => {
+  const getUserData= async () => {
     try{
       const response = await fetch('http://localhost:3000/api/v1/users');
 
@@ -35,8 +36,27 @@ const navbar = () => {
     }
   }
 
+  const getDroneData = async() => {
+    try{
+        const response = await fetch('http://localhost:3000/api/v1/drones');
+
+        if(!response.ok){
+            throw new Error('API isteği başarısız oldu.');
+        }
+
+        const droneData = await response.json();
+        setDrone(droneData);
+    }catch (error){
+        console.log("Hata: ", error.message);
+    }
+  };
+
+  useEffect(() => {
+    getDroneData();
+    getUserData();
+  }, []);
+
   const handleSignInClick = async () => {
-    getData();
     setAction('signIn');
     setShowModal(true);
     setEmail('');
@@ -44,14 +64,13 @@ const navbar = () => {
   };
 
   const handleSignUpClick = () => {
-    getData();
     setAction('signUp');
     setShowModal(true);
     setName('');
     setEmail('');
     setPassword('');
     setPassword2('');
-    setCertificate('');
+    setCertificate('null');
     setOwner(false);
   }
 
@@ -65,7 +84,7 @@ const navbar = () => {
     if(action === 'signIn'){ //data sorgulama
       data.forEach(element => {
         element.email === email ? ( element.password === password ? ( element.roletype_id === 3 ? (setPage('user')) : (setPage('admin')) ) : ( console.log("onaysiz1") ) ) : ( console.log("onaysiz2") );
-        setShowModal(false); setName(""); setEmail(""); setPassword(""); setPassword2(""); setCertificate("null"); setOwner(false);
+        setShowModal(false);
       });
     }else{ //data ekleme
       let kayitliMi = false;
@@ -120,10 +139,11 @@ const navbar = () => {
         <Nav className="mr-auto">
           <Nav.Link onClick={handleSignInClick}>Sign In</Nav.Link>
           <Nav.Link onClick={handleSignUpClick}>Sign Up</Nav.Link>
+          {page !== "map" ? (<Nav.Link onClick={() => {setPage("map")}}>Quit</Nav.Link>) : (<div></div>)}
         </Nav>
       </Navbar>
 
-      {page === "map" ? <Map></Map> : (page === "user" ? <UserPanel usersData={data}></UserPanel> : <AdminPanel usersData={data}></AdminPanel>)}
+      {page === "map" ? <Map markers={drone}></Map> : (page === "user" ? <UserPanel droneData={drone}></UserPanel> : <AdminPanel usersData={data} droneData={drone}></AdminPanel>)}
 
       <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
@@ -159,11 +179,11 @@ const navbar = () => {
                 <Form.Group controlId='pilotCertificate'>
                   <Form.Label>Pilot sertifikanızı seçiniz.</Form.Label>
                   <Form.Control as='select'>
-                    <option value='null' onChange={(e) => {setCertificate(e.target.value)}}>Sertifikam yok.</option>
-                    <option value='shgm' onChange={(e) => {setCertificate(e.target.value)}}>SHGM izin belgem var.</option>
-                    <option value='type1' onChange={(e) => {setCertificate(e.target.value)}}>Tip 1.</option>
-                    <option value='type2' onChange={(e) => {setCertificate(e.target.value)}}>Tip 2.</option>
-                    <option value='type3' onChange={(e) => {setCertificate(e.target.value)}}>Tip 3.</option>
+                    <option value={certificate} onChange={(e) => {setCertificate(e.target.value)}} selected>Sertifikam yok.</option>
+                    <option value={certificate} onChange={(e) => {setCertificate(e.target.value)}}>SHGM izin belgem var.</option>
+                    <option value={certificate} onChange={(e) => {setCertificate(e.target.value)}}>Tip 1.</option>
+                    <option value={certificate} onChange={(e) => {setCertificate(e.target.value)}}>Tip 2.</option>
+                    <option value={certificate} onChange={(e) => {setCertificate(e.target.value)}}>Tip 3.</option>
                   </Form.Control>
                 </Form.Group>
 

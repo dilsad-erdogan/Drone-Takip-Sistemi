@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
 import icon from '/pageFont.png';
 import { Modal, Row } from 'react-bootstrap';
@@ -13,8 +13,7 @@ const center = {
     lng: 35.243247985839844
 };
 
-const googleMap = () => {
-    const [markers, setMarkers] = useState([]);
+const googleMap = ({markers}) => {
     const [showModal, setShowModal] = useState(false);
     const [clicedDrone, setClicedDrone] = useState([]);
     
@@ -32,38 +31,21 @@ const googleMap = () => {
     };
 
     const onLoad = map => {
-        markers.forEach(marker => {
-          const googleMarker = new window.google.maps.Marker({
-            position: {
-                lat: marker.latitude,
-                lng: marker.longitude
-            },
-            map: map,
-            icon: customIcon
-          });
-    
-          googleMarker.addListener('click', () => {markerClick(marker)});
+        markers.map(marker =>{
+            if(marker.isactive === true){
+                const googleMarker = new window.google.maps.Marker({
+                    position: {
+                        lat: marker.latitude,
+                        lng: marker.longitude
+                    },
+                    map: map,
+                    icon: customIcon
+                  });
+            
+                googleMarker.addListener('click', () => {markerClick(marker)});
+            }
         });
     };
-
-    const fetchData = async() => {
-        try{
-            const response = await fetch('http://localhost:3000/api/v1/drones');
-
-            if(!response.ok){
-                throw new Error('API isteği başarısız oldu.');
-            }
-
-            const data = await response.json();
-            setMarkers(data);
-        }catch (error){
-            console.log("Hata: ", error.message);
-        }
-    };
-
-    useEffect(() => {
-        fetchData();
-    }, []);
 
     const markerClick = async (marker) => {
         setClicedDrone(marker);
@@ -84,7 +66,6 @@ const googleMap = () => {
                         <Row>Drone latitude: {clicedDrone.latitude}</Row>
                         <Row>Drone longitude: {clicedDrone.longitude}</Row>
                         <Row>Drone sahibi: {clicedDrone.owner_id}</Row>
-                        <Row>Drone aktifliği: {clicedDrone.isactive}</Row>
                 </Modal.Body>
             </Modal>
         </>
