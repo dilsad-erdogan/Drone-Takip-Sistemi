@@ -29,6 +29,30 @@ const AdminPanel = ({ usersData , droneData }) => {
     setDroneData(updatedData);
   };
 
+  const deleteUser = async (dataId) => {
+    try{
+      const deleteUser = await fetch(`http://localhost:3000/api/v1/users/${dataId}`, {
+        method: "DELETE"
+      });
+
+      setUserData(userData.filter(user => user.user_id !== dataId));
+    }catch(err){
+      console.error(err.message);
+    }
+  };
+
+  const deleteDrone = async (droneId) => {
+    try{
+      const deleteDrone = await fetch(`http://localhost:3000/api/v1/drones/${droneId}`, {
+        method: "DELETE"
+      });
+
+      setDroneData(dronesData.filter(drone => drone.drone_id !== droneId));
+    }catch(err){
+      console.error(err.message);
+    }
+  };
+
   return (
     <>
       <Container style={{marginTop:20}}>
@@ -70,13 +94,13 @@ const AdminPanel = ({ usersData , droneData }) => {
                             <td>{data.pilot_certificate}</td>
                             {data.drone_owner === true ? (<td>true</td>) : (<td>false</td>)}
                             <td>
-                              <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked={data.isactive} onChange={() => dataHandleCheckboxChange(data)}></input>
+                              <div className="form-check form-switch">
+                                <input className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked={data.isactive} onChange={() => dataHandleCheckboxChange(data)}></input>
                               </div>
                             </td>
                             <td>
                               <Button variant='primary'>Update</Button>
-                              <Button variant='danger'>Delete</Button>
+                              <Button variant='danger' onClick={() => {deleteUser(data.user_id)}}>Delete</Button>
                             </td>
                           </tr>
                         ))}
@@ -110,8 +134,8 @@ const AdminPanel = ({ usersData , droneData }) => {
                             <td>{data.drone_id}</td>
                             <td>{data.droneinfo_id}</td>
                             <td>
-                              <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked={data.isactive} onChange={() => droneHandleCheckboxChange(data)}></input>
+                              <div className="form-check form-switch">
+                                <input className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked={data.isactive} onChange={() => droneHandleCheckboxChange(data)}></input>
                               </div>
                             </td>
                             <td>{data.latitude}</td>
@@ -120,7 +144,7 @@ const AdminPanel = ({ usersData , droneData }) => {
                             <td>{data.serialnumber}</td>
                             <td>
                               <Button variant='primary'>Update</Button>
-                              <Button variant='danger'>Delete</Button>
+                              <Button variant='danger' onClick={() => {deleteDrone(data.drone_id)}}>Delete</Button>
                             </td>
                           </tr>
                         ))}

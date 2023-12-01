@@ -178,12 +178,12 @@ const navbar = () => {
 
                 <Form.Group controlId='pilotCertificate'>
                   <Form.Label>Pilot sertifikanızı seçiniz.</Form.Label>
-                  <Form.Control as='select'>
-                    <option value={certificate} onChange={(e) => {setCertificate(e.target.value)}} selected>Sertifikam yok.</option>
-                    <option value={certificate} onChange={(e) => {setCertificate(e.target.value)}}>SHGM izin belgem var.</option>
-                    <option value={certificate} onChange={(e) => {setCertificate(e.target.value)}}>Tip 1.</option>
-                    <option value={certificate} onChange={(e) => {setCertificate(e.target.value)}}>Tip 2.</option>
-                    <option value={certificate} onChange={(e) => {setCertificate(e.target.value)}}>Tip 3.</option>
+                  <Form.Control as='select' value="null" onChange={(e) => {setCertificate(e.target.value)}}>
+                    <option value="null">Sertifikam yok.</option>
+                    <option value="shgm">SHGM izin belgem var.</option>
+                    <option value="type1">Tip 1.</option>
+                    <option value="type2">Tip 2.</option>
+                    <option value="type3">Tip 3.</option>
                   </Form.Control>
                 </Form.Group>
 

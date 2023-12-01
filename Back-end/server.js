@@ -1,6 +1,5 @@
 const express = require('express');
-const userRouters = require('./src/users/routes');
-const droneRouters = require('./src/drone/routes');
+const routers = require('./src/routes');
 const cors = require('cors');
 
 const app = express();
@@ -13,7 +12,6 @@ app.get("/", (req, res) => {
     res.send("Hello World!");
 });
 
-app.use('/api/v1/users', userRouters);
-app.use('/api/v1/drones', droneRouters);
+app.use('/api/v1', routers);
 
 app.listen(port, () => console.log(`app listening on port ${port}`));
