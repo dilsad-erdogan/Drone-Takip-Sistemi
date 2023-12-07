@@ -16,7 +16,7 @@ const navbar = () => {
   const [certificate, setCertificate] = useState('null');
   const [owner, setOwner] = useState(false);
 
-  const [page, setPage] = useState('map');
+  const [page, setPage] = useState('admin');
   const [action, setAction] = useState('signIn');
 
   const getUserData= async () => {

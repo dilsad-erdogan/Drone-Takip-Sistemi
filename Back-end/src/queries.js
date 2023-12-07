@@ -18,6 +18,7 @@ module.exports = {
     addUser,
     removeUser,
     updateActiveUser,
+    
     getDrones,
     getDroneById,
     checkSerialNumber,

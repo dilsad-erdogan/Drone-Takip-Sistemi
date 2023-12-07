@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Container, Table } from 'react-bootstrap';
+import Create from '../createPanel/createPanel.jsx';
 
 const AdminPanel = ({ usersData , droneData }) => {
   const [action, setAction] = useState("users");
@@ -157,7 +158,9 @@ const AdminPanel = ({ usersData , droneData }) => {
           )
             :
           (
-            <div>Adding screen</div>
+            <>
+              <Create panel={action}></Create>
+            </>
           )
         }
       </Container>
