@@ -1,0 +1,8 @@
+1- Create Panel için kullanıcı rollerini api ile çek.
+2- Drone apiyi düzenle select * harici düzgün çalışmıyor.
+3- Drone info apiyi yaz ve apileri birbirine bağla.
+5- Create panel'de drone create et.
+6- Admin panel'de user update et.
+7- Admin panel'de drone delete, update et.
+8- User panel'de kullanıcı bilgileri düzenleme(Drone satın aldıysa drone create ekranı).
+9- Frontend güzelleştirmesi.
