@@ -1,11 +1,26 @@
-import React, { useState } from 'react';
-import { Button, Container, Table } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
+import { Button, Container, Table, Modal, Form } from 'react-bootstrap';
+import Create from '../createPanel/createPanel.jsx';
 
-const AdminPanel = ({ usersData , droneData }) => {
+import UserModel from '../../../../Back-end/models/userModel.js';
+const userModel = new UserModel();
+
+const AdminPanel = ({ droneData }) => {
   const [action, setAction] = useState("users");
   const [page, setPage] = useState("table");
-  const [userData, setUserData] = useState(usersData);
+  const [userData, setUserData] = useState();
   const [dronesData, setDroneData] = useState(droneData);
+
+  const [showModal, setShowModal] = useState(false);
+  const [activeUser, setActiveUser] = useState(usersData[0]);
+
+  const [id, setId] = useState();
+  const [role, setRole] = useState();
+  const [name, setName] = useState();
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
+  const [certificate, setCertificate] = useState();
+  const [owner, setOwner] = useState();
 
   const dataHandleCheckboxChange = (data) => {
     const updatedData = userData.map(item => {
@@ -29,6 +44,12 @@ const AdminPanel = ({ usersData , droneData }) => {
     setDroneData(updatedData);
   };
 
+  useEffect(() => {
+    userModel.fetchUserData().then(() => {
+      setUserData(userModel.getUsers());
+    });
+  }, []);
+
   const deleteUser = async (dataId) => {
     try{
       const deleteUser = await fetch(`http://localhost:3000/api/v1/users/${dataId}`, {
@@ -48,6 +69,40 @@ const AdminPanel = ({ usersData , droneData }) => {
       });
 
       setDroneData(dronesData.filter(drone => drone.drone_id !== droneId));
+    }catch(err){
+      console.error(err.message);
+    }
+  };
+
+  const handleOpenModal = (data) => {
+    setActiveUser(data);
+    setShowModal(true);
+    setId(data.user_id);
+    setRole(data.roletype_id);
+    setName(data.name);
+    setEmail(data.email);
+    setPassword(data.password);
+    setCertificate(data.pilot_certificate);
+    setOwner(data.drone_owner);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
+  const updatedData = async(event) => {
+    event.preventDefault();
+    setShowModal(false);
+    
+    try{
+      const body = {activeUser};
+      const response = await fetch(`http://localhost:3000/api/v1/users/${id}`, {
+        method: "PUT",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(body)
+      });
+
+      console.log(response);
     }catch(err){
       console.error(err.message);
     }
@@ -99,7 +154,7 @@ const AdminPanel = ({ usersData , droneData }) => {
                               </div>
                             </td>
                             <td>
-                              <Button variant='primary'>Update</Button>
+                              <Button variant='primary' onClick={() => {handleOpenModal(data)}}>Update</Button>
                               <Button variant='danger' onClick={() => {deleteUser(data.user_id)}}>Delete</Button>
                             </td>
                           </tr>
@@ -143,7 +198,7 @@ const AdminPanel = ({ usersData , droneData }) => {
                             <td>{data.owner_id}</td>
                             <td>{data.serialnumber}</td>
                             <td>
-                              <Button variant='primary'>Update</Button>
+                              <Button variant='primary' onClick={() => {setShowModal(true)}}>Update</Button>
                               <Button variant='danger' onClick={() => {deleteDrone(data.drone_id)}}>Delete</Button>
                             </td>
                           </tr>
@@ -157,10 +212,66 @@ const AdminPanel = ({ usersData , droneData }) => {
           )
             :
           (
-            <div>Adding screen</div>
+            <Create panel={action} droneData={dronesData}></Create>
           )
         }
       </Container>
+
+      <Modal show={showModal} onHide={handleCloseModal}>
+        <Modal.Header closeButton>
+          {action === "users" ? (<Modal.Title>User Edit</Modal.Title>) : (<Modal.Title>Drone Edit</Modal.Title>)}
+        </Modal.Header>
+
+        <Modal.Body>
+          {action === "users" ?
+            (
+              <Form>
+                <Form.Group controlId='formRoleId'>
+                  <Form.Label>Role Type ID</Form.Label>
+                  <Form.Control type="text" placeholder="Kullanıcı rolunü seçiniz" value={role} onChange={(e) => {setRole(e.target.value)}}></Form.Control>
+                </Form.Group>
+                
+                <Form.Group controlId='formName'>
+                  <Form.Label>Name</Form.Label>
+                  <Form.Control type="name" placeholder="Kullanıcı isminizi giriniz." value={name} onChange={(e) => {setName(e.target.value)}}></Form.Control>
+                </Form.Group>
+                
+                <Form.Group controlId='formEmail'>
+                  <Form.Label>Email</Form.Label>
+                  <Form.Control type="email" placeholder="Kullanıcı emailinizi giriniz." value={email} onChange={(e) => {setEmail(e.target.value)}}></Form.Control>
+                </Form.Group>
+                
+                <Form.Group controlId='formPassword'>
+                  <Form.Label>Password</Form.Label>
+                  <Form.Control type="password" placeholder="Kullanıcı passwordünüzü giriniz." value={password} onChange={(e) => {setPassword(e.target.value)}}></Form.Control>
+                </Form.Group>
+                
+                <Form.Group controlId='formCertificate'>
+                  <Form.Label>Certificate</Form.Label>
+                  <Form.Control as="select" value={certificate} onChange={(e) => {setCertificate(e.target.value)}}>
+                                <option value="null">Sertifikam yok</option>
+                                <option value="shgm">SHGM izin belgem var</option>
+                                <option value="type1">Tip 1</option>
+                                <option value="type2">Tip 2</option>
+                                <option value="type3">Tip 3</option>
+                    </Form.Control>
+                </Form.Group>
+                
+                <Form.Group controlId='formOwner'>
+                  <Form.Label>Drone Owner</Form.Label>
+                  <Form.Check onChange={(e) => {setOwner(e.target.value)}}></Form.Check>
+                </Form.Group>
+              </Form>
+            )
+            :
+            (<div></div>)
+          }
+        </Modal.Body>
+
+        <Modal.Footer>
+          <Button variant='warning' onClick={updatedData}>Edit</Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 };

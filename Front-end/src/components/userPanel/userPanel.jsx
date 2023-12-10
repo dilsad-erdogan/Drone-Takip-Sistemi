@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Card, Button, Container, Table } from 'react-bootstrap';
+import { Row, Card, Container } from 'react-bootstrap';
 
 const userPanel = ({ droneData }) => {
   return (

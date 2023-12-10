@@ -4,6 +4,9 @@ import Map from '../googleMap/googleMap.jsx';
 import AdminPanel from '../adminPanel/adminPanel.jsx';
 import UserPanel from '../userPanel/userPanel.jsx';
 
+import UserModel from '../../../../Back-end/models/userModel.js';
+const userModel = new UserModel();
+
 const navbar = () => {
   const [showModal, setShowModal] = useState(false);
   const [data, setData] = useState([]);
@@ -18,23 +21,6 @@ const navbar = () => {
 
   const [page, setPage] = useState('map');
   const [action, setAction] = useState('signIn');
-
-  const getUserData= async () => {
-    try{
-      const response = await fetch('http://localhost:3000/api/v1/users');
-
-      if(!response.ok){
-        throw new Error('API isteği başarısız oldu.');
-      }
-
-      const userData = await response.json();
-      console.log(userData);
-      setData(userData);
-    }
-    catch(error){
-      console.log("Hata", error.message);
-    }
-  }
 
   const getDroneData = async() => {
     try{
@@ -53,7 +39,9 @@ const navbar = () => {
 
   useEffect(() => {
     getDroneData();
-    getUserData();
+    userModel.fetchUserData().then(() => {
+      setData(userModel.getUsers());
+    });
   }, []);
 
   const handleSignInClick = async () => {
@@ -105,6 +93,7 @@ const navbar = () => {
       }
 
       const newUser = {
+        roletype_id: "3",
         name: name,
         email: email,
         password: password,
@@ -122,7 +111,7 @@ const navbar = () => {
         });
 
         if(response.ok){
-          console.log('Kullanıcı eklendi.');
+          console.log(newUser);
           alert("Kullanıcı eklendi.");
         }else{
           console.log('Kullanıcı eklenirken hata oluştu.');
@@ -143,7 +132,7 @@ const navbar = () => {
         </Nav>
       </Navbar>
 
-      {page === "map" ? <Map markers={drone}></Map> : (page === "user" ? <UserPanel droneData={drone}></UserPanel> : <AdminPanel usersData={data} droneData={drone}></AdminPanel>)}
+      {page === "map" ? <Map markers={drone}></Map> : (page === "user" ? <UserPanel droneData={drone}></UserPanel> : <AdminPanel droneData={drone}></AdminPanel>)}
 
       <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
