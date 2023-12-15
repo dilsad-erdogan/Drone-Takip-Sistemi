@@ -48,45 +48,45 @@ const removeUser = (req, res) => {
     });
 };
 
-const updateActiveUser = (req, res) => {
-    const id= parseInt(req.params.id);
-    const { isactive } = req.body;
-
-    pool.query(queries.getUsersById, [id], (error, results) => {
-        if(error) throw error;
-        else if(!results.rows.length){
-            res.send("User does not exist in the database.");
-        }
-
-        pool.query(queries.updateActiveUser, [isactive, id], (error, results) => {
-            if(error) throw error;
-            res.status(200).send("User updated successfully.");
-        });
-    });
-}
-
 const updateUser = (req, res) => {
     const id = parseInt(req.params.id);
-    const {roletype_id, name, email, password, pilot_certificate, drone_owner, user_id} = req.body;
+    const {roletype_id, name, email, password, pilot_certificate, drone_owner, isactive} = req.body;
     
-    pool.query(queries.getUsersById, [id], (error, result) => {
+    pool.query(queries.getUsersById, [id], (error, results) => {
         if (error) throw error;
         else if (!results.rows.length){
             res.send("User does not exist in the database.");
         }
 
-        pool.query(queries.updateUser, [roletype_id, name, email, password, pilot_certificate, drone_owner, user_id], (error, results) => {
+        pool.query(queries.updateUser, [roletype_id, name, email, password, pilot_certificate, drone_owner, isactive, id], (error, results) => {
             if(error) throw error;
             res.status(200).send("User updated successfully.");
         });
     });
-}
+};
+
+const updateUserIsActive = (req, res) => {
+    const id = parseInt(req.params.id);
+    const { isactive } = req.body;
+    
+    pool.query(queries.getUsersById, [id], (error, results) => {
+        if (error) throw error;
+        else if (!results.rows.length){
+            res.send("User does not exist in the database.");
+        }
+
+        pool.query(queries.updateUserIsActive, [isactive, id], (error, results) => {
+            if(error) throw error;
+            res.status(200).send("User isactive updated successfully.");
+        });
+    });
+};
 
 module.exports = {
     getUsers,
     getUsersById,
     addUser,
     removeUser,
-    updateActiveUser,
     updateUser,
+    updateUserIsActive,
 };

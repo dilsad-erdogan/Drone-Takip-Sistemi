@@ -51,24 +51,7 @@ const createPanel = ({panel, droneData}) => {
             drone_owner: owner
         }
 
-        try{
-            const response = await fetch('http://localhost:3000/api/v1/users', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(newUser),
-            });
-
-            if(response.ok){
-                console.log(newUser);
-                alert('Kullanıcı eklendi.');
-            }else{
-                console.log('Kullanıcı eklenirken hata oluştur.');
-            }
-        }catch(error){
-            console.log('İstek gönderirken hata oluştu: ', error);
-        }
+        userModel.addUser(newUser);
     }
 
     const handleSubmitDrone = (event) => {

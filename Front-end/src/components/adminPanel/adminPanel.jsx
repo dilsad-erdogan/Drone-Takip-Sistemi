@@ -8,11 +8,10 @@ const userModel = new UserModel();
 const AdminPanel = ({ droneData }) => {
   const [action, setAction] = useState("users");
   const [page, setPage] = useState("table");
-  const [userData, setUserData] = useState();
+  const [userData, setUserData] = useState([]);
   const [dronesData, setDroneData] = useState(droneData);
 
   const [showModal, setShowModal] = useState(false);
-  const [activeUser, setActiveUser] = useState(usersData[0]);
 
   const [id, setId] = useState();
   const [role, setRole] = useState();
@@ -51,31 +50,12 @@ const AdminPanel = ({ droneData }) => {
   }, []);
 
   const deleteUser = async (dataId) => {
-    try{
-      const deleteUser = await fetch(`http://localhost:3000/api/v1/users/${dataId}`, {
-        method: "DELETE"
-      });
-
+    userModel.deleteUser(dataId).then(() => {
       setUserData(userData.filter(user => user.user_id !== dataId));
-    }catch(err){
-      console.error(err.message);
-    }
-  };
-
-  const deleteDrone = async (droneId) => {
-    try{
-      const deleteDrone = await fetch(`http://localhost:3000/api/v1/drones/${droneId}`, {
-        method: "DELETE"
-      });
-
-      setDroneData(dronesData.filter(drone => drone.drone_id !== droneId));
-    }catch(err){
-      console.error(err.message);
-    }
+    });
   };
 
   const handleOpenModal = (data) => {
-    setActiveUser(data);
     setShowModal(true);
     setId(data.user_id);
     setRole(data.roletype_id);
@@ -88,24 +68,6 @@ const AdminPanel = ({ droneData }) => {
 
   const handleCloseModal = () => {
     setShowModal(false);
-  };
-
-  const updatedData = async(event) => {
-    event.preventDefault();
-    setShowModal(false);
-    
-    try{
-      const body = {activeUser};
-      const response = await fetch(`http://localhost:3000/api/v1/users/${id}`, {
-        method: "PUT",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(body)
-      });
-
-      console.log(response);
-    }catch(err){
-      console.error(err.message);
-    }
   };
 
   return (
@@ -139,7 +101,7 @@ const AdminPanel = ({ droneData }) => {
                       </thead>
       
                       <tbody>
-                        {userData.map(data => (
+                        {userData && userData.map(data => (
                           <tr key={data.user_id}>
                             <td>{data.user_id}</td>
                             <td>{data.roletype_id}</td>
@@ -269,7 +231,7 @@ const AdminPanel = ({ droneData }) => {
         </Modal.Body>
 
         <Modal.Footer>
-          <Button variant='warning' onClick={updatedData}>Edit</Button>
+          <Button variant='warning'>Edit</Button>
         </Modal.Footer>
       </Modal>
     </>
