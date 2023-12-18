@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import {Card, Form, Button} from 'react-bootstrap';
-import UserModel from '../../../../Back-end/models/userModel.js';
+import UserModel from '../../../../Back-end/models/user.js';
 
 const userModel = new UserModel();
 

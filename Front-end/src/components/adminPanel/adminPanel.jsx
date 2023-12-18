@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Container, Table, Modal, Form } from 'react-bootstrap';
 import Create from '../createPanel/createPanel.jsx';
 
-import UserModel from '../../../../Back-end/models/userModel.js';
+import UserModel from '../../../../Back-end/models/user.js';
 const userModel = new UserModel();
 
 const AdminPanel = ({ droneData }) => {

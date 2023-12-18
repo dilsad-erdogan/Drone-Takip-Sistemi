@@ -4,8 +4,10 @@ import Map from '../googleMap/googleMap.jsx';
 import AdminPanel from '../adminPanel/adminPanel.jsx';
 import UserPanel from '../userPanel/userPanel.jsx';
 
-import UserModel from '../../../../Back-end/models/userModel.js';
+import UserModel from '../../../../Back-end/models/user.js';
 const userModel = new UserModel();
+
+const expirationTime = 60 * 60 * 1000;
 
 const navbar = () => {
   const [showModal, setShowModal] = useState(false);
@@ -24,7 +26,7 @@ const navbar = () => {
 
   const getDroneData = async() => {
     try{
-        const response = await fetch('http://localhost:3000/api/v1/drones');
+        const response = await fetch('http://localhost:3000/api/drones');
 
         if(!response.ok){
             throw new Error('API isteği başarısız oldu.');
@@ -70,10 +72,36 @@ const navbar = () => {
     event.preventDefault();
 
     if(action === 'signIn'){ //data sorgulama
-      data.forEach(element => {
-        element.email === email ? ( element.password === password ? ( element.roletype_id === 3 ? (setPage('user')) : (setPage('admin')) ) : ( console.log("onaysiz1") ) ) : ( console.log("onaysiz2") );
+      const user = {
+        email: email,
+        password: password
+      }
+      
+      try{
+        const token = await userModel.loginUser(user);
+        if(token){
+          const tokenExpiry = Date.now() + expirationTime;
+          localStorage.setItem('token', token);
+          setTimeout(()=>{
+            if(Date.now() > tokenExpiry){
+              localStorage.removeItem("token");
+            }
+          }, expirationTime);
+
+          setPage('admin');
+
+        } else{
+          console.log("not remove");
+        }
         setShowModal(false);
-      });
+      }catch (error){
+        console.error("Giriş sırasında bir hata oluştu:", error.message);
+      }
+
+      // data.forEach(element => {
+      //   element.email === email ? ( element.password === password ? ( element.roletype_id === 3 ? (setPage('user')) : (setPage('admin')) ) : ( console.log("onaysiz1") ) ) : ( console.log("onaysiz2") );
+      //   setShowModal(false);
+      // });
     }else{ //data ekleme
       let kayitliMi = false;
       data.forEach(element => {
