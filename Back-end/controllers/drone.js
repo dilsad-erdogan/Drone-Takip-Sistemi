@@ -17,15 +17,15 @@ const getDroneById = (req, res) => {
 };
 
 const addDrone = (req, res) => {
-    const {droneinfo_id, owner_id, serialnumber, longitude, latitude} = req.body;
+    const {droneinfo_id, owner_id, serial_number, longitude, latitude} = req.body;
     
-    pool.query(queries.checkSerialNumber, [serialnumber], (error, results) => {
+    pool.query(queries.checkSerialNumber, [serial_number], (error, results) => {
         if(error) throw error;
         else if (results.rows.length) {
             res.send("Serial number already exists.");
         }
 
-        pool.query(queries.addDrone, [droneinfo_id, owner_id, serialnumber, longitude, latitude], (error, results) => {
+        pool.query(queries.addDrone, [droneinfo_id, owner_id, serial_number, longitude, latitude], (error, results) => {
             if(error) throw error;
             res.status(201).send("Drone created successfully!");
         });        
@@ -50,7 +50,7 @@ const removeDrone = (req, res) => {
 
 const updateDrone = (req, res) => {
     const id = parseInt(req.params.id);
-    const { droneinfo_id, owner_id, serialnumber, isactive, longitude, latitude } = req.body;
+    const { droneinfo_id, owner_id, serial_number, is_active, longitude, latitude } = req.body;
 
     pool.query(queries.getDroneById, [id], (error, results) => {
         if (error) throw error;
@@ -58,7 +58,7 @@ const updateDrone = (req, res) => {
             res.send("Drone does not exist in the database.");
         }
 
-        pool.query(queries.updateDrone, [droneinfo_id, owner_id, serialnumber, isactive, longitude, latitude, id], (error, results) => {
+        pool.query(queries.updateDrone, [droneinfo_id, owner_id, serial_number, is_active, longitude, latitude, id], (error, results) => {
             if(error) throw error;
             res.status(200).send("Drone updated successfully.");
         });
@@ -67,7 +67,7 @@ const updateDrone = (req, res) => {
 
 const updateDroneIsActive = (req, res) => {
     const id = parseInt(req.params.id);
-    const { isactive } = req.body;
+    const { is_active } = req.body;
 
     pool.query(queries.getDroneById, [id], (error, results) => {
         if (error) {
@@ -76,7 +76,7 @@ const updateDroneIsActive = (req, res) => {
         } else if (!results.rows.length) {
             res.status(404).send("Drone does not exist in the database.");
         } else {
-            pool.query(queries.updateDroneIsActive, [isactive, id], (error, results) => {
+            pool.query(queries.updateDroneIsActive, [is_active, id], (error, results) => {
                 if (error) {
                     console.error('Error updating drone isactive:', error.message);
                     throw error;

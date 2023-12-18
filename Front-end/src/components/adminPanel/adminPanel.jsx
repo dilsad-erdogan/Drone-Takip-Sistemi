@@ -24,7 +24,7 @@ const AdminPanel = ({ droneData }) => {
   const dataHandleCheckboxChange = (data) => {
     const updatedData = userData.map(item => {
       if (item.user_id === data.user_id) {
-        return { ...item, isactive: !item.isactive };
+        return { ...item, is_active: !item.is_active };
       }
       return item;
     });
@@ -35,7 +35,7 @@ const AdminPanel = ({ droneData }) => {
   const droneHandleCheckboxChange = (data) => {
     const updatedData = dronesData.map(item => {
       if (item.drone_id === data.drone_id) {
-        return { ...item, isactive: !item.isactive };
+        return { ...item, is_active: !item.is_active };
       }
       return item;
     });
@@ -112,7 +112,7 @@ const AdminPanel = ({ droneData }) => {
                             {data.drone_owner === true ? (<td>true</td>) : (<td>false</td>)}
                             <td>
                               <div className="form-check form-switch">
-                                <input className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked={data.isactive} onChange={() => dataHandleCheckboxChange(data)}></input>
+                                <input className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked={data.is_active} onChange={() => dataHandleCheckboxChange(data)}></input>
                               </div>
                             </td>
                             <td>
@@ -152,13 +152,13 @@ const AdminPanel = ({ droneData }) => {
                             <td>{data.droneinfo_id}</td>
                             <td>
                               <div className="form-check form-switch">
-                                <input className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked={data.isactive} onChange={() => droneHandleCheckboxChange(data)}></input>
+                                <input className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked={data.is_active} onChange={() => droneHandleCheckboxChange(data)}></input>
                               </div>
                             </td>
                             <td>{data.latitude}</td>
                             <td>{data.longitude}</td>
                             <td>{data.owner_id}</td>
-                            <td>{data.serialnumber}</td>
+                            <td>{data.serial_number}</td>
                             <td>
                               <Button variant='primary' onClick={() => {setShowModal(true)}}>Update</Button>
                               <Button variant='danger' onClick={() => {deleteDrone(data.drone_id)}}>Delete</Button>

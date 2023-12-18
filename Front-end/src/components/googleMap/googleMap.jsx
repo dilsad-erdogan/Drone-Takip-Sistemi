@@ -32,7 +32,7 @@ const googleMap = ({markers}) => {
 
     const onLoad = map => {
         markers.map(marker =>{
-            if(marker.isactive === true){
+            if(marker.is_active === true){
                 const googleMarker = new window.google.maps.Marker({
                     position: {
                         lat: marker.latitude,
@@ -59,7 +59,7 @@ const googleMap = ({markers}) => {
             </div>
 
             <Modal show={showModal} onHide={handleCloseModal}>
-                <Modal.Header closeButton>Drone'in seri numarası: {clicedDrone.serialnumber}</Modal.Header>
+                <Modal.Header closeButton>Drone'in seri numarası: {clicedDrone.serial_number}</Modal.Header>
 
                 <Modal.Body>
                         <Row>Drone id'si: {clicedDrone.drone_id}</Row>
