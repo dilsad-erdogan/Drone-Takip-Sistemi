@@ -1,0 +1,25 @@
+.containerBorder {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 10px;
+    margin: 0;
+    height: 60%;
+    width: 50%;
+    border: 1px black solid;
+    border-radius: 5px;
+    display: flex;
+    box-shadow: 0 4px 8px gray;
+    align-items: center;
+    justify-content: center;
+}
+
+.formContainer {
+    width: 80%;
+    padding: 20px;
+}
+
+.formGroup {
+    margin-bottom: 15px;
+}

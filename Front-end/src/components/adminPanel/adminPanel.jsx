@@ -13,22 +13,23 @@ const AdminPanel = ({ droneData }) => {
 
   const [showModal, setShowModal] = useState(false);
 
-  const [id, setId] = useState();
-  const [role, setRole] = useState();
-  const [name, setName] = useState();
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
-  const [certificate, setCertificate] = useState();
-  const [owner, setOwner] = useState();
+  const [id, setId] = useState("");
+  const [role, setRole] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [certificate, setCertificate] = useState("");
+  const [owner, setOwner] = useState("");
+  const [active, setActive] = useState("");
 
-  const dataHandleCheckboxChange = (data) => {
+  const dataHandleCheckboxChange = (data, event) => {
     const updatedData = userData.map(item => {
       if (item.user_id === data.user_id) {
-        return { ...item, is_active: !item.is_active };
+        return { ...item, is_active: event.target.checked };
       }
       return item;
     });
-
+  
     setUserData(updatedData);
   };
 
@@ -50,20 +51,50 @@ const AdminPanel = ({ droneData }) => {
   }, []);
 
   const deleteUser = async (dataId) => {
-    userModel.deleteUser(dataId).then(() => {
+    try {
+      await userModel.deleteUser(dataId);
       setUserData(userData.filter(user => user.user_id !== dataId));
-    });
+    } catch (error) {
+      console.error('Hata:', error.message);
+    }
   };
-
-  const handleOpenModal = (data) => {
+  
+  const handleOpenModal = async (data) => {
     setShowModal(true);
-    setId(data.user_id);
-    setRole(data.roletype_id);
-    setName(data.name);
-    setEmail(data.email);
-    setPassword(data.password);
-    setCertificate(data.pilot_certificate);
-    setOwner(data.drone_owner);
+    try {
+      const userData = await userModel.getUserById(data.user_id);
+      setId(userData.user_id);
+      setRole(userData.roletype_id);
+      setName(userData.name);
+      setEmail(userData.email);
+      setPassword(userData.password);
+      setCertificate(userData.pilot_certificate);
+      setOwner(userData.drone_owner);
+      setActive(userData.is_active);
+    } catch (error) {
+      console.error('Hata:', error.message);
+    }
+  };
+  
+  const updateUser = async () => {
+    setShowModal(false);
+
+    const updatedUser = {
+      roletype_id: role,
+      name: name,
+      email: email,
+      password: password,
+      pilot_certificate: certificate,
+      drone_owner: owner,
+      is_active: active,
+      user_id: id,
+    };
+
+    userModel.updateUser(updatedUser.user_id, updatedUser).then(() => {
+      console.log('Kullanıcı başarıyla güncellendi.');
+    }).catch((error) => {
+      console.error('Hata:', error.message);
+    });
   };
 
   const handleCloseModal = () => {
@@ -73,7 +104,7 @@ const AdminPanel = ({ droneData }) => {
   return (
     <>
       <Container style={{marginTop:20}}>
-        <Button onClick={() => {setAction('users')}} variant={action === "users" ? ("primary") : ("light")}>Users</Button>
+        <Button onClick={() => setAction('users')} variant={action === "users" ? ("primary") : ("light")}>Users</Button>
         <Button onClick={() => {setAction('drones')}} variant={action === "drones" ? ("primary") : ("light")} style={{marginLeft:20}}>Drones</Button>
 
         {page === "table" ? 
@@ -83,7 +114,7 @@ const AdminPanel = ({ droneData }) => {
                 (
                   <div style={{marginTop:20}}>
                     <h2>Users List</h2>
-                    <Button variant="primary" onClick={() => {setPage('adding')}}>New User</Button>
+                    <Button variant="primary" onClick={() => setPage('adding')}>New User</Button>
     
                     <Table style={{marginTop:50}}>
                       <thead>
@@ -112,12 +143,12 @@ const AdminPanel = ({ droneData }) => {
                             {data.drone_owner === true ? (<td>true</td>) : (<td>false</td>)}
                             <td>
                               <div className="form-check form-switch">
-                                <input className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked={data.is_active} onChange={() => dataHandleCheckboxChange(data)}></input>
+                                <input className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked={data.is_active} onChange={(event) => dataHandleCheckboxChange(data, event)}></input>
                               </div>
                             </td>
                             <td>
-                              <Button variant='primary' onClick={() => {handleOpenModal(data)}}>Update</Button>
-                              <Button variant='danger' onClick={() => {deleteUser(data.user_id)}}>Delete</Button>
+                              <Button variant='primary' onClick={() => handleOpenModal(data)}>Update</Button>
+                              <Button variant='danger' onClick={() => deleteUser(data.user_id)}>Delete</Button>
                             </td>
                           </tr>
                         ))}
@@ -129,7 +160,7 @@ const AdminPanel = ({ droneData }) => {
                 (
                   <div style={{marginTop:20}}>
                     <h2>Drones List</h2>
-                    <Button variant="primary" onClick={() => {setPage('adding')}}>New Drone</Button>
+                    <Button variant="primary" onClick={() => setPage('adding')}>New Drone</Button>
       
                     <Table style={{marginTop:50}}>
                       <thead>
@@ -160,8 +191,8 @@ const AdminPanel = ({ droneData }) => {
                             <td>{data.owner_id}</td>
                             <td>{data.serial_number}</td>
                             <td>
-                              <Button variant='primary' onClick={() => {setShowModal(true)}}>Update</Button>
-                              <Button variant='danger' onClick={() => {deleteDrone(data.drone_id)}}>Delete</Button>
+                              <Button variant='primary' onClick={() => setShowModal(true)}>Update</Button>
+                              <Button variant='danger' onClick={() => deleteDrone(data.drone_id)}>Delete</Button>
                             </td>
                           </tr>
                         ))}
@@ -190,27 +221,27 @@ const AdminPanel = ({ droneData }) => {
               <Form>
                 <Form.Group controlId='formRoleId'>
                   <Form.Label>Role Type ID</Form.Label>
-                  <Form.Control type="text" placeholder="Kullanıcı rolunü seçiniz" value={role} onChange={(e) => {setRole(e.target.value)}}></Form.Control>
+                  <Form.Control type="text" placeholder="Kullanıcı rolunü seçiniz" value={role} onChange={(e) => setRole(e.target.value)}></Form.Control>
                 </Form.Group>
                 
                 <Form.Group controlId='formName'>
                   <Form.Label>Name</Form.Label>
-                  <Form.Control type="name" placeholder="Kullanıcı isminizi giriniz." value={name} onChange={(e) => {setName(e.target.value)}}></Form.Control>
+                  <Form.Control type="name" placeholder="Kullanıcı isminizi giriniz." value={name} onChange={(e) => setName(e.target.value)}></Form.Control>
                 </Form.Group>
                 
                 <Form.Group controlId='formEmail'>
                   <Form.Label>Email</Form.Label>
-                  <Form.Control type="email" placeholder="Kullanıcı emailinizi giriniz." value={email} onChange={(e) => {setEmail(e.target.value)}}></Form.Control>
+                  <Form.Control type="email" placeholder="Kullanıcı emailinizi giriniz." value={email} onChange={(e) => setEmail(e.target.value)}></Form.Control>
                 </Form.Group>
                 
                 <Form.Group controlId='formPassword'>
                   <Form.Label>Password</Form.Label>
-                  <Form.Control type="password" placeholder="Kullanıcı passwordünüzü giriniz." value={password} onChange={(e) => {setPassword(e.target.value)}}></Form.Control>
+                  <Form.Control type="password" placeholder="Kullanıcı passwordünüzü giriniz." value={password} onChange={(e) => setPassword(e.target.value)}></Form.Control>
                 </Form.Group>
                 
                 <Form.Group controlId='formCertificate'>
                   <Form.Label>Certificate</Form.Label>
-                  <Form.Control as="select" value={certificate} onChange={(e) => {setCertificate(e.target.value)}}>
+                  <Form.Control as="select" value={certificate} onChange={(e) => setCertificate(e.target.value)}>
                                 <option value="null">Sertifikam yok</option>
                                 <option value="shgm">SHGM izin belgem var</option>
                                 <option value="type1">Tip 1</option>
@@ -221,7 +252,7 @@ const AdminPanel = ({ droneData }) => {
                 
                 <Form.Group controlId='formOwner'>
                   <Form.Label>Drone Owner</Form.Label>
-                  <Form.Check onChange={(e) => {setOwner(e.target.value)}}></Form.Check>
+                  <Form.Check onChange={(e) => setOwner(e.target.checked)}></Form.Check>
                 </Form.Group>
               </Form>
             )
@@ -231,7 +262,7 @@ const AdminPanel = ({ droneData }) => {
         </Modal.Body>
 
         <Modal.Footer>
-          <Button variant='warning'>Edit</Button>
+          <Button variant='warning' onClick={() => updateUser()}>Edit</Button>
         </Modal.Footer>
       </Modal>
     </>

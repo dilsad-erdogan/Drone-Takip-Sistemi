@@ -9,7 +9,7 @@ const getUsers = (req, res) => {
         if(error) throw error;
         res.status(200).json(result.rows);
     })
-};
+}; //User select işlemi
 
 const getUsersById = (req, res) => {
     const id = parseInt(req.params.id);
@@ -17,7 +17,7 @@ const getUsersById = (req, res) => {
         if(error) throw error;
         res.status(200).json(result.rows);
     })
-};
+}; //Sadece id değeri verilen bilginin select işlemi
 
 const addUser = async (req, res) => {
     const { roletype_id, name, email, password, pilot_certificate, drone_owner } = req.body;
@@ -42,7 +42,7 @@ const addUser = async (req, res) => {
             });
         }
     });
-};
+}; //User bilgisinin tabloya eklenmesi
 
 const removeUser = (req, res) => {
     const id = parseInt(req.params.id);
@@ -58,7 +58,7 @@ const removeUser = (req, res) => {
             res.status(200).send("User removed successfully.");
         });
     });
-};
+}; //Id değeri verilen user bilgisinin silinmesi
 
 const updateUser = (req, res) => {
     const id = parseInt(req.params.id);
@@ -75,7 +75,7 @@ const updateUser = (req, res) => {
             res.status(200).send("User updated successfully.");
         });
     });
-};
+}; //Id değeri verilen user bilgisinin güncellenmesi
 
 const updateUserIsActive = (req, res) => {
     const id = parseInt(req.params.id);
@@ -92,7 +92,7 @@ const updateUserIsActive = (req, res) => {
             res.status(200).send("User isactive updated successfully.");
         });
     });
-};
+}; //Id değeri verilen user bilgisinin is_active güncellenmesi
 
 const loginUser = async (req, res) => {
     const { email, password } = req.body;
@@ -117,7 +117,7 @@ const loginUser = async (req, res) => {
             }
         }
     });
-};
+}; //Sign in sayfasında giriş yapmak için kullanılma ve token üretme
 
 module.exports = {
     getUsers,

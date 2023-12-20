@@ -6,7 +6,7 @@ const getDrones = (req, res) => {
         if(error) throw error;
         res.status(200).json(result.rows);
     });
-};
+}; //Drone select işlemi
 
 const getDroneById = (req, res) => {
     const id = parseInt(req.params.id);
@@ -14,7 +14,7 @@ const getDroneById = (req, res) => {
         if(error) throw error;
         res.status(200).json(result.rows);
     });
-};
+}; //Sadece id değeri verilen bilginin select işlemi
 
 const addDrone = (req, res) => {
     const {droneinfo_id, owner_id, serial_number, longitude, latitude} = req.body;
@@ -30,7 +30,7 @@ const addDrone = (req, res) => {
             res.status(201).send("Drone created successfully!");
         });        
     });
-};
+}; //Drone bilgisinin tabloya eklenmesi
 
 const removeDrone = (req, res) => {
     const id = parseInt(req.params.id);
@@ -46,7 +46,7 @@ const removeDrone = (req, res) => {
             res.status(200).send("Drone removed successfully!");
         });
     });
-};
+}; //Id değeri verilen drone bilgisinin silinmesi
 
 const updateDrone = (req, res) => {
     const id = parseInt(req.params.id);
@@ -63,7 +63,7 @@ const updateDrone = (req, res) => {
             res.status(200).send("Drone updated successfully.");
         });
     });
-};
+}; //Id değeri verilen drone bilgisinin güncellenmesi
 
 const updateDroneIsActive = (req, res) => {
     const id = parseInt(req.params.id);
@@ -85,7 +85,7 @@ const updateDroneIsActive = (req, res) => {
             });
         }
     });
-};
+}; //Id değeri verilen drone bilgisinin is_active güncellenmesi
 
 module.exports = {
     getDrones,
