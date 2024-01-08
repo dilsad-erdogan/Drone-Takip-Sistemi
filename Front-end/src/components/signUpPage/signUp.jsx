@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import './signUp.css';
 import { Form, Button } from 'react-bootstrap';
 import { Link, useNavigate  } from 'react-router-dom';
-import UserModel from '../../../../Back-end/models/user.js';
+import UserModel from '../../../../Back-end/connections/user.js';
 const userModel = new UserModel();
 
 const signUp = () => {

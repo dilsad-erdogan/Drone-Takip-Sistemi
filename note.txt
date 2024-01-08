@@ -1,7 +1,4 @@
-Projede şu anda frontend/src/components dosya yolu içerisinde adminPanel, createPanel ve googleMap aktif olarak kullanılmıyor, tekrardan baktığımda da 
-adminPanelin düzenlenmiş halini ve oradan da mapin aktif olmasına bakıcam.
-
--adminPanel sayfası: admin girişi olduğunda drone ve user bilgilerinin kontrol edilmesinin sağlanacağı page
--createPanel sayfası: admin girişi yapıldığında eğer yeni bir drone veya user eklemek istersen açılan ve girilen değerleri gerekli yere ekleyen page
--googleMap sayfası: harita ve harita üzerinde drone gösteren page şu anda hiçbir yere bağlı değil bunu userPanel ve adminPanel hatta belki de yaparsak yoneticiPage gibi
-bir sayfadan erişilebilecek.
+-adminPanel/map: modalın tasarımını değiştir 
+-css toparlama yap çünkü drone ve user gibi yerlerde aynı
+css kodları kullanılıyortoplu dursun
+-video: 1.19.00

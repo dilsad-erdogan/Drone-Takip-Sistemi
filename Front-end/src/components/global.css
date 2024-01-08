@@ -1,0 +1,16 @@
+:root{
+    --bg: #151c2c;
+    --bgSoft: #182237;
+    --text: white;
+    --textSoft: #b7bac1;
+    --positiveButton: lime;
+    --negativeButton: red;
+    --addButton: #151c2c;
+    --tableAndHover: #2e374a;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}

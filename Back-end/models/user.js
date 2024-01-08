@@ -1,105 +1,73 @@
-class User{
-    constructor(){
-        this.users = [];
-    }
+const { DataTypes } = require('sequelize');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const sequelize  = require('../config/db');
 
-    async fetchUserData(){
-        try{
-            const response = await fetch('http://localhost:3000/api/users');
+const User = sequelize.define('users', {
+    user_id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false,
+      },
+      roletype_id: {
+        type: DataTypes.INTEGER,
+        defaultValue: 3,
+      },
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+      },
+      password: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      pilot_certificate: {
+        type: DataTypes.STRING,
+      },
+      drone_owner: {
+        type: DataTypes.BOOLEAN,
+      },
+      is_active: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true
+      },
+    }, { timestamps: false });
+    
+    User.beforeCreate(async (user) => {
+      if (user.changed('password')) {
+        user.password = await bcrypt.hash(user.password, 10);
+      }
+    });
+    
+    User.prototype.comparePassword = async function (enteredPassword) {
+      return await bcrypt.compare(enteredPassword, this.password);
+    };
+    
+    User.prototype.getJwtToken = function () {
+      return jwt.sign({ user_id: this.user_id }, process.env.JWT_SECRET, {
+        expiresIn: process.env.JWT_EXPIRATION,
+      });
+    };
 
-            if(!response.ok){
-                throw new Error('API isteği başarısız oldu.');
-            }
+    module.exports = User;    
+    
+/*     User.prototype.getResetPasswordToken = function () {
+      const resetToken = crypto.randomBytes(20).toString("hex");
+    
+      this.resetPasswordToken = crypto
+        .createHash("sha256")
+        .update(resetToken)
+        .digest("hex");
+    
+      this.resetPasswordExpire = Date.now() + 30 * 60 * 1000; // 30 min
+    
+      return resetToken;
+    }; */
 
-            const userData = await response.json();
-            this.users = userData;
-        } catch (error) {
-            console.error('Hata:', error.message);
-        }
-    } //Drone bilgisinin api üzerinden fetch ile çekilmesi
 
-    async addUser(newUser){
-        try{
-            const response = await fetch('http://localhost:3000/api/users', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(newUser),
-            });
-
-            if(!response.ok){
-                throw new Error('Kullanıcı eklenirken bir hata oluştu.');
-            }
-
-            await this.fetchUserData();
-        }catch (error){
-            console.error('Hata:', error.message);
-        }
-    } //Frontendde verilen newUser bilgisinin api ile tabloya yerleştirilmesi
-
-    async updateUser(userId, user){
-        try{
-            const response = await fetch(`http://localhost:3000/api/users/${userId}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(user),
-            });
-
-            if(!response.ok){
-                throw new Error('Kullanıcı güncellenirken bir hata oluştu.');
-            };
-
-            await this.fetchUserData();
-        } catch (error){
-            console.error('Hata:', error.message);
-        }
-    } //Frontendden verilen id ve yeni user bilgilerinin api ile tabloya yerleştirilmesi
-
-    async deleteUser(userId){
-        try{
-            const response = await fetch(`http://localhost:3000/api/users/${userId}`, {
-                method: "DELETE"
-            });
-
-            if(!response.ok){
-                throw new Error('Kullanıcı silinirken bir hata oluştu.');
-            }
-
-            await this.fetchUserData();
-        } catch(error){
-            console.error('Hata:', error.message);
-        }
-    } //Frontendden verilen id değerinin fetch ile tablodan silinmesi
-
-    async loginUser(credentials) {
-        try {
-            const response = await fetch('http://localhost:3000/api/users/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(credentials),
-            });
-
-            if (!response.ok) {
-                throw new Error('Giriş sırasında bir hata oluştu.');
-            }
-
-            const { message, token } = await response.json();
-            console.log(message);
-            console.log(token);
-            return token;
-        } catch (error) {
-            console.error('Hata:', error.message);
-        }
-    } //Frontendden alınan login bilgilerinin token üreterek user sayfasına giriş yapabilmesi
-
-    getUsers() {
-        return this.users;
-    } //User bilgilerinin getirilmesi
-}
-
-export default User;

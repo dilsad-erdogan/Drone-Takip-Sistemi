@@ -1,0 +1,12 @@
+.menuLink{
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 5px 0px;
+    border-radius: 10px;
+}
+
+.menuLink:hover, .active2{
+    background-color: var(--tableAndHover);
+}

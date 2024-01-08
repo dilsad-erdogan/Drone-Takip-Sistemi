@@ -1,20 +1,27 @@
-import React, { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './signIn.css';
 import { Form, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom'; 
-import UserModel from '../../../../Back-end/models/user.js';
+import UserModel from '../../../../Back-end/connections/user.js';
 const userModel = new UserModel();
 
-// const expirationTime = 60 * 60 * 1000;
-const expirationTime = 60 * 60;
+const expirationTime = 60 * 60 * 1000;
+//const expirationTime = 60 * 60 * 3;
 
 const signIn = () => {
-
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     const navigate = useNavigate();
     //Sayfa yönlendirme için kullanılıyor
+
+    const handleTokenExpiration = () => {
+        const tokenExpiry = localStorage.getItem('tokenExpiry');
+        if(tokenExpiry && Date.now() > parseInt(tokenExpiry, 10)){
+            localStorage.removeItem('token');
+            localStorage.removeItem('tokenExpiry');
+        }
+    };
 
     const submitEvent = async(event) => {
         event.preventDefault();
@@ -25,23 +32,36 @@ const signIn = () => {
         }; 
 
         try{
-            const token = await userModel.loginUser(user);
+            const { id, role, token } = await userModel.loginUser(user);
 
             if(token) {
                 const tokenExpiry = Date.now() + expirationTime;
                 localStorage.setItem('token', token);
                 localStorage.setItem('tokenExpiry', tokenExpiry.toString());
+                localStorage.setItem('userId', id);
                 
                 setTimeout(() => {
-                    if(Date.now() > tokenExpiry){
-                        localStorage.removeItem('token');
-                        localStorage.removeItem('tokenExpiry');
-                    }
+                    handleTokenExpiration();
                 }, expirationTime);
 
                 console.log("Log in successfully");
+                console.log(role);
+                console.log(token);
 
-                navigate('/userPanel');
+                if(role){
+                    if(role === 1 || role === 2){
+                        console.log("Admin panele gidiyo.");
+                        navigate('/admin');
+                    } else if(role === 3){
+                        console.log("User panele gidiyor.");
+                        navigate('/user');
+                    } else{
+                        console.log("Bilinmeyen role.");
+                    }
+                } else{
+                    console.log("Kullanıcı bilgileri alınamadı veya roletype bulunamadı.");
+                }
+
             } else{
                 alert("Giriş değerlerinizi kontrol ediniz.");
             }
@@ -53,6 +73,10 @@ const signIn = () => {
         //ve kullanıcı sayfayı yenilediği anda kullanıcıyı ana sayfaya atıyor. Eğer kullanıcı girişi doğru ise kullanıcıyı userPanel linki üzerinden app.jsx'de yönlendirilen
         //userPanel.jsx sayfasına atıyor.
     };
+
+    useEffect(() => {
+        handleTokenExpiration();
+    }, []);
 
     return (
         <>

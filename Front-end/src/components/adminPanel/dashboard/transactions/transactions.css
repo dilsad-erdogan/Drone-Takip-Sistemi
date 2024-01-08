@@ -1,0 +1,30 @@
+.transactions{
+    background-color: var(--bgSoft);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.transTitle{
+    margin-bottom: 20px;
+    font-weight: 200;
+    color: var(--textSoft);
+}
+
+.transTable{
+    width: 100%;
+}
+
+.transTable thead {
+    background-color: #2d3e63;
+    border-radius: 10px;
+    height: 100%;
+    border: none;
+}
+
+.transTable td{
+    padding: 10px;
+}
+
+.transTable thead td{
+    font-size: 20px;
+}
