@@ -17,8 +17,8 @@
 
 .blurryBackground{
     width: 50%;
-    height: 100%;
-    background: url('../../../drone.jpeg') center/cover;
+    height:75%;
+    background: url('../../../drone.png') center/cover;
     box-shadow: 0 4px 8px var(--bgSoft);
     border: none;
     border-radius: 5px;
