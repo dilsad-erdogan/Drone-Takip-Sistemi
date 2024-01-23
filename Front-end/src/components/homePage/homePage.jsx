@@ -1,20 +1,36 @@
-import React from 'react'
-import './homePage.css';
+import '../ui/homePage.css';
+import { Link } from 'react-router-dom';
 
-const homePage = () => {
+const HomePage = () => {
   return (
     <>
-      <div className='container'>
-        <div className='blurryBackground'></div>
+      <nav className="navbar header">
+        <div className="container-fluid">
+          <Link className="navbar-brand mainPage active" style={{ color: '#b7bac1' }} to="/">
+            Ana Sayfa
+          </Link>
 
-        <div className='content'>
+          <div className="d-flex">
+            <Link className="btn btn-outline-light" to="/signIn">
+              Sign In
+            </Link>
+            <Link className="btn btn-outline-light" to="/signUp" style={{ marginLeft: 5 }}>
+              Sign Up
+            </Link>
+          </div>
+        </div>
+      </nav>
+
+      <div className='container'>
+        <div className='pages'>
           <h1>Drone Takip Sistemine Hoşgeldiniz.</h1>
           <p>Burada bizim bilgilerimizi göreceksiniz.</p>
         </div>
-      </div>
-      {/* css dosyasında belirtilen sınıf ile container, blurryBackground ve content sınıflarının tasarımı yapılıyor ve content içerisinde yazılan yazılar gösteriliyor. */}
-    </>
-  )
-}
 
-export default homePage
+
+      </div>
+    </>
+  );
+};
+
+export default HomePage;

@@ -5,7 +5,7 @@ class User{
 
     async fetchUserData() {
         try {
-            const response = await fetch('http://localhost:3000/user/users');
+            const response = await fetch('http://localhost:3000/user/all');
     
             if (!response.ok) {
                 throw new Error('API isteği başarısız oldu.');
@@ -51,7 +51,7 @@ class User{
 
     async updateUser(userId, user){
         try{
-            const response = await fetch(`http://localhost:3000/user/profile/update/${userId}`, {
+            const response = await fetch(`http://localhost:3000/user/update/${userId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -71,7 +71,7 @@ class User{
 
     async deleteUser(userId){
         try{
-            const response = await fetch(`http://localhost:3000/user/users/${userId}/delete`, {
+            const response = await fetch(`http://localhost:3000/user/delete/${userId}`, {
                 method: "PATCH"
             });
 
@@ -108,6 +108,29 @@ class User{
         }
     } //Frontendden verilen id değerinin fetch ile tablodan çekilmesi
 
+    async getDroneById(userId){
+        try{
+            const response = await fetch(`http://localhost:3000/user/droneById/${userId}`, {
+                method: "GET"
+            });
+
+            if(!response.ok){
+                throw new Error('API isteği başarısız oldu.');
+            }
+
+            const result = await response.json();
+            if(!result.success || !result.drones){
+                throw new Error('API yanıtı beklenen formatta değil.');
+            }
+
+            const totalData = result.drones;
+            return totalData;
+        } catch(error){
+            console.error('Hata:', error.message);
+            throw error;
+        }
+    }
+
     async loginUser(credentials) {
         try {
             const response = await fetch('http://localhost:3000/api/login', {
@@ -119,14 +142,13 @@ class User{
             });
 
             if (!response.ok) {
-                const errorMessage = await response.text(); // Hata mesajını al
-                throw new Error(`Giriş sırasında bir hata oluştu. Hata: ${errorMessage}`);
+                const errorMessage = await response.text();
+                console.error(`Giriş sırasında bir hata oluştu. Hata: ${errorMessage}`);
             }
 
             const { user, token } = await response.json();
             const id = user.user_id;
             const role = user.roletype_id;
-            console.log(role);
             return { id, role, token };
         } catch (error) {
             console.error('Hata:', error.message);
@@ -136,10 +158,8 @@ class User{
 
     async fetchTotalUser() {
         try {
-          const response = await fetch('http://localhost:3000/user/users/total');
+          const response = await fetch('http://localhost:3000/user/total');
           const data = await response.json();
-
-          console.log('User.js gelen data:', data);
 
           return data;
         } catch (error) {

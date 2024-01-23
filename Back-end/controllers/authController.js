@@ -1,7 +1,8 @@
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const User = require("../models/User");
-//const sendEmail = require("../utils/sendEmail");
+const sendEmail = require("../utils/sendEmail");
 const sendToken = require("../utils/sendToken");
+const crypto = require("crypto");
 
 // kayıt olma işlemi
 exports.register = catchAsyncErrors(async (req, res, next) => {
@@ -61,7 +62,7 @@ exports.login = catchAsyncErrors(async (req, res, next) => {
   const user = await User.findOne({where: {email} });
 
   if (!user) {
-    res.status(400).json({
+    return res.status(400).json({
       success: false,
       error: "Invalid email or password",
     });
@@ -71,21 +72,21 @@ exports.login = catchAsyncErrors(async (req, res, next) => {
   const isPasswordMatched = await user.comparePassword(password);
 
   if (!isPasswordMatched) {
-    res.status(400).json({
+    return res.status(400).json({
       success: false,
       error: "Invalid password",
     });
   }
   // token oluşturma ve cevap gönderme 
-  sendToken(user, 201, res, "Login successful");
+  sendToken(user, 201, res, "Login successful");  
 });
 
 // şifremi unuttum işlemi 
-/* exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
+exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
   const { email } = req.body;
 
   try {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ where: {email} });
 
     if (!user) {
       res.status(404).json({
@@ -97,7 +98,6 @@ exports.login = catchAsyncErrors(async (req, res, next) => {
     // resetToken oluşturma
     const resetToken = user.getResetPasswordToken();
 
-    await user.save();
     // email link
     const resetUrl = `https://akinsoftanket-admin.onrender.com/password/reset/${resetToken}`;
 
@@ -136,19 +136,19 @@ exports.login = catchAsyncErrors(async (req, res, next) => {
   }
 });
 
-
 // şifre yenileme 
-
 exports.resetPassword = catchAsyncErrors(async (req, res, next) => {
-  const resetPasswordToken = crypto
+  const reset_password_token = crypto
     .createHash("sha256")
     .update(req.params.resetToken)
     .digest("hex");
 
   try {
     const user = await User.findOne({
-      resetPasswordToken,
-      resetPasswordExpire: { $gt: Date.now() },
+      where: {
+        reset_password_token: reset_password_token,
+        reset_password_expire: { $gt: Date.now() }
+      }
     });
 
     if (!user) {
@@ -178,4 +178,4 @@ exports.resetPassword = catchAsyncErrors(async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-}); */
+});

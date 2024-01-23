@@ -1,19 +1,18 @@
+import '../ui/sign.css';
+import '../ui/homePage.css';
 import { useState, useEffect } from 'react'
-import './signIn.css';
+import { Link } from 'react-router-dom';
 import { Form, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom'; 
+
 import UserModel from '../../../../Back-end/connections/user.js';
 const userModel = new UserModel();
-
 const expirationTime = 60 * 60 * 1000;
-//const expirationTime = 60 * 60 * 3;
 
 const signIn = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-
     const navigate = useNavigate();
-    //Sayfa yönlendirme için kullanılıyor
 
     const handleTokenExpiration = () => {
         const tokenExpiry = localStorage.getItem('tokenExpiry');
@@ -67,11 +66,8 @@ const signIn = () => {
             }
         } catch (error){
             console.error("Giriş sırasında bir hata oluştu:", error.message);
+            alert("Giriş sırasında bir hata oluştu. Hata: " + error.message);
         }
-
-        //Eğer bir token oluşturulursa userModel'de, localStorage'a gelen token ve son sınır zamanı giriliyor eğer zaman dolarsa localStorage temizleniyor 
-        //ve kullanıcı sayfayı yenilediği anda kullanıcıyı ana sayfaya atıyor. Eğer kullanıcı girişi doğru ise kullanıcıyı userPanel linki üzerinden app.jsx'de yönlendirilen
-        //userPanel.jsx sayfasına atıyor.
     };
 
     useEffect(() => {
@@ -80,25 +76,53 @@ const signIn = () => {
 
     return (
         <>
-            <div className='containerBorder'>
-                <Form className='formContainer' onSubmit={submitEvent}>
-                    <Form.Group className='formGroup' controlId='formEmailId'>
-                        <Form.Label>Email adresi</Form.Label>
-                        <Form.Control type='email' placeholder='Email adresinizi giriniz.' value={email} onChange={(e) => {setEmail(e.target.value)}}></Form.Control>
-                    </Form.Group>
+            <nav className="navbar header">
+                <div className="container-fluid">
+                <Link className="navbar-brand mainPage active" style={{ color: '#b7bac1' }} to="/">
+                    Ana Sayfa
+                </Link>
 
-                    <Form.Group className='formGroup' controlId='formPasswordId'>
-                        <Form.Label>Şifre giriniz</Form.Label>
-                        <Form.Control type='password' placeholder='Şifresinizi giriniz.' value={password} onChange={(e) => {setPassword(e.target.value)}}></Form.Control>
-                    </Form.Group>
+                <div className="d-flex">
+                    <Link className="btn btn-outline-light" to="/signIn">
+                        Sign In
+                    </Link>
+                    <Link className="btn btn-outline-light" to="/signUp" style={{ marginLeft: 5 }}>
+                        Sign Up
+                    </Link>
+                </div>
+                </div>
+            </nav>
 
-                    <Form.Group>
-                        <Button className='formGroup' variant='primary' type='submit'>Giriş</Button>
-                    </Form.Group>
-                </Form>
+            <div className='container'>
+                <div className='pages'>
+                    <Form className='formContainer' onSubmit={submitEvent}>
+                        <Form.Group className='formGroup' controlId='formEmailId'>
+                            <Form.Label className='label'>Email Address</Form.Label>
+                            <Form.Control className='input' type='email' placeholder='Enter your email address.' value={email} onChange={(e) => {setEmail(e.target.value)}}></Form.Control>
+                        </Form.Group>
+
+                        <Form.Group className='formGroup' controlId='formPasswordId'>
+                            <Form.Label className='label'>Password</Form.Label>
+                            <Form.Control className='input' type='password' placeholder='Enter your password.' value={password} onChange={(e) => {setPassword(e.target.value)}}></Form.Control>
+                        </Form.Group>
+
+                        <Form.Group className='formGroup' controlId='formSigned'>
+                            <Form.Check className='check' type='checkbox' defaultChecked={true}></Form.Check>
+                            <Form.Label className='label'><span className='icon'></span> Keep me signed in</Form.Label>
+                        </Form.Group>
+
+                        <Form.Group className='formGroup' controlId='formSubmit'>
+                            <Button className='button' variant='primary' type='submit'>Sign In</Button>
+                        </Form.Group>
+
+                        <div className='hr'></div>
+
+                        <Form.Group className='foot-lnk'>
+                            <p>If you don't have an account, <Link to="/signUp">Sign Up</Link></p>
+                        </Form.Group>
+                    </Form>
+                </div>
             </div>
-            {/* css kodlarından alınan className style ile div'in görüntüsü ayarlanıyor ve hazır bootstrap hazır style kodları kullanarak Form tasarımı yapılıyor. */}
-            {/* type değeri submit olan butona tıklandığında Form bileşenine verilen onSubmit içindeki fonksiyon çalışıyor. */}
         </>
     )
 }

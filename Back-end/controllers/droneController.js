@@ -1,6 +1,8 @@
-const { truncate } = require('fs');
 const catchAsyncErrors = require('../middleware/catchAsyncErrors');
 const Drone = require('../models/Drone');
+const DroneInformation = require('../models/DroneInformation');
+const DroneType = require('../models/DroneType');
+const User = require("../models/User")
 const sendToken = require('../utils/sendToken');
 
 // tüm droneları getir
@@ -14,11 +16,11 @@ exports.getAll = catchAsyncErrors(async (req, res) => {
             data: drones
         })
     } catch(error) {
-        console.error('Error:', error); // Hatanın detaylarını konsola yazdır
+        console.log(error);
         res.status(500).json({
             success: false,
             error: 'Internal server error'
-        });
+        })
     }
 });
 
@@ -26,7 +28,7 @@ exports.getAll = catchAsyncErrors(async (req, res) => {
 exports.getActiveAll = catchAsyncErrors(async (req, res) => {
     try {
         // tüm dronelar
-        const drones=await Drone.findAll();
+        const drones = await Drone.findAll();
 
         // Aktif olan droneları bulmak için bir döngü
         const activeDrones = drones.filter(drone => drone.is_active === true);
@@ -48,21 +50,37 @@ exports.getActiveAll = catchAsyncErrors(async (req, res) => {
 // id'ye göre drone getir
 exports.getDroneById = catchAsyncErrors(async (req, res, next) => {
     try {
-        const id = req.params.id;
-        const drone = await Drone.findByPk(id);
+        const owner_id = req.params.id;
+        const drone = await Drone.findOne({
+            where: { owner_id: owner_id },
+            include: [
+                {
+                    model: User,
+                    attributes: ['name'], // Specify the attributes you want to retrieve
+                },
+            ],
+        });
 
-        if(drone && drone.is_active===true){
+        if (drone && drone.is_active === true) {
             res.status(200).json({
-            success: true,
-            data: drone
-        })
+                success: true,
+                data: {
+                    drone_id: drone.drone_id,
+                    droneinfo_id: drone.droneinfo_id,
+                    owner_id: drone.owner_id,
+                    serial_number: drone.serial_number,
+                    is_active: drone.is_active,
+                    longitude: drone.longitude,
+                    latitude: drone.latitude,
+                    user_name: drone.User ? drone.User.user_name : null,
+                },
+            });
         } else {
             res.status(404).json({
                 success: false,
-                error: 'Drone not found'
-            })
+                error: 'Drone not found or not active'
+            });
         }
-        
     } catch(error) {
         console.log(error);
         res.status(500).json({
@@ -74,39 +92,50 @@ exports.getDroneById = catchAsyncErrors(async (req, res, next) => {
 
 exports.add = catchAsyncErrors(async(req, res, next) => {
     try {
-        const { serial_number } = req.body;
+        const { serial_number, owner_id, dronetype_id, battery_health, size_height, size_width, size_dept, weight, airframe_name, propeller_size, material } = req.body;
 
-        console.log("serial number", serial_number);
+    if (!serial_number || !dronetype_id) {
+      return res.status(400).json({
+        success: false,
+        error: "Serial number ve drone tipi boş olamaz"
+      });
+    }
 
-        if(!serial_number) {
-            res.status(400).json({
-                success: false,
-                error: "Boş olamaz"
-            });
-        }
+    const _drone = await Drone.findOne({ where: { serial_number } });
 
-        const _drone = await Drone.findOne({where: {serial_number}});
+    if (_drone) {
+      return res.status(400).json({
+        success: false,
+        error: "Drone kayıtlı"
+      });
+    }
 
-        console.log("bulundu", _drone);
-        if(_drone) {
-            res.status(400).json({
-                success: false,
-                error: "Drone kayıtlı"
-            });
-        }
+    const droneInfo = await DroneInformation.create({
+      dronetype_id: dronetype_id,
+      battery_health,
+      size_height,
+      size_width,
+      size_dept,
+      weight,
+      airframe_name,
+      propeller_size,
+      material
+    });
 
-        const drone = await Drone.create({
-            serial_number
-        });
+    const drone = await Drone.create({
+      serial_number,
+      owner_id,
+      droneinfo_id: droneInfo.droneinfo_id,
+      DroneInformation: droneInfo,
+    }, {
+      include: [DroneInformation],
+    });
 
-        console.log("son", drone);
+    await drone.save();
 
-        await drone.save();
-        res
-        .status(201)
-        .json({ message: "Drone başarıyla oluşturuldu ", data: drone });
+    res.status(201).json({ message: "Drone başarıyla oluşturuldu", data: drone });
 
-        sendToken(drone, 201, res, "Kayıt başarılı");
+    sendToken(drone, 201, res, "Kayıt başarılı");
 
     } catch (error) {
         console.error('Hata:', error);
@@ -118,10 +147,9 @@ exports.add = catchAsyncErrors(async(req, res, next) => {
     }
 });
 
-
 exports.update = catchAsyncErrors(async (req, res, next) => {
     try {
-        const { is_active, longitude, latitude } = req.body;
+        const { longitude, latitude } = req.body;
     const droneId = req.params.id; // Güncellenecek drone'ın ID'si
 
     // Güncellenecek drone'ı bul
@@ -134,7 +162,7 @@ exports.update = catchAsyncErrors(async (req, res, next) => {
 
     // Yeni bilgilerle drone'ı güncelle
     //droneToUpdate.serial_number = serial_number || droneToUpdate.serial_number;
-    droneToUpdate.is_active = is_active !== undefined ? is_active : droneToUpdate.is_active;
+    //droneToUpdate.is_active = is_active !== undefined ? is_active : droneToUpdate.is_active;
     droneToUpdate.longitude = longitude || droneToUpdate.longitude;
     droneToUpdate.latitude = latitude || droneToUpdate.latitude;
 
@@ -190,5 +218,36 @@ exports.getTotalDroneCount = catchAsyncErrors(async (req, res) => {
         });
     } catch(error) {
         res.status(500).json({error: error.message});
+    }
+});
+
+exports.getTotalUserDroneCount = catchAsyncErrors(async (req, res) => {
+    try {
+        const owner_id = req.params.id;
+
+        const droneCount = await Drone.count({
+            where: {
+                owner_id: owner_id,
+                is_active: true,
+            }
+        });
+
+        if (droneCount > 0) {
+            res.status(200).json({
+                success: true,
+                data: droneCount,
+            });
+        } else {
+            res.status(404).json({
+                success: false,
+                error: 'No active drones found for the user'
+            });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            success: false,
+            error: 'Internal server error'
+        });
     }
 });

@@ -1,7 +1,9 @@
 const { DataTypes } = require('sequelize');
 const bcrypt = require('bcryptjs');
+const crypto = require("crypto");
 const jwt = require('jsonwebtoken');
 const sequelize  = require('../config/db');
+const Drone = require('./Drone');
 
 const User = sequelize.define('users', {
     user_id: {
@@ -12,7 +14,6 @@ const User = sequelize.define('users', {
       },
       roletype_id: {
         type: DataTypes.INTEGER,
-        defaultValue: 3,
       },
       name: {
         type: DataTypes.STRING,
@@ -37,6 +38,12 @@ const User = sequelize.define('users', {
         type: DataTypes.BOOLEAN,
         defaultValue: true
       },
+      reset_password_token: {
+        type: DataTypes.STRING,
+      },
+      reset_password_expire: {
+        type: DataTypes.DATE,
+      },
     }, { timestamps: false });
     
     User.beforeCreate(async (user) => {
@@ -53,21 +60,24 @@ const User = sequelize.define('users', {
       return jwt.sign({ user_id: this.user_id }, process.env.JWT_SECRET, {
         expiresIn: process.env.JWT_EXPIRATION,
       });
+    };  
+    
+    User.prototype.getResetPasswordToken = async function () {
+      try {
+        const resetToken = crypto.randomBytes(20).toString("hex");
+    
+        this.reset_password_token = crypto
+          .createHash("sha256")
+          .update(resetToken, "utf-8")
+          .digest("hex");
+    
+        this.reset_password_expire = new Date(Date.now() + 15 * 60 * 1000); // 15 dakika
+        return resetToken;
+      } catch (error) {
+        console.error("Error in getResetPasswordToken:", error);
+        throw error;
+      }
     };
-
-    module.exports = User;    
     
-/*     User.prototype.getResetPasswordToken = function () {
-      const resetToken = crypto.randomBytes(20).toString("hex");
-    
-      this.resetPasswordToken = crypto
-        .createHash("sha256")
-        .update(resetToken)
-        .digest("hex");
-    
-      this.resetPasswordExpire = Date.now() + 30 * 60 * 1000; // 30 min
-    
-      return resetToken;
-    }; */
-
-
+    User.hasMany(Drone, { foreignKey: 'owner_id' });
+    module.exports = User;

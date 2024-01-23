@@ -1,0 +1,4 @@
+user panelde new flight butonları gelsin
+drone update
+settings için neler gelebilir düşün
+flight tablosu için araştırma yap

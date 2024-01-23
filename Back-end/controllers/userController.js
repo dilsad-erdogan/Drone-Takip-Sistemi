@@ -1,7 +1,8 @@
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const User = require("../models/User");
-const { use } = require("../routes/authRoute");
+const Drone = require("../models/Drone");
 const sendToken = require("../utils/sendToken");
+const DroneInformation = require("../models/DroneInformation");
 
 //bütün kullanıcılar
 exports.getAllUser = catchAsyncErrors(async(req, res) => {
@@ -77,16 +78,13 @@ exports.deleteUser = async (req, res) => {
 
 // Kullanıcının kendi profilini getir
 exports.getUserProfile = catchAsyncErrors(async (req, res, next) => {
-  const id = req.params.id;
-  const user = await User.findByPk(id);
+  const user = req.user;
 
   //Kullanıcı varsa bilgilerini getir
-  if (user && user.is_active===true) {
+  if (user) {
     res.status(200).json({
       success: true,
-      user: user,
-      token: req.headers.authorization.split(" ")[1],
-      roletype_id: user.roletype_id,
+      user
     });
   } else {
     res.status(404).json({
@@ -157,5 +155,41 @@ exports.getTotalUserCount = catchAsyncErrors(async (req, res) => {
     });
   } catch(error){
     res.status(500).json({error: error.message});
+  }
+});
+
+exports.getDroneUserById = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const id = req.params.id;
+
+    // Kullanıcının sahip olduğu tüm droneları bulun
+    const drones = await Drone.findAll({
+      where: { owner_id: id },
+    });
+
+    // Her bir drone için bilgileri alın
+    const droneInfos = await Promise.all(
+      drones.map(async (drone) => {
+        const drone_info = await DroneInformation.findOne({
+          where: { droneinfo_id: drone.droneinfo_id },
+        });
+
+        return {
+          drone: drone,
+          drone_info: drone_info,
+        };
+      })
+    );
+
+    res.status(200).json({
+      success: true,
+      drones: droneInfos,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      error: error,
+    });
   }
 });

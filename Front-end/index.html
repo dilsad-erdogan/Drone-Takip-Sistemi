@@ -2,8 +2,9 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" href="./0.jpg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="/0.jpg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />  
+    <link rel="stylesheet" href="./src/components/global.css">
     <title>Drone Takip Sistemi</title>
   </head>
 
@@ -11,7 +12,7 @@
     <script>
       const link = document.querySelector("link[rel='icon']");
       let i = 0;
-      setInterval(() => link.href = `./${++i % 5}.jpg`, 500);
+      setInterval(() => link.href = `/${++i % 5}.jpg`, 500);
     </script>
     <!-- Title yanındaki iconun sürekli değişerek D-R-O-N-E yazdırma -->
     

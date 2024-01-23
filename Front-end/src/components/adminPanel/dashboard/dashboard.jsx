@@ -1,8 +1,10 @@
-import Card from './card/card';
-import Transactions from './transactions/transactions';
-import Chart from './chart/chart';
-import './dashboard.css';
+import '../../ui/panel.css';
 import { useEffect, useState } from 'react';
+
+import Card from '../../ui/commonUsage/card.jsx';
+import Transactions from '../../ui/commonUsage/transactions.jsx';
+import Chart from '../../ui/commonUsage/chart.jsx';
+
 import UserModel from '../../../../../Back-end/connections/user.js';
 const userModel = new UserModel();
 import DroneModel from '../../../../../Back-end/connections/drone.js';

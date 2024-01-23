@@ -1,8 +1,9 @@
 const { DataTypes } = require('sequelize');
 const jwt = require('jsonwebtoken');
-const sequelize  = require('../config/db');
+const sequelize = require('../config/db');
+const DroneInformation = require('./DroneInformation');
 
-const Drone = sequelize.define("drones", {
+const Drone = sequelize.define('drones', {
     drone_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -38,5 +39,7 @@ const Drone = sequelize.define("drones", {
         expiresIn: process.env.JWT_EXPIRATION,
       });
     };
+
+Drone.belongsTo(DroneInformation, {foreignKey: 'droneinfo_id', targetKey: 'droneinfo_id'})    
 
 module.exports = Drone;    

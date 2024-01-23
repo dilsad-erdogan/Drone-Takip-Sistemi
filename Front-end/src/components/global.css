@@ -14,3 +14,15 @@
     padding: 0;
     box-sizing: border-box;
 }
+
+body{
+    background-color: var(--bg);
+    color: var(--text);
+}
+
+#root {
+    min-height: 100vh;
+    width: 100%;
+    background-color: var(--bg);
+    color: var(--textSoft);
+}

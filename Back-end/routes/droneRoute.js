@@ -8,6 +8,7 @@ const {
     update,
     deleteDrone,
     getTotalDroneCount,
+    getTotalUserDroneCount,
 } = require('../controllers/droneController');
 
 const router = express.Router();
@@ -19,8 +20,6 @@ router.route('/:id').get(getDroneById);
 router.route('/add').post(add);
 router.route('/update/:id').put(update);
 router.route('/delete/:id').patch(deleteDrone);
-
-//bi kişinin tüm dronelarını getir
-//droneu sil
+router.route('/userdrone/:id').get(getTotalUserDroneCount);
 
 module.exports = router;

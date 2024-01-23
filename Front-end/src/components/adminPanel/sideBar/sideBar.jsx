@@ -4,10 +4,10 @@ import { FiLogOut } from "react-icons/fi";
 import { TbDrone, TbBrandAppgallery, TbBoxModel2 } from "react-icons/tb";
 import { VscTypeHierarchy } from "react-icons/vsc";
 import { IoSettingsOutline, IoHelp } from "react-icons/io5";
-import MenuLink from './menuLink/menuLink';
-import './sidebar.css';
+import MenuLink from '../../ui/commonUsage/menuLink.jsx';
+import '../../ui/panel.css';
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from "react";
+import { useState, useEffect } from 'react'
 import UserModel from '../../../../../Back-end/connections/user.js';
 const userModel = new UserModel();
 
@@ -42,22 +42,22 @@ const menuItems = [
     list: [
       {
         title: "Drone Brand",
-        path: "#",
+        path: "/admin/drone-brand",
         icon: <TbBrandAppgallery></TbBrandAppgallery>
       },
       {
         title: "Drone Model",
-        path: "#",
+        path: "/admin/drone-model",
         icon: <TbBoxModel2></TbBoxModel2>
       },
       {
         title: "Drone Type",
-        path: "#",
+        path: "/admin/drone-type",
         icon: <VscTypeHierarchy></VscTypeHierarchy>
       },
       {
         title: "User Role Type",
-        path: "#",
+        path: "/admin/user-roleType",
         icon: <MdOutlineMergeType></MdOutlineMergeType>
       },
     ],
@@ -91,18 +91,20 @@ const SideBar = () => {
   };
 
   useEffect(() => {
-    const fetchUser = async (id) => {
-      try{
-        const userData = await userModel.getUserById(id);
+    const fetchUser = async () => {
+      try {
+        const userData = await userModel.getUserById(localStorage.getItem('userId'));
         setUser(userData);
-      } catch(error){
+      } catch (error) {
         console.error('Hata:', error.message);
       }
     };
-
-    const userId = localStorage.getItem('userId');
-    fetchUser(userId);
-  });
+  
+    // Sadece userId değiştiğinde fetchUser fonksiyonunu çağır
+    if (localStorage.getItem('userId')) {
+      fetchUser();
+    }
+  }, [localStorage.getItem('userId')]); // userId değiştiğinde useEffect'i çalıştır
 
   return (
     <div className="sideBar">

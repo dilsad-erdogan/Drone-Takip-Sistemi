@@ -1,4 +1,0 @@
--adminPanel/map: modalın tasarımını değiştir 
--css toparlama yap çünkü drone ve user gibi yerlerde aynı
-css kodları kullanılıyortoplu dursun
--video: 1.19.00
