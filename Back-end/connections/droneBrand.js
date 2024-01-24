@@ -82,6 +82,29 @@ class DroneBrand {
         }
     }
 
+    async droneBrandModel(brandId){
+        try {
+            const response = await fetch(`http://localhost:3000/droneBrand/addDrone/${brandId}`, {
+                method: "GET"
+            });
+    
+            if (!response.ok) {
+                throw new Error('API isteği başarısız oldu.');
+            }
+    
+            const result = await response.json();
+            if (!result.success || !result.models) {
+                throw new Error('API yanıtı beklenen formatta değil.');
+            }
+    
+            const totalData = result.models;
+            return totalData;
+        } catch(error) {
+            console.error('Hata:', error.message);
+            throw error;
+        }
+    }    
+
     getDroneBrands() {
         return this.brand;
     }

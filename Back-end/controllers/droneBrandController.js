@@ -1,6 +1,7 @@
 const catchAsyncErrors = require('../middleware/catchAsyncErrors');
 const DroneBrand = require('../models/DroneBrand');
 const sendToken = require('../utils/sendToken');
+const DroneModel = require('../models/DroneModel');
 
 // tüm markaları getir
 exports.getAll = catchAsyncErrors(async (req, res) => {
@@ -165,3 +166,37 @@ exports.deleteBrand = catchAsyncErrors(async (req, res)=> {
         })
     }
 })
+
+exports.addDrone = catchAsyncErrors(async (req, res) => {
+    try {
+        const id = req.params.id;
+
+        // Belirli bir markayı al
+        const brand = await DroneBrand.findOne({
+            where: { brand_id: id }
+        });
+
+        if (!brand) {
+            return res.status(404).json({
+                success: false,
+                error: 'Belirtilen marka bulunamadı.'
+            });
+        }
+
+        // Belirli markanın modellerini al
+        const models = await DroneModel.findAll({
+            where: { brand_id: brand.brand_id }
+        });
+
+        res.status(200).json({
+            success: true,
+            models: models
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            success: false,
+            error: error.message
+        });
+    }
+});

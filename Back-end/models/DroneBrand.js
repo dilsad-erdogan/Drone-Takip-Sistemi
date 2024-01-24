@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize  = require('../config/db');
+const DroneModel = require('./DroneModel');
 
 const DroneBrand = sequelize.define("drone_brands", {
     brand_id: {
@@ -18,4 +19,5 @@ const DroneBrand = sequelize.define("drone_brands", {
       },
     }, { timestamps: false });
 
+DroneBrand.belongsTo(DroneModel, {foreignKey: 'brand_id', targetKey: 'brand_id'});
 module.exports = DroneBrand; 
