@@ -1,0 +1,8 @@
+user panelde new flight butonları gelsin
+settings için neler gelebilir düşün
+flight tablosu için araştırma yap
+
+drone sahip değiştirme durumları
+
+brand model type roletype idye göre name
+map modal düzelecek

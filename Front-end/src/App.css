@@ -1,0 +1,12 @@
+.header{
+    background-color: var(--bg);
+}
+
+.mainPage{
+    padding: 15px;
+    margin: 5px 0px;
+    background-color: var(--tableAndHover);
+    border: none;
+    border-radius: 10px;
+    width: 10%; 
+}
