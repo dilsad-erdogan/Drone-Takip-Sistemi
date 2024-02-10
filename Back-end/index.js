@@ -4,6 +4,10 @@ const cors = require('cors');
 const PORT = process.env.PORT || 3000;
 const { expressWinstonLogger, logger } = require('./controllers/logController');
 
+require('dotenv').config()
+var connectDB = require("./config/mongoDb");
+connectDB()
+
 const app = express();
 app.use(expressWinstonLogger);
 app.use(cors());
@@ -12,6 +16,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static("public"));
 
+//const Flight = require('./models/Flight');
+
+app.use("/flight", require("./routes/flightRoute"))
 app.use("/drone", require("./routes/droneRoute"));
 app.use("/api", require("./routes/authRoute"));
 app.use("/user", require("./routes/userRoute"));

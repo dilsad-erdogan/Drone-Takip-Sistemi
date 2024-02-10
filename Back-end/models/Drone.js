@@ -24,13 +24,7 @@ const Drone = sequelize.define('drones', {
       is_active: {
         type: DataTypes.BOOLEAN,
         defaultValue: true
-      },
-      longitude: {
-        type: DataTypes.DOUBLE,
-      },
-      latitude: {
-        type: DataTypes.DOUBLE,
-      },
+      }
       
     }, { timestamps: false });
     
