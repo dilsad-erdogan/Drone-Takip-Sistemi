@@ -10,6 +10,10 @@ const userModel = new UserModel();
 import DroneModel from '../../../../../Back-end/connections/drone.js';
 const droneModel = new DroneModel();
 
+import io from 'socket.io-client';
+
+const socket = io.connect('http://localhost:3000');
+
 const dashboard = () => {
   const [totalUser, setTotalUser] = useState('');
   const [totalDrone, setTotalDrone] = useState('');
@@ -55,7 +59,7 @@ const dashboard = () => {
           <Card title="Total Drone" count={totalDrone}></Card>
           <Card title="Total Flight" count="15"></Card>
         </div>
-        <Transactions></Transactions>
+        <Transactions socket={socket}></Transactions>
         <Chart></Chart>
       </div>
     </div>

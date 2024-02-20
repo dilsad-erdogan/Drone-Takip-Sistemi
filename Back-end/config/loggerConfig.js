@@ -7,11 +7,11 @@ const logger = createLogger({
         new transports.Console(),
         new transports.File({
           level:'warn',
-          filename:'./logger/warningLogger.log'
+          filename:'/logger/warningLogger.log'
         }),
         new transports.File({
           level:'error',
-          filename:'./logger/errorLogger.log'
+          filename:'/logger/errorLogger.log'
         }),
         new transports.MongoDB({
           db: process.env.MONGODB_URI, // database URL MongoDB Atlas URI
@@ -19,7 +19,7 @@ const logger = createLogger({
         }),
         new transports.File({
             level:'info',
-            filename:'./logger/infoLogger.log'
+            filename:'/logger/infoLogger.log'
         })
     ],
     format: format.combine(

@@ -26,6 +26,7 @@ const App = () => {
 
         <Route path="/admin/userAdd" element={<AdminPanel screen="userAdd"/>} />
         <Route path="/admin/droneAdd" element={<AdminPanel screen="droneAdd"/>} />
+        <Route path='/admin/flightAdd' element={<AdminPanel screen="flightAdd"/>} />
         <Route path="/admin/brandAdd" element={<AdminPanel screen="brandAdd"/>} />
         <Route path="/admin/modelAdd" element={<AdminPanel screen="modelAdd"/>} />
         <Route path="/admin/typeAdd" element={<AdminPanel screen="typeAdd"/>} />

@@ -16,6 +16,7 @@ import UserRoleType from './userRoleType/userRoleType';
 
 import UserAdd from './user/userPanel/userAdd';
 import DroneAdd from './drone/dronePanel/droneAdd';
+import FlightAdd from './dashboard/flightAdd';
 import BrandAdd from './droneBrand/brandPanel/brandAdd';
 import ModelAdd from './droneModel/modelPanel/modelAdd';
 import TypeAdd from './droneType/typePanel/typeAdd';
@@ -64,6 +65,8 @@ const adminPanel = ({ screen }) => {
         return <UserAdd></UserAdd>;
       case 'droneAdd':
         return <DroneAdd></DroneAdd>;
+      case 'flightAdd':
+        return <FlightAdd></FlightAdd>;
       case 'brandAdd':
         return <BrandAdd></BrandAdd>;
       case 'modelAdd':

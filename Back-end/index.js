@@ -1,17 +1,23 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const http = require('http');
 const PORT = process.env.PORT || 3000;
 const { expressWinstonLogger, logger } = require('./controllers/logController');
 
+require('dotenv').config()
+var connectDB = require("./config/mongoDb");
+connectDB()
+
 const app = express();
-app.use(expressWinstonLogger);
 app.use(cors());
+app.use(expressWinstonLogger);
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static("public"));
 
+app.use("/flight", require("./routes/flightRoute"));
 app.use("/drone", require("./routes/droneRoute"));
 app.use("/api", require("./routes/authRoute"));
 app.use("/user", require("./routes/userRoute"));
@@ -46,6 +52,10 @@ app.patch('/user/delete/:id', (req, res) => {
   res.sendStatus(200);
 });
 
-app.listen(PORT, () => {
+const server = http.createServer(app);
+const io = require('./socket');
+io.attach(server);
+
+server.listen(PORT, () => {
   console.log(`Server Started at Port ${PORT}`);
 });

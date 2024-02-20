@@ -1,54 +1,55 @@
+import { useEffect, useState } from 'react';
 import '../panel.css'
+import { useNavigate } from 'react-router-dom';
 
-const transactions = () => {
-  return (
-    <div className='transactions'>
-        <h2 className='transTitle'>Flights</h2>
-        <table className='transTable'>
-            <thead>
-                <tr>
-                    <td><b>Name</b></td>
-                    <td><b>Code</b></td>
-                    <td><b>Pilot Name</b></td>
-                    <td><b>Flight Destination</b></td>
-                    <td><b>Flight Time</b></td>
-                </tr>
-            </thead>
+const transactions = ({socket}) => {
+    const navigate = useNavigate();
+    const [flights, setFlights] = useState([]);
 
-            <tbody>
-                <tr>
-                    <td>Drone 1</td>
-                    <td>f123</td>
-                    <td>Abc Def</td>
-                    <td>Ankara</td>
-                    <td>14.00</td>
-                </tr>
-                <tr>
-                    <td>Drone 2</td>
-                    <td>f234</td>
-                    <td>Def Abc</td>
-                    <td>Konya</td>
-                    <td>15.00</td>
-                </tr>
-                <tr>
-                    <td>Drone 3</td>
-                    <td>f345</td>
-                    <td>Xyz Def</td>
-                    <td>İstanbul</td>
-                    <td>16.00</td>
-                </tr>
-                <tr>
-                    <td>Drone 4</td>
-                    <td>f456</td>
-                    <td>Def Xyz</td>
-                    <td>Eskişehir</td>
-                    <td>17.00</td>
-                </tr>
-                
-            </tbody>
-        </table>
-    </div>
-  )
+    useEffect(() => {
+        socket.on('flights', (data) => {
+            setFlights(data);
+        });
+    });
+
+    const addNewFlight = () => {
+        navigate('/admin/flightAdd');
+    }
+    
+    return (
+        <div className='transactions'>
+            <div className='top'>
+                <h2 className='transTitle'>Flights</h2>
+                <button className='btn btn-outline-light'onClick={() => {addNewFlight()}}>Add New Flight</button>
+            </div>
+  
+            <table className='transTable'>
+                <thead>
+                    <tr>
+                        <td><b>Flight Number</b></td>
+                        <td><b>Start Point</b></td>
+                        <td><b>End Point</b></td>
+                        <td><b>Created At</b></td>
+                        <td><b>Updated At</b></td>
+                        <td><b>Coordinates</b></td>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {flights.map((flight) => (
+                        <tr key={flight._id}>
+                            <td>{flight.flight_number}</td>
+                            <td>{flight.startPoint}</td>
+                            <td>{flight.endPoint}</td>
+                            <td>{flight.createdAt}</td>
+                            <td>{flight.updatedAt}</td>
+                            <td>{flight.coordinates.coordinates}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
+    )
 }
 
 export default transactions
