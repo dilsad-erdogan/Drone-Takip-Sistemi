@@ -5,7 +5,7 @@ require('dotenv').config();
 const sequelize = new Sequelize(
     'ProjeDB', 
     'postgres', 
-    '716350',
+    'sevde200142',
   {
     host: 'localhost',
     dialect: 'postgres',
