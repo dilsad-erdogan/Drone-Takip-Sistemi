@@ -29,7 +29,7 @@ async function updateFlightCoordinates(flightId, newCoordinates) {
 }
 
 const add = async (req, res) => {
-    try {      
+    try {       
         const {
             flight_number, drone_id, startPoint, endPoint, coordinates
         } = req.body;
