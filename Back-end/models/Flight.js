@@ -25,6 +25,9 @@ const flightSchema = new mongoose.Schema({
             type: [Number],
             default: [0, 0],
         },
+    },
+    is_active: {
+        type: Boolean
     }
 }, { timestamps: true });
 

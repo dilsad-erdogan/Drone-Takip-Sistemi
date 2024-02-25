@@ -28,9 +28,7 @@ const User = sequelize.define('users', {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      pilot_certificate: {
-        type: DataTypes.STRING,
-      },
+     
       drone_owner: {
         type: DataTypes.BOOLEAN,
       },
@@ -79,5 +77,5 @@ const User = sequelize.define('users', {
       }
     };
     
-    User.hasMany(Drone, { foreignKey: 'owner_id' });
-    module.exports = User;
+    //User.hasMany(Drone, { foreignKey: 'owner_id' });
+module.exports = User;

@@ -8,18 +8,17 @@ const sendToken = require('../utils/sendToken');
 exports.getAll = catchAsyncErrors(async (req, res) => {
     try {
         // tüm dronelar
-        const drones=await Drone.findAll();
+        const drones = await Drone.findAll();
 
-        res.status(200).json({
-            success: true,
-            data: drones
-        })
+        if(drones) {
+            res.status(200).json({ success: true, data: drones })
+        } else {
+            res.status(404).json({ success: false, message: 'Active drone not found!' });
+        }
+        
     } catch(error) {
         console.log(error);
-        res.status(500).json({
-            success: false,
-            error: 'Internal server error'
-        })
+        res.status(500).json({ success: false, error: 'Internal server error!'  })
     }
 });
 
@@ -27,22 +26,19 @@ exports.getAll = catchAsyncErrors(async (req, res) => {
 exports.getActiveAll = catchAsyncErrors(async (req, res) => {
     try {
         // tüm dronelar
-        const drones = await Drone.findAll();
+        const drones = await Drone.findAll()
 
         // Aktif olan droneları bulmak için bir döngü
-        const activeDrones = drones.filter(drone => drone.is_active === true);
+        const activeDrones = drones.filter(drone => drone.is_active === true)
 
-        res.status(200).json({
-            success: true,
-            data: activeDrones
-        });
-        
+        if(activeDrones) {
+            res.status(200).json({ success: true, data: activeDrones });
+        } else {
+            res.status(404).json({ success: false, message: 'Active drone not found!' });
+        }
     } catch(error) {
         console.log(error);
-        res.status(500).json({
-            success: false,
-            error: 'Internal server error'
-        })
+        res.status(500).json({ success: false, error: 'Internal server error!' })
     }
 });
 
@@ -75,17 +71,11 @@ exports.getDroneById = catchAsyncErrors(async (req, res, next) => {
                 },
             });
         } else {
-            res.status(404).json({
-                success: false,
-                error: 'Drone not found or not active'
-            });
+            res.status(404).json({ success: false, error: 'Drone not found or not active!' });
         }
     } catch(error) {
         console.log(error);
-        res.status(500).json({
-            success: false,
-            error: 'Internal server error'
-        })
+        res.status(500).json({ success: false, error: 'Internal server error' })
     }
 }) 
 
