@@ -6,7 +6,6 @@ const logger = require('../config/loggerConfig');
 
 // MongoDB transportunu oluştur
 const mongoTransport = new transports.MongoDB({
-    level: 'info',  // Log seviyesi, isteğe bağlı olarak değiştirilebilir
     db: process.env.MONGODB_URI,
     options: { useUnifiedTopology: true },  // MongoDB bağlantısı için gerekli seçenekler
     collection: 'logs',  // Logların kaydedileceği koleksiyon adı

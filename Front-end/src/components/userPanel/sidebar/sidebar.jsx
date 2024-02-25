@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import MenuLink from '../../ui/commonUsage/menuLink.jsx';
 import '../../ui/panel.css';
 import { MdOutlineDashboard } from "react-icons/md";
-import { FaMapMarked } from "react-icons/fa";
+import { FaMapMarked, FaBell } from "react-icons/fa";
 import { TbDrone } from "react-icons/tb";
 import { IoSettingsOutline, IoHelp } from "react-icons/io5";
 import { FiLogOut } from "react-icons/fi";
@@ -28,6 +28,11 @@ const menuItems = [
         title: "Map",
         path: "/user/map",
         icon: <FaMapMarked></FaMapMarked>
+      },
+      {
+        title: "Permissions",
+        path: "/user/permissions",
+        icon: <FaBell></FaBell>
       }
     ],
   },

@@ -1,5 +1,5 @@
 import { MdOutlineDashboard, MdOutlineMergeType } from "react-icons/md";
-import { FaMapMarked, FaUser } from "react-icons/fa";
+import { FaMapMarked, FaUser, FaBell } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
 import { TbDrone, TbBrandAppgallery, TbBoxModel2 } from "react-icons/tb";
 import { VscTypeHierarchy } from "react-icons/vsc";
@@ -35,6 +35,11 @@ const menuItems = [
         path: "/admin/map",
         icon: <FaMapMarked></FaMapMarked>
       },
+      {
+        title: "Permissions",
+        path: "/admin/permissions",
+        icon: <FaBell></FaBell>
+      }
     ],
   },
   {
@@ -99,7 +104,7 @@ const SideBar = () => {
         console.error('Hata:', error.message);
       }
     };
-  
+
     // Sadece userId değiştiğinde fetchUser fonksiyonunu çağır
     if (localStorage.getItem('userId')) {
       fetchUser();

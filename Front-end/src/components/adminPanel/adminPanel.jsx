@@ -9,6 +9,7 @@ import Dashboard from './dashboard/dashboard';
 import Map from './map/map';
 import User from './user/user';
 import Drone from './drone/drone';
+import Permissions from './permission/permission';
 import DroneBrand from './droneBrand/droneBrand';
 import DroneModel from './droneModel/droneModel';
 import DroneType from './droneType/droneType';
@@ -28,7 +29,7 @@ import ModelUpdate from './droneModel/modelPanel/modelUpdate';
 import TypeUpdate from './droneType/typePanel/typeUpdate';
 import RoleUpdate from './userRoleType/rolePanel/roleUpdate';
 
-const adminPanel = ({ screen }) => {
+const adminPanel = ({ screen, socket }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -46,13 +47,15 @@ const adminPanel = ({ screen }) => {
   const content = () => {
     switch (screen) {
       case 'dashboard':
-        return <Dashboard></Dashboard>;
+        return <Dashboard socket={socket}></Dashboard>;
       case 'map':
         return <Map></Map>;
       case 'user':
         return <User></User>;
       case 'drone':
         return <Drone></Drone>;
+      case 'permissions':
+        return <Permissions></Permissions>;
       case 'brand':
         return <DroneBrand></DroneBrand>;
       case 'model':
@@ -66,7 +69,7 @@ const adminPanel = ({ screen }) => {
       case 'droneAdd':
         return <DroneAdd></DroneAdd>;
       case 'flightAdd':
-        return <FlightAdd></FlightAdd>;
+        return <FlightAdd socket={socket}></FlightAdd>;
       case 'brandAdd':
         return <BrandAdd></BrandAdd>;
       case 'modelAdd':

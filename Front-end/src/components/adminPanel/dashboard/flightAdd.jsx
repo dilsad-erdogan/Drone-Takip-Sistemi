@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import DroneModel from '../../../../../Back-end/connections/drone.js';
 const droneModel = new DroneModel();
 
-const flightAdd = () => {
+const flightAdd = ({ socket }) => {
     const[drones, setDrones] = useState([]);
     const navigate = useNavigate();
 
@@ -46,9 +46,11 @@ const flightAdd = () => {
             flight_number: flightNumber,
             drone_id: droneId
         }
-
         console.log(newFlight);
-        navigate('/admin/dashboard');
+        
+        await socket.emit('addFlight', newFlight);
+        navigate('/admin');
+        alert('Flight başarıyla eklendi.');
     }
 
     return (

@@ -8,8 +8,9 @@ import Chart from '../../ui/commonUsage/chart.jsx';
 import DroneModel from '../../../../../Back-end/connections/drone.js';
 const droneModel = new DroneModel();
 
-const dashboard = () => {
+const dashboard = ({ socket }) => {
   const [totalDrone, setTotalDrone] = useState('');
+  const [flights, setFlights] = useState([]);
 
   useEffect(() => {
     const fetchDroneData = async () => {
@@ -26,6 +27,10 @@ const dashboard = () => {
       }
     };
 
+    socket.on('flights', (data) => {
+      setFlights(data);
+    });
+
     if(localStorage.getItem('userId')){
       fetchDroneData();
     }
@@ -38,7 +43,7 @@ const dashboard = () => {
           <Card title="Total My Drone" count={totalDrone}></Card>
           <Card title="Total My Flight" count="5"></Card>
         </div>
-        <Transactions></Transactions>
+        <Transactions flights={flights}></Transactions>
         <Chart></Chart>
       </div>
     </div>

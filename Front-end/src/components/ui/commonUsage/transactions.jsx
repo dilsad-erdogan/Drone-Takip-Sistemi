@@ -1,26 +1,20 @@
-import { useEffect, useState } from 'react';
 import '../panel.css'
 import { useNavigate } from 'react-router-dom';
 
-const transactions = ({socket}) => {
+const transactions = ({ flights }) => {
     const navigate = useNavigate();
-    const [flights, setFlights] = useState([]);
-
-    useEffect(() => {
-        socket.on('flights', (data) => {
-            setFlights(data);
-        });
-    });
 
     const addNewFlight = () => {
-        navigate('/admin/flightAdd');
+        const currentPath = window.location.pathname;
+        const newPath = currentPath.endsWith('/admin') ? '/admin/flightAdd' : '/user/flightAdd';
+        navigate(newPath);
     }
     
     return (
         <div className='transactions'>
             <div className='top'>
                 <h2 className='transTitle'>Flights</h2>
-                <button className='btn btn-outline-light'onClick={() => {addNewFlight()}}>Add New Flight</button>
+                <button className='btn btn-outline-light' onClick={() => {addNewFlight()}}>Add New Flight</button>
             </div>
   
             <table className='transTable'>
