@@ -1,5 +1,5 @@
 const mongoose = require("mongoose")
-
+//user id
 const flightSchema = new mongoose.Schema({
     flight_number: {
         type: String,

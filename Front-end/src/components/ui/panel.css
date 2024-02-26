@@ -366,3 +366,34 @@ a{
     border-radius: 5px;
     cursor: pointer;
 }
+
+/***************PERMISSION***************/
+
+.permissionsCard {
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-between;
+}
+
+.permissionCard {
+    flex: 0 1 calc(33.333% - 20px); /* 3 kart için varsayılan genişlik */
+    background-color: var(--tableAndHover);
+    border-radius: 10px;
+    padding: 20px;
+}
+
+/* 600px genişliğinde 2 kart */
+@media (max-width: 600px) {
+    .permissionCard {
+        flex-basis: calc(50% - 20px);
+    }
+}
+
+/* Telefon boyutlarında 1 kart */
+@media (max-width: 400px) {
+    .permissionCard {
+        flex-basis: calc(100% - 20px);
+    }
+}

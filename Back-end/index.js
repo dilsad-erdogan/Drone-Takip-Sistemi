@@ -26,6 +26,8 @@ app.use("/droneModel", require("./routes/droneModelRoute"));
 app.use("/droneType", require("./routes/droneTypeRoute"));
 app.use("/userRole", require("./routes/roleTypeRoute"));
 app.use("/flight", require("./routes/flightRoute"));
+app.use("/permission", require("./routes/permissionRoute"));
+app.use("/pilot", require("./routes/pilotRoute"));
 
 app.get('/', (req, res) => {
   res.setHeader("Access-Control-Allow-Credentials", "true");

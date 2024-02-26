@@ -4,42 +4,50 @@ import Search from '../../ui/commonUsage/search';
 const json = [
   {
     permission_id: "1",
-    user_id: "1",
+    owner_id: "1",
+    pilot_id: "2",
     drone_id: "1",
     admin_id: "2",
     permission_status: false,
     permission_date: "",
     date_and_time: null,
+    coordinate: null,
     is_active: true,
   },
   {
     permission_id: "2",
-    user_id: "2",
+    owner_id: "2",
+    pilot_id: "2",
     drone_id: "2",
     admin_id: "3",
     permission_status: false,
     permission_date: "",
     date_and_time: null,
+    coordinate: null,
     is_active: true,
   },
   {
     permission_id: "3",
-    user_id: "2",
+    owner_id: "2",
+    pilot_id: "2",
     drone_id: "5",
     admin_id: "1",
     permission_status: false,
     permission_date: "",
     date_and_time: null,
+    coordinate: null,
     is_active: true,
   },
   {
     permission_id: "4",
-    user_id: "3",
+    owner_id: "3",
+    pilot_id: "2",
     drone_id: "8",
     admin_id: "1",
     permission_status: false,
     permission_date: "",
     date_and_time: null,
+    coordinate: null,
     is_active: true,
   }
 ];
@@ -77,12 +85,14 @@ const permission = ({ socket }) => {
       <table className='dataTable'>
         <thead>
           <tr>
-            <td>User Name</td>
+            <td>Owner Name</td>
+            <td>Pilot Name</td>
             <td>Drone Serial Number</td>
             <td>Admin Name</td>
             <td>Permission Status</td>
             <td>Permission Date</td>
             <td>Date and Time</td>
+            <td>Drone Coordinate</td>
             <td>Active</td>
             <td>Action</td>
           </tr>
@@ -91,12 +101,14 @@ const permission = ({ socket }) => {
         <tbody>
           {json && json.map((flight) => (
             <tr key={flight.permission_id}>
-              <td>{flight.user_id}</td>
+              <td>{flight.owner_id}</td>
+              <td>{flight.pilot_id}</td>
               <td>{flight.drone_id}</td>
               <td>{flight.admin_id}</td>
               <td>{flight.permission_status}</td>
               <td>{flight.permission_date}</td>
               <td>{flight.date_and_time}</td>
+              <td>{flight.coordinate}</td>
               <td>{flight.is_active}</td>
               <td>
                 <div className="buttons">
