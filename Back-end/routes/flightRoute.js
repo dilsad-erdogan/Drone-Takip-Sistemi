@@ -1,9 +1,17 @@
-const router = require("express").Router()
+const express = require('express')
 
-const controller = require("../controllers/flightController")
+const {
+    addFlight,
+    allActiveFlight,
+    getFromMongo,
+    updateCoordinates
+} = require("../controllers/flightController");
 
-router.post("/flight", controller.add)
-router.get("/flight", controller.getFlight)
-router.put("/flight/:flightId/coordinates", controller.updateCoordinates);
+const router = express.Router()
+
+router.route('/flight').post(addFlight)
+router.route('/flight/all').get(allActiveFlight)
+router.route('/mongo').get(getFromMongo)
+router.route('/flight/:flightId/coordinates').put(updateCoordinates)
 
 module.exports = router
