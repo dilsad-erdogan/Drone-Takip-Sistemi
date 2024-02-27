@@ -1,10 +1,18 @@
 const mongoose = require("mongoose")
-//user id
+
 const flightSchema = new mongoose.Schema({
     flight_number: {
         type: String,
         required: true,
         unique: true,
+    },
+    owner_id: {
+        type: Number,
+        required: true,
+    },
+    pilot_id: {
+        type: Number,
+        required: true
     },
     drone_id: {
       type: Number,  
@@ -14,6 +22,10 @@ const flightSchema = new mongoose.Schema({
     },
     endPoint: {
         type: Number,
+    },
+    date_and_time: {
+        type: Date,
+        default: Date.now,
     },
     coordinates: {
         type: {
@@ -25,6 +37,9 @@ const flightSchema = new mongoose.Schema({
             type: [Number],
             default: [0, 0],
         },
+    },
+    is_active: {
+        type: Boolean
     }
 }, { timestamps: true });
 

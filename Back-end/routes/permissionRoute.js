@@ -4,6 +4,7 @@ const {
     getAll,
     getActiveAll,
     getPermissionById,
+    getPermissionByUserId,
     getTotalPermissionCount,
     add,
     update,
@@ -16,8 +17,9 @@ router.route('/all').get(getAll)
 router.route('/activeAll').get(getActiveAll)
 router.route('/total').get(getTotalPermissionCount)
 router.route('/:id').get(getPermissionById)
+router.route('/:id').get(getPermissionByUserId)
 router.route('/add').post(add)
-router.route('/update/:id').put(update)
+router.route('/update/:id').patch(update)
 router.route('/delete/:id').patch(deletePermission)
 
 module.exports = router

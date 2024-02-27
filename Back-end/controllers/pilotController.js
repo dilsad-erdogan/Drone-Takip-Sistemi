@@ -1,5 +1,6 @@
 const catchAsyncErrors = require('../middleware/catchAsyncErrors')
 const Pilot = require('../models/Pilot')
+const User = require('../models/User')
 
 exports.getAll = catchAsyncErrors(async (req, res) => {
     try {
@@ -69,15 +70,18 @@ exports.add = catchAsyncErrors(async (req, res) => {
     try {
         const { user_id, pilot_certificate } = req.body
 
-        const pilot = Pilot.create({
-            user_id: user_id,
-            pilot_certificate: pilot_certificate,
-            is_active: true
-        })
+        const user = await User.findByPk(user_id)
 
-        await pilot.save();
-
-        res.status(201).json({ success: true, message: pilot })
+        if(!user) {
+            res.status(404).json({ success: false, message: 'User not found!' })
+        } else {
+            const pilot = await Pilot.create({
+                user_id: user.user_id,
+                pilot_certificate: pilot_certificate,
+                is_active: true
+            })
+            res.status(201).json({ success: true, message: pilot })
+        }
     } catch(error) {
         console.log(error);
         res.status(500).json({ success: false, error: 'Internal server error!' })
