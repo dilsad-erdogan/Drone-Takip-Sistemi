@@ -1,5 +1,6 @@
 import '../../ui/panel.css';
 import Search from '../../ui/commonUsage/search';
+import { TbDrone, TbDroneOff } from "react-icons/tb";
 
 const json = [
   {
@@ -48,12 +49,12 @@ const json = [
     permission_date: "",
     date_and_time: null,
     coordinate: null,
-    is_active: true,
+    is_active: false,
   }
 ];
 
 
-const permission = ({ socket }) => {
+const permission = () => {
   return (
     <div className='topPanel'>
       <div className="top">
@@ -63,7 +64,16 @@ const permission = ({ socket }) => {
       <div className="permissionsCard">
         {json && json.map((flight) => (
           <div key={flight.permission_id} className='permissionCard'>
-            {flight.admin_id}
+            {flight.is_active === true ? (<TbDrone></TbDrone>) : (<TbDroneOff></TbDroneOff>)}
+            <div className='texts-permission'>
+              <span className='title'>Pilot Name: {flight.pilot_id}</span>
+              <span className='title'>Drone Serial Number: {flight.drone_id}</span>
+              <span className='title'>Admin Name: {flight.admin_id}</span>
+              <span className='title'>Permission Status: {flight.permission_status}</span>
+              <span className='title'>Permission Date: {flight.permission_date}</span>
+              <span className='title'>Date and Time: {flight.date_and_time}</span>
+              <span className='title'>Coordinate: {flight.coordinate}</span>
+            </div>
           </div>
         ))}
       </div>

@@ -1,62 +1,36 @@
 import '../../ui/panel.css';
 import Search from '../../ui/commonUsage/search';
+import Pagination from '../../ui/commonUsage/pagination.jsx';
+import { useEffect, useState } from 'react';
+import PermissionModel from '../../../../../Back-end/connections/permission.js';
+const permissionModel = new PermissionModel();
 
-const json = [
-  {
-    permission_id: "1",
-    owner_id: "1",
-    pilot_id: "2",
-    drone_id: "1",
-    admin_id: "2",
-    permission_status: false,
-    permission_date: "",
-    date_and_time: null,
-    coordinate: null,
-    is_active: true,
-  },
-  {
-    permission_id: "2",
-    owner_id: "2",
-    pilot_id: "2",
-    drone_id: "2",
-    admin_id: "3",
-    permission_status: false,
-    permission_date: "",
-    date_and_time: null,
-    coordinate: null,
-    is_active: true,
-  },
-  {
-    permission_id: "3",
-    owner_id: "2",
-    pilot_id: "2",
-    drone_id: "5",
-    admin_id: "1",
-    permission_status: false,
-    permission_date: "",
-    date_and_time: null,
-    coordinate: null,
-    is_active: true,
-  },
-  {
-    permission_id: "4",
-    owner_id: "3",
-    pilot_id: "2",
-    drone_id: "8",
-    admin_id: "1",
-    permission_status: false,
-    permission_date: "",
-    date_and_time: null,
-    coordinate: null,
-    is_active: true,
-  }
-];
+const permission = () => {
+  const[permissions, setPermissions] = useState([]);
 
-const permission = ({ socket }) => {
+  useEffect(() => {
+    const fetchData = async () => {
+      try{
+        await permissionModel.fetchPermissionData();
+        const data = permissionModel.getPermission();
+
+        if(Array.isArray(data)){
+          setPermissions(data);
+        } else{
+          console.error('Hata getPermission bir dizi döndürmedi.');
+        }
+      } catch(error){
+        console.error('Error fetching permission data:', error.message);
+        console.error('Full error:', error);
+      }
+    };
+
+    fetchData();
+  }, [])
 
   const approveButtonClick = (permission_id) => {
     console.log("Onayla");
-    json.forEach(flight => {
+    permissions.forEach(flight => {
       if(flight.permission_id === permission_id){
         flight.permission_status = true;
         flight.is_active = false;
@@ -67,7 +41,7 @@ const permission = ({ socket }) => {
 
   const disapproveButtonClick = (permission_id) => {
     console.log("Onaylama");
-    json.forEach(flight => {
+    permissions.forEach(flight => {
       if(flight.permission_id === permission_id){
         flight.permission_status = false;
         flight.is_active = false;
@@ -99,7 +73,7 @@ const permission = ({ socket }) => {
         </thead>
 
         <tbody>
-          {json && json.map((flight) => (
+          {permissions && permissions.map((flight) => (
             <tr key={flight.permission_id}>
               <td>{flight.owner_id}</td>
               <td>{flight.pilot_id}</td>
@@ -121,6 +95,7 @@ const permission = ({ socket }) => {
           ))}
         </tbody>
       </table>
+      <Pagination></Pagination>
     </div>
   )
 }

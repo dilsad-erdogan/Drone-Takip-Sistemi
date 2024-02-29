@@ -122,10 +122,26 @@ async function getFromMongo(req, res) {
     }
 }
 
+async function totalFlight(req, res) { 
+    try {
+        const flights = await Flight.find()
+
+        if(flights.length > 0) {
+            res.status(200).json({ success: true, message: flights.length})
+        } else {
+            res.status(404).json({ success: false, message: 'Flight not found!'})
+        }
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({ error: 'Internal server error!' })
+    }
+ }
+
   module.exports = {
     createFlightWithDroneId, 
     addFlight, 
     updateCoordinates, 
     allActiveFlight,
     getFromMongo, 
+    totalFlight
 } 

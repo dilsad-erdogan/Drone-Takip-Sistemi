@@ -45,7 +45,7 @@ const dashboard = ({ socket }) => {
     };
   
     socket.on('flights', (data) => {
-        setFlights(data);
+        setFlights(data.message);
     });
 
     fetchUserData();

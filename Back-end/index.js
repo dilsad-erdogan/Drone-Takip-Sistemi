@@ -17,6 +17,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static("public"));
 
+// user izinlerini görecek owner id ye göre
+// user kendi uçuşlarını görecek
+
 app.use("/api", require("./routes/authRoute"));
 app.use("/user", require("./routes/userRoute"));
 app.use("/drone", require("./routes/droneRoute"));
@@ -156,7 +159,6 @@ app.put('/flight/flight/:flightId/coordinates', (req, res) => {
 
 const server = http.createServer(app);
 const io = require('./socket');
-const { log } = require('console');
 io.attach(server);
 
 server.listen(PORT, () => {

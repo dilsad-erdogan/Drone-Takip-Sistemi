@@ -382,6 +382,10 @@ a{
     background-color: var(--tableAndHover);
     border-radius: 10px;
     padding: 20px;
+    display: flex;
+    gap: 20px;
+    cursor: pointer;
+    width: 100%;
 }
 
 /* 600px genişliğinde 2 kart */
@@ -396,4 +400,9 @@ a{
     .permissionCard {
         flex-basis: calc(100% - 20px);
     }
+}
+
+.texts-permission{
+    display: flex;
+    flex-direction: column;
 }

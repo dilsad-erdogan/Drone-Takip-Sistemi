@@ -10,7 +10,7 @@ const io = require('socket.io')(server, {
 
 io.on('connection', async (socket) => {
     try {
-        const response = await fetch('http://localhost:3000/flight/flight');
+        const response = await fetch('http://localhost:3000/flight/flight/all');
         const flights = await response.json();
         
         socket.emit('flights', flights);

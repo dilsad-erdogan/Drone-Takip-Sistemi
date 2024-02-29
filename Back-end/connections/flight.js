@@ -5,7 +5,7 @@ class Flight{
 
     async fetchFlightData(){
         try {
-            const response = await fetch('http://localhost:3000/flight/flight');
+            const response = await fetch('http://localhost:3000/flight/flight/all');
             const flights = await response.json();
             
             this.flight = flights;

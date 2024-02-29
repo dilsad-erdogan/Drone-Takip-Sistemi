@@ -5,9 +5,13 @@ const permissionSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         unique: true,
     },
-    user_id: {
+    owner_id: {
         type: Number,
         required: true,
+    },
+    pilot_id: {
+        type: Number,
+        required: true
     },
     drone_id: {
         type: Number, 
@@ -23,6 +27,17 @@ const permissionSchema = new mongoose.Schema({
     date_and_time: {
         type: Date,
         default: Date.now,
+    },
+    coordinates: {
+        type: {
+            type: String,
+            enum: ["Point"],
+            default: "Point",
+        },
+        coordinates: {
+            type: [Number],
+            default: [0, 0],
+        },
     },
     is_active: {
         type: Boolean,

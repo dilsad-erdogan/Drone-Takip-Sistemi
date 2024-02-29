@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
-import icon from '/pageFont.png';
+import icon from '../../../../public/pageFont.png';
 import MapModal from '../../ui/commonUsage/mapModal.jsx';
 import UserModel from '../../../../../Back-end/connections/user.js';
 const userModel = new UserModel();
@@ -45,7 +45,7 @@ const googleMap = () => {
 
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
-    googleMapsApiKey: "AIzaSyCikvnBT7o7eo62eqUnjjx8oMiCcm21k6I"
+    googleMapsApiKey: "AIzaSyA4Iplfzhel3DioSkxnZjF9bcGXR-ORItw"
   });
 
   const customIcon = {

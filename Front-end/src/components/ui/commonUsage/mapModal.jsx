@@ -1,31 +1,39 @@
 import { Button, Modal, Row } from 'react-bootstrap';
 
-const mapModal = ({ show, onClose, data }) => {
+const MapModal = ({ show, onClose, data }) => {
     const handleExit = () => {
         onClose();
     }
 
-    return(
+    return (
         <div>
-            <Modal show={show}>
+            <Modal show={show} onHide={handleExit}>
                 <Modal.Header style={{ backgroundColor: '#182237', color: '#B7BAC1' }}>
-                    <Modal.Title>Drone Information</Modal.Title>
+                    <Modal.Title>Drone Bilgileri</Modal.Title>
                 </Modal.Header>
 
                 <Modal.Body style={{ backgroundColor: '#182237', color: '#B7BAC1' }}>
-                    <Row>Drone serial number: {data.serial_number}</Row>
-                    <Row>Drone id: {data.drone_id}</Row>
-                    <Row>Drone latitude: {data.latitude}</Row>
-                    <Row>Drone longitude: {data.longitude}</Row>
-                    <Row>Drone owner: {data.owner_id}</Row>
+                    {data ? (
+                        <>
+                            <Row>Drone uçuş numarası: {data.flight_number}</Row>
+                            <Row>Drone id: {data.drone_id}</Row>
+                            <Row>Drone başlangıç noktası: {data.startPoint}</Row>
+                            <Row>Drone bitiş noktası: {data.endPoint}</Row>
+                            <Row>Drone oluşturulma tarihi: {data.createdAt}</Row>
+                            <Row>Drone güncellenme tarihi: {data.updatedAt}</Row>
+                            <Row>Drone tarih ve saat: {data.date_and_time}</Row>
+                        </>
+                    ) : (
+                        <Row>Veri bulunamadı</Row>
+                    )}
                 </Modal.Body>
 
                 <Modal.Footer style={{ backgroundColor: '#182237', color: '#B7BAC1' }}>
-                    <Button onClick={handleExit} style={{ backgroundColor: '#468f43' }}>Exit</Button>
+                    <Button onClick={handleExit} style={{ backgroundColor: '#468f43' }}>Çıkış</Button>
                 </Modal.Footer>
             </Modal>
         </div>
-    )
+    );
 }
 
-export default mapModal
+export default MapModal;

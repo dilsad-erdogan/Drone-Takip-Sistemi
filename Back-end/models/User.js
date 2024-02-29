@@ -28,9 +28,6 @@ const User = sequelize.define('users', {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      pilot_certificate: {
-        type: DataTypes.STRING,
-      },
       drone_owner: {
         type: DataTypes.BOOLEAN,
       },

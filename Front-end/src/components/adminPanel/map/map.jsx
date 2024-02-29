@@ -1,88 +1,96 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react';
 import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
-import icon from '/pageFont.png';
+import icon from '../../../../public/pageFont.png';
 import MapModal from '../../ui/commonUsage/mapModal.jsx';
-import DroneModel from '../../../../../Back-end/connections/drone.js';
-const droneModel = new DroneModel();
+import FlightModel from '../../../../../Back-end/connections/flight.js';
+const flightModel = new FlightModel();
 
 const containerStyle = {
   width: '100%',
   height: '90vh'
 };
-  
+
 const center = {
-  lat: 38.9639778137207, 
+  lat: 38.9639778137207,
   lng: 35.243247985839844
 };
 
 const googleMap = () => {
-  const[droneData, setDroneData] = useState([]);
-  const [clicedDrone, setClicedDrone] = useState([]);
-  const[mapModal, setMapModal] = useState(false);
+  const [flightsData, setFlightsData] = useState([]);
+  const [clickedDrone, setClickedDrone] = useState(null);
+  const [mapModal, setMapModal] = useState(false);
+  const [map, setMap] = useState(null);
+
+  const { isLoaded } = useJsApiLoader({
+    id: 'google-map-script',
+    googleMapsApiKey: "AIzaSyA4Iplfzhel3DioSkxnZjF9bcGXR-ORItw"
+  });
 
   useEffect(() => {
     const fetchData = async () => {
-      try{
-        const dronesData = await droneModel.allDrone();
-  
-        if(Array.isArray(dronesData)) {
-          setDroneData(dronesData);
+      try {
+        await flightModel.fetchFlightData();
+        const flights = flightModel.getFlights();
+
+        if (Array.isArray(flights.message)) {
+          setFlightsData(flights.message);
         } else {
-          console.error('Hata: getDrones bir dizi döndürmedi.');
+          console.error('Hata: getFlights bir dizi döndürmedi.');
         }
       } catch (error) {
         console.error('Error fetching drone data:', error.message);
         console.error('Full error:', error);
       }
     };
-  
+
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (isLoaded) {
+      flightsData.forEach(marker => {
+        if (marker.is_active) {
+          const googleMarker = new window.google.maps.Marker({
+            map: map,
+            position: {
+              lat: marker.coordinates.coordinates[0],
+              lng: marker.coordinates.coordinates[1]
+            },
+            icon: icon
+          });
+          
+          googleMarker.addListener('click', () => markerClick(marker));
+        }
+      });
+    }
+  }, [isLoaded, flightsData, map]);
+
   const closeMapModal = () => {
     setMapModal(false);
-  }
-
-  const { isLoaded } = useJsApiLoader({
-    id: 'google-map-script',
-    googleMapsApiKey: "AIzaSyCikvnBT7o7eo62eqUnjjx8oMiCcm21k6I"
-  });
-
-  const customIcon = {
-    url: icon
   };
 
   const onLoad = map => {
-    droneData.map(marker =>{
-      if(marker.is_active === true){
-        const googleMarker = new window.google.maps.Marker({
-          position: {
-            lat: marker.latitude,
-            lng: marker.longitude
-          },
-          map: map,
-          icon: customIcon
-        });
-            
-        googleMarker.addListener('click', () => {markerClick(marker)});
-      }
-    });
+    setMap(map);
   };
 
-  const markerClick = async (marker) => {
-    setClicedDrone(marker);
+  const markerClick = (marker) => {
+    setClickedDrone(marker);
     setMapModal(true);
   };
 
   return (
     <>
       <div className="container-fluid">
-        {isLoaded ? (<GoogleMap mapContainerStyle={containerStyle} center={center} zoom={6} onLoad={onLoad}></GoogleMap>) : (<p>Harita yükleniyor...</p>)}
+        {isLoaded ? (
+          <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={6} onLoad={onLoad}></GoogleMap>
+        ) : (
+          <p>Harita yükleniyor...</p>
+        )}
       </div>
 
-      <MapModal show={mapModal} onClose={closeMapModal} data={clicedDrone}></MapModal>
+      <MapModal show={mapModal} onClose={closeMapModal} data={clickedDrone}></MapModal>
     </>
-  )
-}
+  );
+};
 
-export default googleMap
+export default googleMap;

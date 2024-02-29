@@ -7,7 +7,7 @@ const crypto = require("crypto");
 // kayıt olma işlemi
 exports.register = catchAsyncErrors(async (req, res, next) => {
   try {
-    const { name, email, password, pilot_certificate, drone_owner } = req.body;
+    const { name, email, password, drone_owner } = req.body;
 
     // isim , soyisim , email ve şifre girilip girilmediğini kontrol et
     if (!name || !email || !password) {
@@ -30,7 +30,6 @@ exports.register = catchAsyncErrors(async (req, res, next) => {
       name,
       email,
       password,
-      pilot_certificate,
       drone_owner
     });
 

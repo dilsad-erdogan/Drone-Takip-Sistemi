@@ -131,7 +131,6 @@ exports.updateUserProfile = catchAsyncErrors(async (req, res, next) => {
         if(req.body.password) {
             user.password = req.body.password;
         }
-        user.pilot_certificate = req.body.pilot_certificate || user.pilot_certificate;
         user.drone_owner = req.body.drone_owner || user.drone_owner;
 
         const updatedUser = await user.save();

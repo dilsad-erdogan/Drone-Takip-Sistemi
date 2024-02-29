@@ -27,7 +27,6 @@ const signUp = () => {
       name: name,
       email: email,
       password: password,
-      pilot_certificate: 'null',
       drone_owner: false
     };
 
