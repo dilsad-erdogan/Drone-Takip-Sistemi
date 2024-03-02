@@ -130,7 +130,8 @@ async function update(req, res) {
         } else {
             const updateFields = {
                 permission_status: permission_status,
-                date_and_time: Date.now()
+                date_and_time: Date.now(),
+                is_active: false,
             };
 
             await Permission.findByIdAndUpdate(permission_id, updateFields);

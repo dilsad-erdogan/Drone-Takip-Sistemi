@@ -3,6 +3,8 @@ import DroneModel from '../../../../../Back-end/connections/drone.js';
 const droneModel = new DroneModel();
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import PermissionModel from '../../../../../Back-end/connections/permission.js';
+const permissionModel = new PermissionModel();
 
 const flightAdd = ({ socket }) => {
     const[drones, setDrones] = useState([]);
@@ -40,7 +42,26 @@ const flightAdd = ({ socket }) => {
         }
         console.log(newFlight);
 
-        await socket.emit('addFlight', newFlight);
+        const newPermission = {
+            user_id: localStorage.getItem("userId"),
+            pilot_id: null, //pilot için selection option input bloğu yap sonra eklenecek
+            drone_id: droneId,
+            admin_id: null,
+            coordinates: {
+                type: "Point",
+                coordinates: [] //coordinates map eklenip başlangıç ve bitiş konumu seçilerek girilecek
+            },
+            id_active: true
+        }
+        console.log(newPermission);
+
+        permissionModel.addPermission(newPermission).then(() =>  {
+            alert("İzin ekleme işlemi başarıyla gerçekleşti.");
+        }).catch((error) => {
+            alert("İzin sırasında hata oluştu." + error);
+        });
+
+        await socket.emit('addFlight', newFlight); //burada sadece izin eklenmeli eğer admin permission sayfasında onaylarsa uçuşa yazılmalı
         navigate('/user');
         alert('Flight isteğiniz admine yönlendirildi.');
     }

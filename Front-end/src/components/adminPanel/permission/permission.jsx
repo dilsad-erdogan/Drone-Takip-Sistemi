@@ -4,9 +4,12 @@ import Pagination from '../../ui/commonUsage/pagination.jsx';
 import { useEffect, useState } from 'react';
 import PermissionModel from '../../../../../Back-end/connections/permission.js';
 const permissionModel = new PermissionModel();
+import UserModel from '../../../../../Back-end/connections/user.js';
+const userModel = new UserModel();
 
 const permission = () => {
   const[permissions, setPermissions] = useState([]);
+  const[ownerName, setOwnerName] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
@@ -19,6 +22,28 @@ const permission = () => {
         } else{
           console.error('Hata getPermission bir dizi döndürmedi.');
         }
+
+        const ownerPromises = permissions.map(async (data) => {
+          if(data.owner_id){
+            try{
+              const ownerData = await userModel.getUserByName(data.owner_id);
+              return { id: data.owner_id, name: ownerData };
+            } catch(error){
+              console.error('Error fetching user data:', error);
+            }
+          }
+          return null;
+        });
+
+        const resolvedOwner = await Promise.all(ownerPromises);
+        const ownerObject = resolvedOwner.reduce((acc, item) => {
+          if(item) {
+            acc[item.id] = item.name;
+          }
+          return acc;
+        }, {});
+        console.log(ownerObject);
+        setOwnerName(ownerObject);
       } catch(error){
         console.error('Error fetching permission data:', error.message);
         console.error('Full error:', error);
@@ -29,25 +54,27 @@ const permission = () => {
   }, [])
 
   const approveButtonClick = (permission_id) => {
-    console.log("Onayla");
-    permissions.forEach(flight => {
-      if(flight.permission_id === permission_id){
-        flight.permission_status = true;
-        flight.is_active = false;
-        console.log("Burada admin ataması ve izin verilen tarihin de atanması gerçekleşecek.");
-      }
+    const newPermission = {
+      permission_status: true,
+    };
+
+    permissionModel.updatePermission(permission_id, newPermission).then(() => {
+      alert('Uçuş onaylandı.');
+    }).catch((error) => {
+      console.error('Hata:', error.message);
     });
   };
 
   const disapproveButtonClick = (permission_id) => {
-    console.log("Onaylama");
-    permissions.forEach(flight => {
-      if(flight.permission_id === permission_id){
-        flight.permission_status = false;
-        flight.is_active = false;
-        console.log("Burada admin ataması ve izin verilmeyen tarihin de ataması gerçekleşecek.");
-      }
-    })
+    const newPermission = {
+      permission_status: false,
+    };
+
+    permissionModel.updatePermission(permission_id, newPermission).then(() => {
+      alert('Uçuş reddedildi.');
+    }).catch((error) => {
+      console.error('Hata:', error.message);
+    });
   };
 
   return (
@@ -64,9 +91,7 @@ const permission = () => {
             <td>Drone Serial Number</td>
             <td>Admin Name</td>
             <td>Permission Status</td>
-            <td>Permission Date</td>
             <td>Date and Time</td>
-            <td>Drone Coordinate</td>
             <td>Active</td>
             <td>Action</td>
           </tr>
@@ -75,15 +100,17 @@ const permission = () => {
         <tbody>
           {permissions && permissions.map((flight) => (
             <tr key={flight.permission_id}>
-              <td>{flight.owner_id}</td>
-              <td>{flight.pilot_id}</td>
+              <td>{ownerName[flight.owner_id]}</td>
+              <td>{ownerName[flight.pilot_id]}</td>
               <td>{flight.drone_id}</td>
-              <td>{flight.admin_id}</td>
-              <td>{flight.permission_status}</td>
-              <td>{flight.permission_date}</td>
+              <td>{ownerName[flight.admin_id]}</td>
+              <td>{flight.permission_status === true  ? 'true' : 'false'}</td>
               <td>{flight.date_and_time}</td>
-              <td>{flight.coordinate}</td>
-              <td>{flight.is_active}</td>
+              <td>
+                <div className="form-check form-switch">
+                  <input type="checkbox" className="form-check-input" checked={flight.is_active} onChange={() => {}}></input>
+                </div>
+              </td>
               <td>
                 <div className="buttons">
                   <button className="button update" onClick={() => {approveButtonClick(flight.permission_id)}}>Approve</button>
