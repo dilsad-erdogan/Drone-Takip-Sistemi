@@ -8,11 +8,55 @@ class Flight{
             const response = await fetch('http://localhost:3000/flight/flight/all');
             const flights = await response.json();
             
-            this.flight = flights;
+            this.message = flights;
         } catch (error) {
             console.error('Error fetching flights:', error);
         }
     }
+
+    // async addFlight(newFlight){
+    //     try{
+    //         const response = await fetch('http://localhost:3000/flight/add', {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             },
+    //             body: JSON.stringify(newFlight),
+    //         });
+
+    //         if(!response.ok){
+    //             throw new Error('Flight eklenirken bir hata oluştu.');
+    //         }
+
+    //         await this.fetchFlightData();
+    //     } catch(error){
+    //         console.error('Hata:', error.message);
+    //     }
+    // }
+
+    async updateFlight(flightId, flight){
+        try{
+            const response = await this.fetch(`http://localhost:3000/flight/flight/${flightId}/coordinates`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(flight),
+            });
+
+            if(!response.ok){
+                throw new Error('Flight güncellenirken bir hata oluştu.');
+            };
+
+            await this.fetchFlightData();
+        } catch(error){
+            console.error('Hata:', error.message);
+        }
+    }
+
+    // async flightByUserId(userId){
+
+    // }
 
     getFlights(){
         return this.flight;

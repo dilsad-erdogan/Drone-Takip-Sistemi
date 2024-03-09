@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
 
 const permissionSchema = new mongoose.Schema({
-    permission_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        unique: true,
-    },
+    // permission_id: {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     unique: true,
+    // },
     owner_id: {
         type: Number,
         required: true,
@@ -22,22 +22,16 @@ const permissionSchema = new mongoose.Schema({
     },
     permission_status: {
         type: Boolean,
-        default: false,
+        //default: false,
     },
     date_and_time: {
-        type: Date,
-        default: Date.now,
+        type: String,
     },
-    coordinates: {
-        type: {
-            type: String,
-            enum: ["Point"],
-            default: "Point",
-        },
-        coordinates: {
-            type: [Number],
-            default: [0, 0],
-        },
+    startPoint: {
+        type: Number
+    },
+    endPoint: {
+        type: Number,
     },
     is_active: {
         type: Boolean,

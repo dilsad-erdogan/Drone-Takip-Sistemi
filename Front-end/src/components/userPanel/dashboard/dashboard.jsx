@@ -28,7 +28,7 @@ const dashboard = ({ socket }) => {
     };
 
     socket.on('flights', (data) => {
-      setFlights(data);
+      setFlights(data.message);
     });
 
     if(localStorage.getItem('userId')){

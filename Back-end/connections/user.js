@@ -193,7 +193,7 @@ class User{
             console.error('Hata:', error.message);
             throw error;
         }
-    } 
+    }
     
     getUsers() {
         return this.users;

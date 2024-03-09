@@ -21,11 +21,11 @@ const transactions = ({ flights }) => {
                 <thead>
                     <tr>
                         <td><b>Flight Number</b></td>
-                        <td><b>Start Point</b></td>
-                        <td><b>End Point</b></td>
-                        <td><b>Created At</b></td>
-                        <td><b>Updated At</b></td>
+                        <td><b>Owner</b></td>
+                        <td><b>Pilot</b></td>
+                        <td><b>Drone</b></td>
                         <td><b>Coordinates</b></td>
+                        <td><b>Created At</b></td>
                     </tr>
                 </thead>
 
@@ -33,11 +33,11 @@ const transactions = ({ flights }) => {
                     {flights.map((flight) => (
                         <tr key={flight._id}>
                             <td>{flight.flight_number}</td>
-                            <td>{flight.startPoint}</td>
-                            <td>{flight.endPoint}</td>
-                            <td>{flight.createdAt}</td>
-                            <td>{flight.updatedAt}</td>
+                            <td>{flight.owner_id}</td>
+                            <td>{flight.pilot_id}</td>
+                            <td>{flight.drone_id}</td>
                             <td>{flight.coordinates.coordinates}</td>
+                            <td>{flight.createdAt}</td>
                         </tr>
                     ))}
                 </tbody>

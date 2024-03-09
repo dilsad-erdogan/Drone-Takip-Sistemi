@@ -15,7 +15,6 @@ const droneAdd = () => {
   const navigate = useNavigate();
 
   const[serialNumber, setSerialNumber] = useState('');
-  const[ownerId, setOwnerId] = useState('');
   const[droneType, setDroneType] = useState('');
   const[droneBrand, setDroneBrand] = useState('');
   const[droneModel, setDroneModel] = useState('');

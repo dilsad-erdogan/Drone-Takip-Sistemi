@@ -1,5 +1,6 @@
 const catchAsyncErrors = require('../middleware/catchAsyncErrors');
 const Drone = require('../models/Drone');
+const Flight = require('../models/Flight');
 const Permission = require("../models/Permission");
 const Pilot = require('../models/Pilot');
 const User = require('../models/User')
@@ -84,24 +85,32 @@ async function getTotalPermissionCount(req, res)  {
     }
 }
 
+// koordinalt için flight tablosundan start point end point bilgilerii al
 async function add(req, res) {
     try {
-        const { user_id, pilot_id, drone_id, admin_id, coordinates, is_active } = req.body
+        const { user_id, pilot_id, drone_id, date_and_time, startPoint, endPoint, is_active } = req.body
         console.log(user_id)
-        const owner = await User.findByPk(user_id)
-        const pilot = await Pilot.findByPk(pilot_id)
-        const drone = await Drone.findByPk(drone_id)
-        
-        if(!owner || !pilot || !drone) {
-            res.status(400).json({ success: false, message: 'Required information could not be found!' })
-        }
+        const _owner = await User.findByPk(user_id)
+        const _pilot = await Pilot.findByPk(pilot_id)
+        const _drone = await Drone.findByPk(drone_id)
+
+        if(!_owner) {
+            res.status(404).json({ success: false, message: 'User not found!'})
+        } else if(!_pilot) {
+            res.status(404).json({ success: false, message: 'Pilot not found!'})
+        } else if(!_drone) {
+            res.status(404).json({ success: false, message: 'Drone not found!'})
+        } 
+
         const permission = new Permission({
-            owner_id: owner.user_id,
-            pilot_id: pilot.pilot_id,
-            drone_id: drone.drone_id,
-            admin_id: admin_id,
+            owner_id: _owner.user_id,
+            pilot_id: _pilot.pilot_id,
+            drone_id: _drone.drone_id,
+            date_and_time: date_and_time,
+            startPoint: startPoint,
+            endPoint: endPoint,
             date_and_time: Date.now(),
-            coordinates: coordinates,
+            permission_status: false,
             is_active: is_active
         })
 
@@ -121,7 +130,7 @@ async function add(req, res) {
 async function update(req, res) {
     try {
         const permission_id = req.params.id
-        const permission_status = req.body.permission_status
+        const { admin_id, permission_status } = req.body
 
         const permission = await Permission.findById(permission_id)
 
@@ -129,14 +138,14 @@ async function update(req, res) {
             res.status(404).json({ success: false, message: 'Permission not found!'})
         } else {
             const updateFields = {
+                admin_id: admin_id, 
                 permission_status: permission_status,
                 date_and_time: Date.now(),
-                is_active: false,
+                is_active: false
             };
 
             await Permission.findByIdAndUpdate(permission_id, updateFields);
 
-            // Duruma göre cevap verme
             if (permission_status === true) {
                 res.status(200).json({ success: true, message: 'Flight permission granted!' });
             } else {

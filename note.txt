@@ -1,0 +1,15 @@
+Admin Panel:
+    - Total flight için sayı gelsin
+    - Permissionda onaylayınca flighta kayıt olsun
+    - Permission tablosunda owner, pilot, adminin isimleri dronenun seri numarası gözüksün
+    - Flight add sayfasında isimler gözüksün
+    - Web socket bağlantısını kontrol et direkt açılınca bilgiler gelsin
+    - Map'i toparla
+
+User Panel:
+    - Total my flight için sayı gelsin
+    - Permissionda icon büyüsün
+    - Flightta kendi uçuşlarını görebilsin
+    - Flight add sayfasında isimler gözüksün
+    - Web socket bağlantısını kontrol et direkt açılınca bilgiler gelsin
+    - Map'i toparla

@@ -4,57 +4,33 @@ import Pagination from '../../ui/commonUsage/pagination.jsx';
 import { useEffect, useState } from 'react';
 import PermissionModel from '../../../../../Back-end/connections/permission.js';
 const permissionModel = new PermissionModel();
-import UserModel from '../../../../../Back-end/connections/user.js';
-const userModel = new UserModel();
 
 const permission = () => {
-  const[permissions, setPermissions] = useState([]);
-  const[ownerName, setOwnerName] = useState({});
+  const [permissions, setPermissions] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      try{
+      try {
         await permissionModel.fetchPermissionData();
         const data = permissionModel.getPermission();
 
-        if(Array.isArray(data)){
+        if (Array.isArray(data)) {
           setPermissions(data);
-        } else{
+        } else {
           console.error('Hata getPermission bir dizi döndürmedi.');
         }
-
-        const ownerPromises = permissions.map(async (data) => {
-          if(data.owner_id){
-            try{
-              const ownerData = await userModel.getUserByName(data.owner_id);
-              return { id: data.owner_id, name: ownerData };
-            } catch(error){
-              console.error('Error fetching user data:', error);
-            }
-          }
-          return null;
-        });
-
-        const resolvedOwner = await Promise.all(ownerPromises);
-        const ownerObject = resolvedOwner.reduce((acc, item) => {
-          if(item) {
-            acc[item.id] = item.name;
-          }
-          return acc;
-        }, {});
-        console.log(ownerObject);
-        setOwnerName(ownerObject);
-      } catch(error){
+      } catch (error) {
         console.error('Error fetching permission data:', error.message);
         console.error('Full error:', error);
       }
     };
 
     fetchData();
-  }, [])
+  }, []);
 
   const approveButtonClick = (permission_id) => {
     const newPermission = {
+      admin_id: localStorage.getItem("userId"),
       permission_status: true,
     };
 
@@ -63,10 +39,13 @@ const permission = () => {
     }).catch((error) => {
       console.error('Hata:', error.message);
     });
+
+    //flight eklenecek uçuş onaylanırsa
   };
 
   const disapproveButtonClick = (permission_id) => {
     const newPermission = {
+      admin_id: localStorage.getItem("userId"),
       permission_status: false,
     };
 
@@ -99,12 +78,12 @@ const permission = () => {
 
         <tbody>
           {permissions && permissions.map((flight) => (
-            <tr key={flight.permission_id}>
-              <td>{ownerName[flight.owner_id]}</td>
-              <td>{ownerName[flight.pilot_id]}</td>
+            <tr key={flight._id}>
+              <td>{flight.owner_id}</td>
+              <td>{flight.pilot_id}</td>
               <td>{flight.drone_id}</td>
-              <td>{ownerName[flight.admin_id]}</td>
-              <td>{flight.permission_status === true  ? 'true' : 'false'}</td>
+              <td>{flight.admin_id}</td>
+              <td>{flight.permission_status === true ? 'true' : 'false'}</td>
               <td>{flight.date_and_time}</td>
               <td>
                 <div className="form-check form-switch">
@@ -113,9 +92,8 @@ const permission = () => {
               </td>
               <td>
                 <div className="buttons">
-                  <button className="button update" onClick={() => {approveButtonClick(flight.permission_id)}}>Approve</button>
-
-                  <button className="button delete" onClick={() => {disapproveButtonClick(flight.permission_id)}}>Disapprove</button>
+                  <button className="button update" onClick={() => { approveButtonClick(flight._id) }}>Approve</button>
+                  <button className="button delete" onClick={() => { disapproveButtonClick(flight._id) }}>Disapprove</button>
                 </div>
               </td>
             </tr>
@@ -127,4 +105,4 @@ const permission = () => {
   )
 }
 
-export default permission
+export default permission;

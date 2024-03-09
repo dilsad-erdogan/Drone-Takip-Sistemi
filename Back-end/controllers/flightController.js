@@ -1,62 +1,52 @@
 const Flight = require("../models/Flight")
-const Drone = require("../models/Drone")
+const Drone = require("../models/Drone");
+const User = require("../models/User");
+const Pilot = require("../models/Pilot");
 
-async function addFlight(req, res) {
+async function add(req, res) {
     try {       
         const {
-            flight_number, drone_id, startPoint, endPoint, coordinates, is_active
+            flight_number, user_id, pilot_id, drone_id, start_point, end_point, coordinates
         } = req.body;
 
         const _flight = await Flight.findOne({ flight_number })
+        const _owner = await User.findByPk(user_id)
+        const _pilot = await Pilot.findByPk(pilot_id)
+        const _drone = await Drone.findByPk(drone_id)
+
 
         if(_flight) {
             return res.status(400).json({ success: false, message: 'This flight is already exists!'})
-        }
-
-        await createFlightWithDroneId({
-            flight_number: flight_number,
-            startPoint: startPoint,
-            endPoint: endPoint,
-            coordinates: coordinates,
-            is_active: is_active
-        }, drone_id).then(flight => {
-            res.status(201).json({
-                success: true,
-                message: flight
+        } else if(!_owner) {
+            res.status(404).json({ success: false, message: 'User not found!'})
+        } else if(!_pilot) {
+            res.status(404).json({ success: false, message: 'Pilot not found!'})
+        } else if(!_drone) {
+            res.status(404).json({ success: false, message: 'Drone not found!'})
+        } 
+            const flight = new Flight({
+                flight_number: flight_number,
+                owner_id: _owner.user_id,
+                pilot_id: _pilot.pilot_id,
+                drone_id: _drone.drone_id,
+                start_point: start_point,
+                end_point: end_point,
+                date_and_time: Date.now(),
+                coordinates: coordinates,
+                is_active: true
             })
-        }).catch(error => {
-            console.log(error)
-            res.status(400).json({ success: false, message: error })
-        })
+        
+
+        const savedFlight = await flight.save()
+
+        if(savedFlight) {
+            res.status(201).json({ success: true, message: savedFlight })
+        } else {
+            res.status(400).json({ success: false, message: 'Flight error!'})
+        }
     } catch(error) {
         console.log(error)
         res.status(500).json({ message: error })
-    }
-}
-
-// new flight mongodb and postgresql function
-async function createFlightWithDroneId(flightData, droneId) {
-    try {
-        const drone = await Drone.findByPk(droneId);
-        if (!drone) {
-            throw new Error("Drone not found");
-        }
-
-        const flight = new Flight({
-            flight_number: flightData.flight_number,
-            drone_id: droneId,
-            startPoint: flightData.startPoint,
-            endPoint: flightData.endPoint,
-            coordinates: flightData.coordinates,
-            is_active: flightData.is_active
-        });
-
-        const savedFlight = await flight.save()
-        console.log(savedFlight)
-        return flight;
-    } catch (error) {
-        console.log("Error creating flight: ", error)
-        throw error;
     }
 }
 
@@ -74,7 +64,7 @@ async function updateCoordinates(req, res) {
                 message: 'Flight not found'
             })
         }
-        //await updateFlightCoordinates(flightId, newCoordinates);
+
         flight.coordinates = newCoordinates;
         flight.save();
 
@@ -90,7 +80,6 @@ async function updateCoordinates(req, res) {
         })
     }
 }
-
 
 async function allActiveFlight(req, res) {
     try {
@@ -137,11 +126,28 @@ async function totalFlight(req, res) {
     }
  }
 
-  module.exports = {
-    createFlightWithDroneId, 
-    addFlight, 
+async function flightByUserId(req, res) {
+    try {
+        const id = req.params.id
+
+        const user = await User.findByPk(id)
+
+        if(!user) {
+            res.status(404).json({ success: false, message: 'User not found!'})
+        }  
+
+        res.status(200).json({ success: true, message: user })
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({ error: 'Internal server error!' })
+    }
+} 
+
+module.exports = { 
+    add, 
     updateCoordinates, 
     allActiveFlight,
     getFromMongo, 
-    totalFlight
+    totalFlight,
+    flightByUserId
 } 
