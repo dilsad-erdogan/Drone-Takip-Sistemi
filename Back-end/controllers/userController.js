@@ -3,6 +3,7 @@ const User = require("../models/User");
 const Drone = require("../models/Drone");
 const sendToken = require("../utils/sendToken");
 const DroneInformation = require("../models/DroneInformation");
+const Flight = require("../models/Flight");
 
 //bütün kullanıcılar
 exports.getAllUser = catchAsyncErrors(async(req, res) => {
@@ -219,3 +220,28 @@ exports.getUserByName = catchAsyncErrors(async (req, res, next) => {
       })
   }
 }) 
+
+exports.getFlightByUserId = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const owner_id = req.params.id;
+    const _flight = await Flight.findOne({ owner_id: owner_id })
+
+    if(_flight){
+        res.status(200).json({
+        success: true,
+        data: _flight
+    })
+    } else {
+        res.status(404).json({
+            success: false,
+            error: 'Flight not found'
+        })
+    }
+  } catch(error) {
+      console.log(error);
+      res.status(500).json({
+          success: false,
+          error: 'Internal server error'
+      })
+  }
+})

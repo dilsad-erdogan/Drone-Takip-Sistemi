@@ -11,6 +11,7 @@ const {
     deleteUser,
     getTotalUserCount,
     getUserByName,
+    getFlightByUserId,
 } = require('../controllers/userController');
 
 const router = express.Router();
@@ -21,6 +22,7 @@ router.route('/total').get(getTotalUserCount);
 router.route('/:id').get(getUserById);
 router.route('/name/:id').get(getUserByName);
 router.route('/droneById/:id').get(getDroneUserById);
+router.route('/flight/:id').get(getFlightByUserId);
 router.route('/delete/:id').patch(deleteUser);
      
 router.route('/profile/me').get(isAuthenticatedUser, getUserProfile);

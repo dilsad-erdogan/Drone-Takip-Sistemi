@@ -3,25 +3,39 @@ const Drone = require("../models/Drone");
 const User = require("../models/User");
 const Pilot = require("../models/Pilot");
 
+async function generateFlightNumber() {
+    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWYZ'
+    const numbers = '0123456789'
+    let flightNumber = ''
+    for(let i = 0; i < 3; i++) {
+        flightNumber += letters.charAt(Math.floor(Math.random() * letters.length))
+    }
+    for(let i = 0; i < 3; i++){
+        flightNumber += numbers.charAt(Math.floor(Math.random() * numbers.length))
+    }
+
+    return flightNumber
+}
+
 async function add(req, res) {
     try {       
         const {
-            flight_number, user_id, pilot_id, drone_id, start_point, end_point, coordinates
+            user_id, pilot_id, drone_id, start_point, end_point, coordinates
         } = req.body;
-
+        
+        flight_number = await generateFlightNumber()
         const _flight = await Flight.findOne({ flight_number })
         const _owner = await User.findByPk(user_id)
         const _pilot = await Pilot.findByPk(pilot_id)
         const _drone = await Drone.findByPk(drone_id)
 
-
         if(_flight) {
             return res.status(400).json({ success: false, message: 'This flight is already exists!'})
-        } else if(!_owner) {
+        } else if(!_owner || _owner.dataValues.is_active === false) {
             res.status(404).json({ success: false, message: 'User not found!'})
-        } else if(!_pilot) {
+        } else if(!_pilot || _pilot.dataValues.is_active === false) {
             res.status(404).json({ success: false, message: 'Pilot not found!'})
-        } else if(!_drone) {
+        } else if(!_drone || _drone.dataValues.is_active === false) {
             res.status(404).json({ success: false, message: 'Drone not found!'})
         } 
             const flight = new Flight({
@@ -52,7 +66,7 @@ async function add(req, res) {
 
 async function updateCoordinates(req, res) {
     try {
-        //await client.connect();
+
         const flightId = req.params.flightId;
         const newCoordinates = req.body.coordinates;
 
@@ -124,7 +138,7 @@ async function totalFlight(req, res) {
         console.error(error)
         res.status(500).json({ error: 'Internal server error!' })
     }
- }
+}
 
 async function flightByUserId(req, res) {
     try {
@@ -143,7 +157,7 @@ async function flightByUserId(req, res) {
     }
 } 
 
-module.exports = { 
+  module.exports = { 
     add, 
     updateCoordinates, 
     allActiveFlight,

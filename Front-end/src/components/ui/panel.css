@@ -218,6 +218,10 @@ a{
     background-color: #c84f2a;
 }
 
+.off{
+    background-color: var(--bg);
+}
+
 /***************SIDEBAR***************/
 
 .sideBar{

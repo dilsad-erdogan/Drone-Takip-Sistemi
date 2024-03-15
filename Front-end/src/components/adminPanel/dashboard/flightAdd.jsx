@@ -21,6 +21,8 @@ const flightAdd = ({ socket }) => {
     const[pilotId, setPilotId] = useState('');
     const[dateAndTime, setDateAndTime] = useState('');
 
+    const[userNames, setUserNames] = useState('');
+
     useEffect(() => {
         const fetchDroneData = async () => {
             try{
@@ -41,10 +43,16 @@ const flightAdd = ({ socket }) => {
         const fetchPilotData = async () => {
             try{
                 await pilotModel.fetchPilotData();
-                const pilot = pilotModel.getPilot();
+                const pilots = pilotModel.getPilot();
 
-                if(Array.isArray(pilot)){
-                    setPilots(pilot);
+                if(Array.isArray(pilots)){
+                    setPilots(pilots);
+
+                    const users = {};
+                    for(const pilot of pilots){
+                        users[pilot.user_id] = await getUserById(pilot.user_id);
+                    }
+                    setUserNames(users);
                 }else{
                     console.error('Hata getPilot bir dizi döndürmedi.');
                 }
@@ -68,12 +76,22 @@ const flightAdd = ({ socket }) => {
               console.error('Error fetching user data:', error.message);
               console.error('Full error:', error);
             }
-          };
+        };
 
         fetchDroneData();
         fetchPilotData();
         fetchUserData();
-    }, [])
+    }, []);
+
+    async function getUserById(userId){
+        try{
+          const userName = await userModel.getUserByName(userId);
+          return userName;
+        } catch(error){
+          console.error('Hata:', error.message);
+          return userId;
+        }
+    }
 
     const submitEvent = async (event) => {
         event.preventDefault();
@@ -96,9 +114,7 @@ const flightAdd = ({ socket }) => {
             alert("İzin sırasında hata oluştu." + error);
         });
         
-        //await socket.emit('addFlight', newFlight); //burada sadece izin eklenmeli eğer admin permission sayfasında onaylarsa uçuşa yazılmalı
         navigate('/admin');
-        alert('Flight isteği bağarıyla eklendi.');
     }
 
     return (
@@ -124,7 +140,7 @@ const flightAdd = ({ socket }) => {
                     <select name='cat' id='id' onChange={(e) => [setPilotId(e.target.value)]}>
                         <option>Select a pilot</option>
                         {pilots && pilots.map((pilot) => (
-                            pilot.is_active === true ? (<option key={pilot.pilot_id} value={pilot.pilot_id}>{pilot.user_id}</option>) : (console.log())
+                            pilot.is_active === true ? (<option key={pilot.pilot_id} value={pilot.pilot_id}>{userNames[pilot.user_id]}</option>) : (console.log())
                         ))}
                     </select>
                     <select name='cat' id='id' onChange={(e) => {setDroneId(e.target.value)}}>

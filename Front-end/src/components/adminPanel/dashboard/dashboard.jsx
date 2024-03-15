@@ -9,10 +9,13 @@ import UserModel from '../../../../../Back-end/connections/user.js';
 const userModel = new UserModel();
 import DroneModel from '../../../../../Back-end/connections/drone.js';
 const droneModel = new DroneModel();
+import FlightModel from '../../../../../Back-end/connections/flight.js';
+const flightModel = new FlightModel();
 
 const dashboard = ({ socket }) => {
   const [totalUser, setTotalUser] = useState('');
   const [totalDrone, setTotalDrone] = useState('');
+  const [totalFlight, setTotalFlight] = useState('');
   const [flights, setFlights] = useState([]);
 
   useEffect(() => {
@@ -43,6 +46,20 @@ const dashboard = ({ socket }) => {
         console.error('Error fetching total drone count:', error.message);
       }
     };
+
+    const fetchFlightData = async () => {
+      try{
+        const result = await flightModel.fetchTotalFlight();
+
+        if(result && result.success){
+          setTotalFlight(result.message);
+        } else{
+          console.error('Error fetchning total flight count:', result && result.message);
+        }
+      } catch(error) {
+        console.error('Error fetching total flight count:', error.message);
+      }
+    }
   
     socket.on('flights', (data) => {
         setFlights(data.message);
@@ -50,6 +67,7 @@ const dashboard = ({ socket }) => {
 
     fetchUserData();
     fetchDroneData();
+    fetchFlightData();
   }, []);  
 
   return (
@@ -58,7 +76,7 @@ const dashboard = ({ socket }) => {
         <div className='cards'>
           <Card title="Total User" count={totalUser}></Card>
           <Card title="Total Drone" count={totalDrone}></Card>
-          <Card title="Total Flight" count="15"></Card>
+          <Card title="Total Flight" count={totalFlight}></Card>
         </div>
         <Transactions flights={flights}></Transactions>
         <Chart></Chart>
