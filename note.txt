@@ -1,0 +1,15 @@
+Admin Panel:
+    - Permission tablosunda dronenun seri numarası gözüksün
+    - Web socket bağlantısını kontrol et direkt açılınca bilgiler gelsin
+    - Map'i toparla
+
+User Panel:
+    - Total my flight için sayı gelsin
+    - Flightta kendi uçuşlarını görebilsin
+    - Web socket bağlantısını kontrol et direkt açılınca bilgiler gelsin
+    - Map'i toparla
+    - Permissionda drone seri numaları gelsin
+
+
+* permission ve flightta değerler doğru geliyor mu bi kontrol et
+* yaptıklarını kontrol et
