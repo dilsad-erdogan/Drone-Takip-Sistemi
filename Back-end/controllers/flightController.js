@@ -125,12 +125,31 @@ async function getFromMongo(req, res) {
     }
 }
 
+// admin icin bütün ucusların sayısı
 async function totalFlight(req, res) { 
     try {
         const flights = await Flight.find()
 
         if(flights.length > 0) {
             res.status(200).json({ success: true, message: flights.length})
+        } else {
+            res.status(404).json({ success: false, message: 'Flight not found!'})
+        }
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({ error: 'Internal server error!' })
+    }
+}
+
+// user icin kendi ucus sayısı
+async function totalFlightByUserId(req, res) {
+    try {
+        const user_id = req.params.id
+        
+        const flightCount = await Flight.countDocuments({ owner_id: user_id })
+
+        if(flightCount > 0) {
+            res.status(200).json({ success: true, message: flightCount})
         } else {
             res.status(404).json({ success: false, message: 'Flight not found!'})
         }
@@ -163,5 +182,6 @@ async function flightByUserId(req, res) {
     allActiveFlight,
     getFromMongo, 
     totalFlight,
+    totalFlightByUserId,
     flightByUserId
 } 
