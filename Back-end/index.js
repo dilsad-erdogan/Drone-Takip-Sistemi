@@ -29,6 +29,7 @@ app.use("/flight", require("./routes/flightRoute"));
 app.use("/permission", require("./routes/permissionRoute"));
 app.use("/pilot", require("./routes/pilotRoute"));
 app.use("/certificate", require("./routes/pilotCertificateRoute"));
+app.use("/certificatePermission", require("./routes/certificatePermissionRoute"));
 
 app.get('/', (req, res) => {
   res.setHeader("Access-Control-Allow-Credentials", "true");
