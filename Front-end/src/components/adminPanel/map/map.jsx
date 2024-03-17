@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
-import icon from '../../../../public/pageFont.png';
+import icon from '/pageFont.png';
 import MapModal from '../../ui/commonUsage/mapModal.jsx';
 import FlightModel from '../../../../../Back-end/connections/flight.js';
 const flightModel = new FlightModel();
+import { MarkerClusterer } from "@googlemaps/markerclusterer";
 
 const containerStyle = {
   width: '100%',
@@ -20,6 +21,7 @@ const googleMap = () => {
   const [clickedDrone, setClickedDrone] = useState(null);
   const [mapModal, setMapModal] = useState(false);
   const [map, setMap] = useState(null);
+  const clusterer = useRef(null);
 
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
@@ -47,7 +49,11 @@ const googleMap = () => {
   }, []);
 
   useEffect(() => {
-    if (isLoaded) {
+    if (isLoaded && map) {
+      if(!clusterer.current){
+        clusterer.current = new MarkerClusterer({ map });
+      }
+
       flightsData.forEach(marker => {
         if (marker.is_active) {
           const googleMarker = new window.google.maps.Marker({
@@ -56,10 +62,14 @@ const googleMap = () => {
               lat: marker.coordinates.coordinates[0],
               lng: marker.coordinates.coordinates[1]
             },
-            icon: icon
+            icon: {
+              url: icon,
+              scaledSize: {width: 30, height: 30}
+            }
           });
           
           googleMarker.addListener('click', () => markerClick(marker));
+          clusterer.current.addMarker(googleMarker);
         }
       });
     }
@@ -82,7 +92,7 @@ const googleMap = () => {
     <>
       <div className="container-fluid">
         {isLoaded ? (
-          <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={6} onLoad={onLoad}></GoogleMap>
+          <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={6} options={{fullscreenControl: false}} onLoad={onLoad}></GoogleMap>
         ) : (
           <p>Harita yükleniyor...</p>
         )}

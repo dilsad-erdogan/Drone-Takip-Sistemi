@@ -10,6 +10,7 @@ const userModel = new UserModel();
 const permission = () => {
   const[permissions, setPermissions] = useState([]);
   const[userNames, setUserNames] = useState([]);
+  const[adminNames, setAdminNames] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -21,11 +22,13 @@ const permission = () => {
         if(Array.isArray(data)){
           setPermissions(data);
 
-          const users = {};
+          const users = {}, admins = {};
           for(const flight of data){
-            users[flight.owner_id] = await getUserById(flight.owner_id);
+            users[flight.pilot_id] = await getUserById(flight.pilot_id);
+            admins[flight.admin_id] = await getUserById(flight.admin_id);
           }
           setUserNames(users);
+          setAdminNames(admins);
         } else{
           console.error('Hata getPermission bir dizi döndürmedi.');
         }
@@ -39,6 +42,10 @@ const permission = () => {
   }, []);
 
   async function getUserById(userId){
+    if (!userId) {
+      return null;
+    }
+
     try{
       const userName = await userModel.getUserByName(userId);
       return userName;
@@ -60,7 +67,7 @@ const permission = () => {
             <div className='texts-permission'>
               <span className='title'>Pilot Name: {userNames[flight.pilot_id]}</span>
               <span className='title'>Drone Serial Number: {flight.drone_id}</span>
-              <span className='title'>Admin Name: {flight.admin_id === null ? 'NULL' : userNames[flight.admin_id]}</span>
+              <span className='title'>Admin Name: {flight.admin_id === null ? 'NULL' : adminNames[flight.admin_id]}</span>
               <span className='title'>Permission Status: {flight.permission_status === true ? 'true' : 'false'}</span>
               <span className='title'>Date and Time: {flight.date_and_time}</span>
             </div>

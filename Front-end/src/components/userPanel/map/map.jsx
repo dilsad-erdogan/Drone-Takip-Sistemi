@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
-import icon from '../../../../public/pageFont.png';
+import icon from '/pageFont.png';
 import MapModal from '../../ui/commonUsage/mapModal.jsx';
 import UserModel from '../../../../../Back-end/connections/user.js';
 const userModel = new UserModel();
+import { MarkerClusterer } from "@googlemaps/markerclusterer";
 
 const containerStyle = {
   width: '100%',
@@ -16,17 +17,24 @@ const center = {
 };
 
 const googleMap = () => {
-  const[droneData, setDroneData] = useState([]);
+  const[flightsData, setFlightsData] = useState([]);
   const[clicedDrone, setClicedDrone] = useState([]);
   const[mapModal, setMapModal] = useState(false);
+  const[map, setMap] = useState(null);
+  const clusterer = useRef(null);
+
+  const { isLoaded } = useJsApiLoader({
+    id: 'google-map-script',
+    googleMapsApiKey: "AIzaSyA4Iplfzhel3DioSkxnZjF9bcGXR-ORItw"
+  });
 
   useEffect(() => {
     const fetchData = async () => {
       try{
-        const dronesData = await userModel.getDroneById(localStorage.getItem('userId'));
-  
-        if(Array.isArray(dronesData)) {
-          setDroneData(dronesData);
+        const flightData = await userModel.getFlightById(localStorage.getItem('userId'));
+        
+        if(Array.isArray(flightData)) {
+          setFlightsData(flightData);
         } else {
           console.error('Hata: getDrones bir dizi döndürmedi.');
         }
@@ -37,37 +45,41 @@ const googleMap = () => {
     };
   
     fetchData();
-  }, []);
+  }, [localStorage.getItem('userId')]);
+
+  useEffect(() => {
+    if(isLoaded && map){
+      if(!clusterer.current){
+        clusterer.current = new MarkerClusterer({ map });
+      }
+
+      flightsData.forEach(marker => {
+        if(marker.is_active){
+          const googleMarker = new window.google.maps.Marker({
+            map: map,
+            position: {
+              lat: marker.coordinates.coordinates[0],
+              lng: marker.coordinates.coordinates[1]
+            },
+            icon: {
+              url: icon,
+              scaledSize: {width: 30, height: 30}
+            }
+          });
+
+          googleMarker.addListener('click', () => markerClick(marker));
+          clusterer.current.addMarker(googleMarker);
+        }
+      })
+    }
+  }, [isLoaded, flightsData, map]);
 
   const closeMapModal = () => {
     setMapModal(false);
   }
 
-  const { isLoaded } = useJsApiLoader({
-    id: 'google-map-script',
-    googleMapsApiKey: "AIzaSyA4Iplfzhel3DioSkxnZjF9bcGXR-ORItw"
-  });
-
-  const customIcon = {
-    url: icon
-  };
-
   const onLoad = map => {
-    console.log(droneData);
-    droneData.map(marker =>{
-      if(marker.drone.is_active === true){
-        const googleMarker = new window.google.maps.Marker({
-          position: {
-            lat: marker.drone.latitude,
-            lng: marker.drone.longitude
-          },
-          map: map,
-          icon: customIcon
-        });
-        
-        googleMarker.addListener('click', () => {markerClick(marker.drone)});
-      }
-    });
+    setMap(map);
   };
 
   const markerClick = async (marker) => {
@@ -78,7 +90,11 @@ const googleMap = () => {
   return (
     <>
       <div className="container-fluid">
-        {isLoaded ? (<GoogleMap mapContainerStyle={containerStyle} center={center} zoom={6} onLoad={onLoad}></GoogleMap>) : (<p>Harita yükleniyor...</p>)}
+        {isLoaded ? (
+          <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={6} options={{fullscreenControl: false}} onLoad={onLoad}></GoogleMap>
+        ) : (
+          <p>Harita yükleniyor...</p>
+        )}
       </div>
 
       <MapModal show={mapModal} onClose={closeMapModal} data={clicedDrone}></MapModal>

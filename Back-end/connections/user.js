@@ -131,6 +131,29 @@ class User{
         }
     }
 
+    async getFlightById(userId){
+        try{
+            const response = await fetch(`http://localhost:3000/user/flight/${userId}`, {
+                method: "GET"
+            });
+
+            if(!response.ok){
+                throw new Error('API isteği başarısız oldu.');
+            };
+
+            const result = await response.json();
+            if(!result.success || !result.data){
+                throw new Error('API yanıtı beklenen formatta değil.');
+            };
+
+            const totalData = result.data;
+            return totalData;
+        } catch(error){
+            console.error('Hata:', error.message);
+            throw error;
+        }
+    }
+
     async loginUser(credentials) {
         try {
             const response = await fetch('http://localhost:3000/api/login', {

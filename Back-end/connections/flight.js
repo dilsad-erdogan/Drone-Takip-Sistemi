@@ -8,7 +8,7 @@ class Flight{
             const response = await fetch('http://localhost:3000/flight/flight/all');
             const flights = await response.json();
             
-            this.message = flights;
+            this.flight = flights;
         } catch (error) {
             console.error('Error fetching flights:', error);
         }

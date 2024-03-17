@@ -12,6 +12,8 @@ const userModel = new UserModel();
 const permission = () => {
   const [permissions, setPermissions] = useState([]);
   const [userNames, setUserNames] = useState({});
+  const [pilotNames, setPilotNames] = useState({});
+  const [adminNames, setAdminNames] = useState({});
 
   const fetchData = async () => {
     try {
@@ -22,11 +24,15 @@ const permission = () => {
         setPermissions(data);
 
         // Kullanıcı isimlerini önceden yükleme
-        const users = {};
+        const users = {}, pilots = {}, admins = {};
         for (const flight of data) {
           users[flight.owner_id] = await getUserById(flight.owner_id);
+          pilots[flight.pilot_id] = await getUserById(flight.pilot_id);
+          admins[flight.admin_id] = await getUserById(flight.admin_id);
         }
         setUserNames(users);
+        setPilotNames(pilots);
+        setAdminNames(admins);
       } else {
         console.error('Hata getPermission bir dizi döndürmedi.');
       }
@@ -89,6 +95,10 @@ const permission = () => {
   };
 
   async function getUserById(userId){
+    if (!userId) {
+      return null;
+    }
+
     try{
       const userName = await userModel.getUserByName(userId);
       return userName;
@@ -122,9 +132,9 @@ const permission = () => {
           {permissions.map((flight) => (
             <tr key={flight._id}>
               <td>{userNames[flight.owner_id]}</td>
-              <td>{userNames[flight.pilot_id]}</td>
+              <td>{pilotNames[flight.pilot_id]}</td>
               <td>{flight.drone_id}</td>
-              <td>{userNames[flight.admin_id]}</td>
+              <td>{adminNames[flight.admin_id]}</td>
               <td>{flight.permission_status === true ? 'true' : 'false'}</td>
               <td>{flight.date_and_time}</td>
               <td>

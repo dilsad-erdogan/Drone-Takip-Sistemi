@@ -224,19 +224,19 @@ exports.getUserByName = catchAsyncErrors(async (req, res, next) => {
 exports.getFlightByUserId = catchAsyncErrors(async (req, res, next) => {
   try {
     const owner_id = req.params.id;
-    const _flight = await Flight.findOne({ owner_id: owner_id })
+    const flights = await Flight.find({ owner_id: owner_id });
 
-    if(_flight){
-        res.status(200).json({
+    if (flights.length > 0) {
+      res.status(200).json({
         success: true,
-        data: _flight
-    })
+        data: flights
+      });
     } else {
-        res.status(404).json({
-            success: false,
-            error: 'Flight not found'
-        })
-    }
+      res.status(404).json({
+        success: false,
+        error: 'Flights not found'
+      });
+    }    
   } catch(error) {
       console.log(error);
       res.status(500).json({
