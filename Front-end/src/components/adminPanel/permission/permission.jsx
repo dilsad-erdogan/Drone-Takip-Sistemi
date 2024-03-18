@@ -67,7 +67,7 @@ const permission = () => {
       endPoint: permission.endPoint,
       coordinates: {
         type: "Point",
-        coordinates: [permission.startPoint, permission.endPoint]
+        coordinates: [permission.startPoint.coordinates[0], permission.startPoint.coordinates[1]]
       }
     }
 
