@@ -36,7 +36,7 @@ const transactions = ({ flights }) => {
                             <td>{flight.owner_id}</td>
                             <td>{flight.pilot_id}</td>
                             <td>{flight.drone_id}</td>
-                            <td>{flight.coordinates.coordinates}</td>
+                            <td>{flight.coordinates.coordinates[0] + '-' + flight.coordinates.coordinates[0]}</td>
                             <td>{flight.createdAt}</td>
                         </tr>
                     ))}

@@ -103,8 +103,14 @@ const flightAdd = ({ socket }) => {
             pilot_id: pilotId,
             drone_id: droneId,
             date_and_time: dateAndTime,
-            startPoint: startPoint, //mapten seçilecek
-            endPoint: endPoint, //mapten seçilecek
+            startPoint: {
+                type: "Point",
+                coordinates: [startPoint.split(', ')[0], startPoint.split(', ')[1]]
+            },
+            endPoint: {
+                type: "Point",
+                coordinates: [endPoint.split(', ')[0], endPoint.split(', ')[1]]
+            },
             is_active: true
         }
         console.log(newPermission);
