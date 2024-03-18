@@ -57,8 +57,9 @@ async function getPermissionByUserId(req, res) {
     try {
         const user_id = req.params.id
 
-        const permissionByOwnerId = Permission.findOne({ owner_id: user_id })
+        const permissionByOwnerId = await Permission.find({ owner_id: user_id })
 
+        console.log(permissionByOwnerId)
         if(permissionByOwnerId) {
             res.status(200).json({ success: true, message: permissionByOwnerId })
         } else {

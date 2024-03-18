@@ -28,10 +28,26 @@ const permissionSchema = new mongoose.Schema({
         type: String,
     },
     startPoint: {
-        type: Number
+        type: {
+            type: String,
+            enum: ["Point"],
+            default: "Point",
+        },
+        coordinates: {
+            type: [Number],
+            default: [0, 0],
+        },
     },
     endPoint: {
-        type: Number,
+        type: {
+            type: String,
+            enum: ["Point"],
+            default: "Point",
+        },
+        coordinates: {
+            type: [Number],
+            default: [0, 0],
+        },
     },
     is_active: {
         type: Boolean,

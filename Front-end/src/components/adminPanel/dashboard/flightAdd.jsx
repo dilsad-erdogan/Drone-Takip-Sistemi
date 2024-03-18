@@ -109,7 +109,7 @@ const flightAdd = ({ socket }) => {
         console.log(newPermission);
 
         permissionModel.addPermission(newPermission).then(() =>  {
-            alert("İzin ekleme işlemi başarıyla gerçekleşti.");
+            alert("İzin isteğiniz başarıyla yönlendirildi.");
         }).catch((error) => {
             alert("İzin sırasında hata oluştu." + error);
         });

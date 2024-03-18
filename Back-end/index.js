@@ -17,9 +17,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static("public"));
 
-// user izinlerini görecek owner id ye göre
-// user kendi uçuşlarını görecek
-
 app.use("/api", require("./routes/authRoute"));
 app.use("/user", require("./routes/userRoute"));
 app.use("/drone", require("./routes/droneRoute"));
@@ -31,6 +28,8 @@ app.use("/userRole", require("./routes/roleTypeRoute"));
 app.use("/flight", require("./routes/flightRoute"));
 app.use("/permission", require("./routes/permissionRoute"));
 app.use("/pilot", require("./routes/pilotRoute"));
+app.use("/certificate", require("./routes/pilotCertificateRoute"));
+app.use("/certificatePermission", require("./routes/certificatePermissionRoute"));
 
 app.get('/', (req, res) => {
   res.setHeader("Access-Control-Allow-Credentials", "true");

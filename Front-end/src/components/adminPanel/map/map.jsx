@@ -1,10 +1,9 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
 import icon from '/pageFont.png';
 import MapModal from '../../ui/commonUsage/mapModal.jsx';
 import FlightModel from '../../../../../Back-end/connections/flight.js';
 const flightModel = new FlightModel();
-import { MarkerClusterer } from "@googlemaps/markerclusterer";
 
 const containerStyle = {
   width: '100%',
@@ -21,7 +20,6 @@ const googleMap = () => {
   const [clickedDrone, setClickedDrone] = useState(null);
   const [mapModal, setMapModal] = useState(false);
   const [map, setMap] = useState(null);
-  const clusterer = useRef(null);
 
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
@@ -50,10 +48,6 @@ const googleMap = () => {
 
   useEffect(() => {
     if (isLoaded && map) {
-      if(!clusterer.current){
-        clusterer.current = new MarkerClusterer({ map });
-      }
-
       flightsData.forEach(marker => {
         if (marker.is_active) {
           const googleMarker = new window.google.maps.Marker({
@@ -69,7 +63,6 @@ const googleMap = () => {
           });
           
           googleMarker.addListener('click', () => markerClick(marker));
-          clusterer.current.addMarker(googleMarker);
         }
       });
     }

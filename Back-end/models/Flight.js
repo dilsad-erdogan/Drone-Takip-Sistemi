@@ -18,10 +18,26 @@ const flightSchema = new mongoose.Schema({
       type: Number,  
     },
     startPoint: {
-        type: Number
+        type: {
+            type: String,
+            enum: ["Point"],
+            default: "Point",
+        },
+        coordinates: {
+            type: [Number],
+            default: [0, 0],
+        },
     },
     endPoint: {
-        type: Number,
+        type: {
+            type: String,
+            enum: ["Point"],
+            default: "Point",
+        },
+        coordinates: {
+            type: [Number],
+            default: [0, 0],
+        },
     },
     date_and_time: {
         type: Date,

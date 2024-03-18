@@ -2,52 +2,44 @@ const catchAsyncErrors = require('../middleware/catchAsyncErrors');
 const DroneType = require('../models/DroneType');
 const sendToken = require('../utils/sendToken');
 
-// tüm drone tiplerini getir
 exports.getAll = catchAsyncErrors(async (req, res) => {
     try {
-        // tüm drone tipleri
         const types = await DroneType.findAll();
 
-        res.status(200).json({
-            success: true,
-            data: types
-        })
+        if(types) {
+            res.status(200).json({ success: true, data: types })
+        }else {
+            res.status(404).json({ success: false, data: 'Drone type not found!' });
+        }
+
     } catch(error) {
         console.log(error);
-        res.status(500).json({
-            success: false,
-            error: 'Internal server error'
-        })
+        res.status(500).json({ success: false, error: 'Internal server error!' })
     }
 });
 
-// aktif olan tüm drone tipleri getir
 exports.getActiveAll = catchAsyncErrors(async (req, res) => {
     try {
-        // tüm drone tipleri
-        const types = await DroneType.findAll();
-
-        // Aktif olan droneları bulmak için bir döngü
-        const activeTypeNames = types
-            .filter(type => type.is_active === true)
-            .map(type => type.dataValues.type_name);
-
-        console.log(activeTypeNames);
-        res.status(200).json({
-            success: true,
-            data: activeTypeNames
+        const activeTypes = await DroneType.findAll({
+            where: { is_active: true },
+            attributes: ['type_name']
         });
+
+        const activeTypeNames = activeTypes.map(type => type.type_name);
+
+        if(activeTypes) {
+            res.status(200).json({ success: true, data: activeTypeNames });
+        } else {
+            res.status(404).json({ success: false, data: 'Active drone type not found!' });
+        }
+        
         
     } catch(error) {
         console.log(error);
-        res.status(500).json({
-            success: false,
-            error: 'Internal server error!'
-        })
+        res.status(500).json({ success: false, error: 'Internal server error!' })
     }
 });
 
-// id'ye göre drone tipi getir
 exports.getTypeById = catchAsyncErrors(async (req, res, next) => {
     try {
         const id = req.params.id;
@@ -61,7 +53,7 @@ exports.getTypeById = catchAsyncErrors(async (req, res, next) => {
         } else {
             res.status(404).json({
                 success: false,
-                error: 'Drone type not found'
+                error: 'Drone type not found!'
             })
         }
         
@@ -69,7 +61,7 @@ exports.getTypeById = catchAsyncErrors(async (req, res, next) => {
         console.log(error);
         res.status(500).json({
             success: false,
-            error: 'Internal server error'
+            error: 'Internal server error!'
         })
     }
 }) 
@@ -79,19 +71,13 @@ exports.add = catchAsyncErrors(async(req, res, next) => {
         const { type_name } = req.body;
 
     if (!type_name) {
-      return res.status(400).json({
-        success: false,
-        error: "Type name cannot be empty"
-      });
+      return res.status(400).json({ success: false, error: "Type name cannot be empty!" });
     }
 
     const _type = await DroneType.findOne({ where: { type_name } });
 
     if (_type) {
-      return res.status(400).json({
-        success: false,
-        error: "This brand already exists"
-      });
+      return res.status(400).json({ success: false, error: "This brand already exists" });
     }
 
     const type = await DroneType.create({
@@ -99,50 +85,34 @@ exports.add = catchAsyncErrors(async(req, res, next) => {
     });
 
     await type.save();
-
-    res.status(201).json({ message: "Drone type successfully registered", data: type });
-
-    //sendToken(drone, 201, res, "Kayıt başarılı");
+    res.status(201).json({ message: "Drone type successfully registered.", data: type });
 
     } catch (error) {
-        console.error('Hata:', error);
- // Hatanın consola yazdırılması
-        res.status(500).json({
-        success: false,
-        error: "Internal Server Error"
-    });
+        console.error('Error:', error);
+        res.status(500).json({ success: false, error: "Internal Server Error!" });
     }
 });
 
 
 exports.update = catchAsyncErrors(async (req, res, next) => {
     try {
+        const typeId = req.params.id;
         const { type_name } = req.body;
-        const typeId = req.params.id; // Güncellenecek drone tipinin ID'si
-
-        // Güncellenecek tipi bul
+        
         const typeToUpdate = await DroneType.findByPk(typeId);
 
-        // Tip bulunamazsa hata döndür
         if (!typeToUpdate) {
-        return res.status(404).json({ success: false, error: 'Drone bulunamadı' });
+            return res.status(404).json({ success: false, error: 'Drone not found!' });
         }
 
-        // Yeni bilgilerle tipi güncelle
         typeToUpdate.type_name = type_name || typeToUpdate.type_name;
 
-        // Güncellenmiş tipi kaydet
         await typeToUpdate.save();
-
-        // Başarı durumunda cevap gönder
         res.status(200).json({ success: true, data: typeToUpdate });
+
     } catch (error) {
         console.error('Hata:', error);
-        // Hatanın consola yazdırılması
-        res.status(500).json({
-        success: false,
-        error: "Internal Server Error"
-    });
+        res.status(500).json({ success: false, error: "Internal Server Error!" });
     }
 });
 
@@ -151,23 +121,18 @@ exports.deleteType = catchAsyncErrors(async (req, res)=> {
         const id = req.params.id;
 
         const type = await DroneType.update(
-            {is_active: false},
-            {where: { dronetype_id: id }}
+            { is_active: false },
+            { where: { dronetype_id: id }}
         );
 
         if(type[0] === 0){
-            return res.status(404).json({message: 'Drone type not found'});
+            return res.status(404).json({ success: false, message: 'Drone type not found!' });
         }
 
-        res.status(200).json({
-            message: 'Drone type deleted successful'
-        })
+        res.status(200).json({ success: true, message: 'Drone type deleted successfuly.' })
         
     } catch(error) {
         console.log(error);
-        res.status(500).json({
-            success: false,
-            error: 'Internal server error'
-        })
+        res.status(500).json({ success: false, error: 'Internal server error!' })
     }
 })

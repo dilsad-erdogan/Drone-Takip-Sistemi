@@ -7,6 +7,11 @@ User Panel:
     - Total my flight için sayı gelsin
     - Web socket bağlantısını kontrol et direkt açılınca bilgiler gelsin
     - Permissionda drone seri numaları gelsin
-    - Flight add'de map gelsin ve başlangıç bitiş seçebilsin
+    - Flight add'de map gelsin ve başlangıç bitiş seçebilsin bunu yaptım ama permissionda eklenirken hata mesajı verdi ona bi bak
 
 * map için bi icon bul 
+* admin sayfasına pilotları görüntüle ve işlemlerini gerçekleştir
+* user sayfasında settings de sertifika seçebilsin ve bu onaya düşsün 
+* adminde de sertifikaları düzenleme sayfası
+* adminde sertifika onaylama sayfası
+* mapte aktif rotasyon değişimi denenbilir
