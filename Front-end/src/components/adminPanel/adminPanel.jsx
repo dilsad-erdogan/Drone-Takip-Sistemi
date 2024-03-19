@@ -19,18 +19,25 @@ import Certificate from './certificate/certificate';
 import CertificatePermission from './certificatePermission/certificatePermission';
 
 import UserAdd from './user/userPanel/userAdd';
+import PilotAdd from './pilot/pilotPanel/pilotAdd';
 import DroneAdd from './drone/dronePanel/droneAdd';
 import FlightAdd from './dashboard/flightAdd';
 import BrandAdd from './droneBrand/brandPanel/brandAdd';
 import ModelAdd from './droneModel/modelPanel/modelAdd';
 import TypeAdd from './droneType/typePanel/typeAdd';
 import RoleAdd from './userRoleType/rolePanel/roleAdd';
+import CertificateAdd from './certificate/certificatePanel/certificateAdd';
+import CertificatePermissionAdd from './certificatePermission/certificatePermissionPanel/certificatePermissionUpdate';
 
 import UserUpdate from './user/userPanel/userUpdate';
+import PilotUpdate from './pilot/pilotPanel/pilotUpdate';
 import BrandUpdate from './droneBrand/brandPanel/brandUpdate';
 import ModelUpdate from './droneModel/modelPanel/modelUpdate';
 import TypeUpdate from './droneType/typePanel/typeUpdate';
 import RoleUpdate from './userRoleType/rolePanel/roleUpdate';
+import CertificateUpdate from './certificate/certificatePanel/certificateUpdate';
+import CertificatePermissionUpdate from './certificatePermission/certificatePermissionPanel/certificatePermissionUpdate';
+
 
 const adminPanel = ({ screen, socket }) => {
   const navigate = useNavigate();
@@ -75,6 +82,8 @@ const adminPanel = ({ screen, socket }) => {
         return <CertificatePermission></CertificatePermission>;
       case 'userAdd':
         return <UserAdd></UserAdd>;
+      case 'pilotAdd':
+        return <PilotAdd></PilotAdd>;
       case 'droneAdd':
         return <DroneAdd></DroneAdd>;
       case 'flightAdd':
@@ -87,8 +96,14 @@ const adminPanel = ({ screen, socket }) => {
         return <TypeAdd></TypeAdd>;
       case 'roleAdd':
         return <RoleAdd></RoleAdd>; 
+      case 'certificateAdd':
+        return <CertificateAdd></CertificateAdd>;
+      case 'certificatePermissionAdd':
+        return <CertificatePermissionAdd></CertificatePermissionAdd>;
       case 'userUpdate':
         return <UserUpdate></UserUpdate>;
+      case 'pilotUpdate':
+        return <PilotUpdate></PilotUpdate>;
       case 'brandUpdate':
         return <BrandUpdate></BrandUpdate>;
       case 'modelUpdate':
@@ -96,7 +111,11 @@ const adminPanel = ({ screen, socket }) => {
       case 'typeUpdate':
         return <TypeUpdate></TypeUpdate>;
       case 'roleUpdate':
-        return <RoleUpdate></RoleUpdate>;             
+        return <RoleUpdate></RoleUpdate>;
+      case 'certificateUpdate':
+        return <CertificateUpdate></CertificateUpdate>;
+      case 'certificatePermissionUpdate':
+        return <CertificatePermissionUpdate></CertificatePermissionUpdate>;
       default:
         return null;
     }

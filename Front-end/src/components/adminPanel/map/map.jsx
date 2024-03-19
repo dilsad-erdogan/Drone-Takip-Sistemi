@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
-import icon from '/pageFont.png';
+import icon from '/drone.jpeg';
 import MapModal from '../../ui/commonUsage/mapModal.jsx';
 import FlightModel from '../../../../../Back-end/connections/flight.js';
 const flightModel = new FlightModel();

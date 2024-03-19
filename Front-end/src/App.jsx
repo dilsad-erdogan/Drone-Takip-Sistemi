@@ -34,18 +34,24 @@ const App = () => {
         <Route path="/admin/certificatePermission" element={<AdminPanel screen="certificatePermission" socket={socket}/>} />
 
         <Route path="/admin/userAdd" element={<AdminPanel screen="userAdd" socket={socket}/>} />
+        <Route path="/admin/pilotAdd" element={<AdminPanel screen="pilotAdd" socket={socket}/>} />
         <Route path="/admin/droneAdd" element={<AdminPanel screen="droneAdd" socket={socket}/>} />
         <Route path='/admin/flightAdd' element={<AdminPanel screen="flightAdd" socket={socket}/>} />
         <Route path="/admin/brandAdd" element={<AdminPanel screen="brandAdd" socket={socket}/>} />
         <Route path="/admin/modelAdd" element={<AdminPanel screen="modelAdd" socket={socket}/>} />
         <Route path="/admin/typeAdd" element={<AdminPanel screen="typeAdd" socket={socket}/>} />
         <Route path="/admin/roleAdd" element={<AdminPanel screen="roleAdd" socket={socket}/>} />
+        <Route path="/admin/certificateAdd" element={<AdminPanel screen="certificateAdd" socket={socket}/>} />
+        <Route path="/admin/certificatePermissionAdd" element={<AdminPanel screen="certificatePermissionAdd" socket={socket}/>} />
 
         <Route path="/admin/userUpdate/:id" element={<AdminPanel screen="userUpdate" socket={socket}/>} />
+        <Route path="/admin/pilotUpdate/:id" element={<AdminPanel screen="pilotUpdate" socket={socket}/>} />
         <Route path="/admin/brandUpdate/:id" element={<AdminPanel screen="brandUpdate" socket={socket}/>} />
         <Route path="/admin/modelUpdate/:id" element={<AdminPanel screen="modelUpdate" socket={socket}/>} />
         <Route path="/admin/typeUpdate/:id" element={<AdminPanel screen="typeUpdate" socket={socket}/>} />
         <Route path="/admin/roleUpdate/:id" element={<AdminPanel screen="roleUpdate" socket={socket}/>} />
+        <Route path="/admin/certificateUpdate/:id" element={<AdminPanel screen="certificateUpdate" socket={socket}/>} />
+        <Route path="/admin/certificatePermissionUpdate/:id" element={<AdminPanel screen="certificatePermissionUpdate" socket={socket}/>} />
           
         <Route path="/user" element={<UserPanel screen="panel" socket={socket}/>} />
         <Route path="/user/map" element={<UserPanel screen="map" socket={socket}/>} />
