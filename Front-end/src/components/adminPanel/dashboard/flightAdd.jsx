@@ -180,7 +180,7 @@ const flightAdd = ({ socket }) => {
                             drone.is_active === true ? (<option key={drone.drone_id} value={drone.drone_id}>{drone.serial_number}</option>) : (console.log())
                         ))}
                     </select>
-                    <input type='text' placeholder='Flight Date and Time' value={dateAndTime} onChange={(e) => {setDateAndTime(e.target.value)}}></input>
+                    <input type='datetime-local' placeholder='Flight Date and Time' value={dateAndTime} onChange={(e) => {setDateAndTime(e.target.value)}}></input>
                     <div className='container-fluid'>
                         {isLoaded ? (
                             <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={6} onClick={handleMapClick}>

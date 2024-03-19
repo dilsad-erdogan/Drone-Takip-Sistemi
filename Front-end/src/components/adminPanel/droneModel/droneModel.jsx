@@ -4,6 +4,8 @@ import Search from '../../ui/commonUsage/search.jsx';
 import Pagination from '../../ui/commonUsage/pagination.jsx';
 import DroneModelModel from '../../../../../Back-end/connections/droneModel.js';
 const droneModelModel = new DroneModelModel();
+import DroneBrandModel from '../../../../../Back-end/connections/droneBrand.js';
+const droneBrandModel = new DroneBrandModel();
 import DeleteModal from '../../ui/commonUsage/modal.jsx';
 import { useEffect, useState } from 'react';
 
@@ -12,6 +14,7 @@ const droneModel = () => {
   const [droneModelData, setDroneModelData] = useState([]);
   const [deleteModal, setDeleteModal] = useState(false);
   const [deletedModel, setDeletedModel] = useState([]);
+  const [brandNames, setBrandNames]= useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -21,6 +24,13 @@ const droneModel = () => {
 
         if(Array.isArray(model)){
           setDroneModelData(model);
+
+          const brands = {};
+          for(const brand of model){
+            brands[brand.brand_id] = await getBrandById(brand.brand_id);
+          }
+          setBrandNames(brands);
+
         } else{
           console.error('Hata getDroneModel bir dizi döndürmedi.');
         }
@@ -32,6 +42,16 @@ const droneModel = () => {
 
     fetchData();
   }, [])
+
+  async function getBrandById(brandId){
+    try{
+      const brandName = await droneBrandModel.getBrandById(brandId);
+      return brandName;
+    } catch(error){
+      console.error('Hata:', error.message);
+      return brandId;
+    }
+  }
 
   const addNewModel = () => {
     navigate('/admin/modelAdd');
@@ -81,7 +101,7 @@ const droneModel = () => {
         <tbody>
           {droneModelData && droneModelData.map((model) => (
             <tr key={model.model_id}>
-              <td>{model.brand_id}</td>
+              <td>{brandNames[model.brand_id]}</td>
               <td>{model.model_name}</td>
               <td>
                 <div className='form-check form-switch'>
