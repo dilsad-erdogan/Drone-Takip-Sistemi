@@ -8,12 +8,15 @@ import SideBar from './sideBar/sideBar';
 import Dashboard from './dashboard/dashboard';
 import Map from './map/map';
 import User from './user/user';
+import Pilot from './pilot/pilot';
 import Drone from './drone/drone';
 import Permissions from './permission/permission';
 import DroneBrand from './droneBrand/droneBrand';
 import DroneModel from './droneModel/droneModel';
 import DroneType from './droneType/droneType';
 import UserRoleType from './userRoleType/userRoleType';
+import Certificate from './certificate/certificate';
+import CertificatePermission from './certificatePermission/certificatePermission';
 
 import UserAdd from './user/userPanel/userAdd';
 import DroneAdd from './drone/dronePanel/droneAdd';
@@ -52,6 +55,8 @@ const adminPanel = ({ screen, socket }) => {
         return <Map></Map>;
       case 'user':
         return <User></User>;
+      case 'pilot':
+        return <Pilot></Pilot>;
       case 'drone':
         return <Drone></Drone>;
       case 'permissions':
@@ -64,6 +69,10 @@ const adminPanel = ({ screen, socket }) => {
         return <DroneType></DroneType>;
       case 'roleType':
         return <UserRoleType></UserRoleType>;
+      case 'certificate':
+        return <Certificate></Certificate>;
+      case 'certificatePermission':
+        return <CertificatePermission></CertificatePermission>;
       case 'userAdd':
         return <UserAdd></UserAdd>;
       case 'droneAdd':

@@ -4,6 +4,9 @@ import { FiLogOut } from "react-icons/fi";
 import { TbDrone, TbBrandAppgallery, TbBoxModel2 } from "react-icons/tb";
 import { VscTypeHierarchy } from "react-icons/vsc";
 import { IoSettingsOutline, IoHelp } from "react-icons/io5";
+import { RiCopilotFill } from "react-icons/ri";
+import { LiaCertificateSolid } from "react-icons/lia";
+import { AiOutlineSafetyCertificate } from "react-icons/ai";
 import MenuLink from '../../ui/commonUsage/menuLink.jsx';
 import '../../ui/panel.css';
 import { useNavigate } from 'react-router-dom';
@@ -24,6 +27,11 @@ const menuItems = [
         title: "Users",
         path: "/admin/user",
         icon: <FaUser></FaUser>
+      },
+      {
+        title: "Pilots",
+        path: "/admin/pilot",
+        icon: <RiCopilotFill></RiCopilotFill>
       },
       {
         title: "Drones",
@@ -64,6 +72,16 @@ const menuItems = [
         title: "User Role Type",
         path: "/admin/user-roleType",
         icon: <MdOutlineMergeType></MdOutlineMergeType>
+      },
+      {
+        title: "Pilot Certificate",
+        path: "/admin/certificate",
+        icon: <LiaCertificateSolid></LiaCertificateSolid>
+      },
+      {
+        title: "Pilot Certificate Permission",
+        path: "/admin/certificatePermission",
+        icon: <AiOutlineSafetyCertificate></AiOutlineSafetyCertificate>
       },
     ],
   },

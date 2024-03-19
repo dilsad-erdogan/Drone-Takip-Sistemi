@@ -22,6 +22,7 @@ const App = () => {
         <Route path="/admin" element={<AdminPanel screen="dashboard" socket={socket}/>} />
         <Route path="/admin/map" element={<AdminPanel screen="map" socket={socket}/>} />
         <Route path="/admin/user" element={<AdminPanel screen="user" socket={socket}/>} />
+        <Route path="/admin/pilot" element={<AdminPanel screen="pilot" socket={socket}/>} />
         <Route path="/admin/drone" element={<AdminPanel screen="drone" socket={socket}/>} />
         <Route path="/admin/permissions" element={<AdminPanel screen="permissions" socket={socket}/>} />
 
@@ -29,6 +30,8 @@ const App = () => {
         <Route path="/admin/drone-model" element={<AdminPanel screen="model" socket={socket}/>} />
         <Route path="/admin/drone-type" element={<AdminPanel screen="type" socket={socket}/>} />
         <Route path="/admin/user-roleType" element={<AdminPanel screen="roleType" socket={socket}/>} />
+        <Route path="/admin/certificate" element={<AdminPanel screen="certificate" socket={socket}/>} />
+        <Route path="/admin/certificatePermission" element={<AdminPanel screen="certificatePermission" socket={socket}/>} />
 
         <Route path="/admin/userAdd" element={<AdminPanel screen="userAdd" socket={socket}/>} />
         <Route path="/admin/droneAdd" element={<AdminPanel screen="droneAdd" socket={socket}/>} />
