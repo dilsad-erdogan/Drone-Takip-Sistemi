@@ -1,11 +1,11 @@
-class PilotCertificate{
+class CertificatePermission{
     constructor(){
-        this.certificate = [];
+        this.certificatePermission = [];
     }
 
-    async fetchCertificateData(){
+    async fetchCertificatePermissionData(){
         try{
-            const response = await fetch('http://localhost:3000/certificate/all');
+            const response = await fetch('http://localhost:3000/certificatePermission/all');
 
             if(!response.ok){
                 throw new Error(`API isteği başarısız oldu. Status: ${response.status}`);
@@ -17,7 +17,7 @@ class PilotCertificate{
                 throw new Error('API yanıtı beklenen formatta bir dizi içermiyor.');
             }
 
-            this.certificate = responseData.data;
+            this.permission = responseData.data;
         } catch(error){
             console.error('Hata:', error.message);
             throw error;
@@ -26,7 +26,7 @@ class PilotCertificate{
 
     async fetchActiveAll(){
         try{
-            const response = await fetch('http://localhost:3000/certificate/activeAll');
+            const response = await fetch('http://localhost:3000/certificatePermission/activeAll');
             
             if(!response.ok){
                 throw new Error(`API isteği başarısız oldu. Status: ${response.status}`);
@@ -44,9 +44,9 @@ class PilotCertificate{
         }
     }
 
-    async getCertificateById(certificateId){
+    async getCertificatePermissionById(certificatePermissionId){
         try{
-            const response = await fetch(`http://localhost:3000/certificate/${certificateId}`, {
+            const response = await fetch(`http://localhost:3000/certificatePermission/${certificatePermissionId}`, {
                 method: "GET"
             });
 
@@ -67,65 +67,56 @@ class PilotCertificate{
         }
     }
 
-    async addCertificate(newCertificate){
+    async getTotalCertificatePermissionCount(){
         try{
-            const response = await fetch('http://localhost:3000/certificate/add', {
+            const response = await fetch('http://localhost:3000/certificatePermission/total');
+            const data = await response.json();
+
+            return data;
+        } catch(error){
+            console.log('Hata:', error.message);
+        }
+    }
+
+    async addCertificatePermission(newCertificatePermission){
+        try{
+            const response = await fetch('http://localhost:3000/certificatePermission/add', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(newCertificate),
+                body: JSON.stringify(newCertificatePermission),
             });
 
             if(!response.ok){
-                throw new Error('Permission eklenirken bir hata oluştu.');
+                throw new Error('Certificate permission eklenirken bir hata oluştu.');
             }
 
-            await this.fetchCertificateData();
+            await this.fetchCertificatePermissionData();
         } catch(error){
             console.error('Hata:', error.message);
         }
     }
 
-    async updateCertificate(certificateId, newCertificate){
+    async deleteCertificatePermission(certificatePermissionId){
         try{
-            const response = await fetch(`http://localhost:3000/certificate/update/${certificateId}`, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(newCertificate),
-            });
-
-            if(!response.ok){
-                throw new Error('Permission güncellenirken hata oldu.');
-            }
-
-            await this.fetchCertificateData();
-        } catch(error){
-            console.error('Hata:', error.message);
-        }
-    }
-
-    async deleteCertificate(certificateId){
-        try{
-            const response = await fetch(`http://localhost:3000/certificate/delete/${certificateId}`, {
+            const response = await fetch(`http://localhost:3000/certificatePermission/delete/${certificatePermissionId}`, {
                 method: "PATCH"
             });
 
             if(!response.ok){
-                throw new Error('Permission silinirken bir hata oluştu.');
+                throw new Error('Certificate permission silinirken bir hata oluştu.');
             }
 
-            await this.fetchCertificateData();
+            await this.fetchCertificatePermissionData();
         } catch(error){
             console.error('Hata:', error.message);
         }
     }
 
-    getCertificate(){
-        return this.certificate;
+    getCertificatePermission(){
+        return this.certificatePermission;
     }
 }
 
-export default PilotCertificate;
+export default CertificatePermission;
