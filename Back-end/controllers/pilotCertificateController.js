@@ -87,7 +87,6 @@ exports.add = catchAsyncErrors(async(req, res, next) => {
     }
 });
 
-
 exports.update = catchAsyncErrors(async (req, res, next) => {
     try {
         const certificateId = req.params.id;
