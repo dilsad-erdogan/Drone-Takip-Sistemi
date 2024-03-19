@@ -9,6 +9,17 @@ import PilotModel from '../../../../../Back-end/connections/pilot.js';
 const pilotModel = new PilotModel();
 import UserModel from '../../../../../Back-end/connections/user.js';
 const userModel = new UserModel();
+import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api';
+
+const containerStyle = {
+    width: '100%',
+    height: '50vh'
+};
+
+const center = {
+    lat: 38.9639778137207,
+    lng: 35.243247985839844
+};
 
 const flightAdd = ({ socket }) => {
     const[users, setUsers] = useState([]);
@@ -20,8 +31,17 @@ const flightAdd = ({ socket }) => {
     const[droneId, setDroneId] = useState('');
     const[pilotId, setPilotId] = useState('');
     const[dateAndTime, setDateAndTime] = useState('');
+    const[startPoint, setStartPoint] = useState('');
+    const[endPoint, setEndPoint] = useState('');
 
     const[userNames, setUserNames] = useState('');
+    const[clickCount, setClickCount] = useState(0);
+    const[markers, setMarkers] = useState([]);
+
+    const { isLoaded } = useJsApiLoader({
+        id: 'google-map-script',
+        googleMapsApiKey: "AIzaSyA4Iplfzhel3DioSkxnZjF9bcGXR-ORItw"
+    });
 
     useEffect(() => {
         const fetchDroneData = async () => {
@@ -102,8 +122,14 @@ const flightAdd = ({ socket }) => {
             pilot_id: pilotId,
             drone_id: droneId,
             date_and_time: dateAndTime,
-            startPoint: null, //mapten seçilecek
-            endPoint: null, //mapten seçilecek
+            startPoint: {
+                type: "Point",
+                coordinates: [startPoint.split(', ')[0], startPoint.split(', ')[1]]
+            },
+            endPoint: {
+                type: "Point",
+                coordinates: [endPoint.split(', ')[0], endPoint.split(', ')[1]]
+            },
             is_active: true
         }
         console.log(newPermission);
@@ -115,6 +141,18 @@ const flightAdd = ({ socket }) => {
         });
         
         navigate('/admin');
+    }
+
+    const handleMapClick = (ev) => {
+        if(clickCount === 0){
+            setStartPoint(`${ev.latLng.lat()}, ${ev.latLng.lng()}`);
+            setClickCount(1);
+            setMarkers([{ lat: ev.latLng.lat(), lng: ev.latLng.lng(), type: 'start' }]);
+        } else if(clickCount === 1) {
+            setEndPoint(`${ev.latLng.lat()}, ${ev.latLng.lng()}`);
+            setClickCount(2);
+            setMarkers([...markers, { lat: ev.latLng.lat(), lng: ev.latLng.lng(), type: 'end' }]);
+        }
     }
 
     return (
@@ -150,6 +188,17 @@ const flightAdd = ({ socket }) => {
                         ))}
                     </select>
                     <input type='text' placeholder='Flight Date and Time' value={dateAndTime} onChange={(e) => {setDateAndTime(e.target.value)}}></input>
+                    <div className='container-fluid'>
+                        {isLoaded ? (
+                            <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={6} onClick={handleMapClick}>
+                                {markers.map((marker, index) => (
+                                    <Marker key={index} position={{ lat: marker.lat, lng: marker.lng }} icon={'https://maps.google.com/mapfiles/ms/icons/red-dot.png'} />
+                                ))}
+                            </GoogleMap>
+                        ) : (
+                            <p>Map is loading...</p>
+                        )}
+                    </div>
                     <button type='submit'>Submit</button>
                 </form>
             </div>
