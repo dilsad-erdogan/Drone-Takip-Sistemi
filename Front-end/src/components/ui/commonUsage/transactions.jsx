@@ -17,15 +17,15 @@ const transactions = ({ flights }) => {
                 <button className='btn btn-outline-light' onClick={() => {addNewFlight()}}>Add New Flight</button>
             </div>
   
-            <table className='transTable'>
+            <table className='dataTable'>
                 <thead>
                     <tr>
-                        <td><b>Flight Number</b></td>
-                        <td><b>Owner</b></td>
-                        <td><b>Pilot</b></td>
-                        <td><b>Drone</b></td>
-                        <td><b>Coordinates</b></td>
-                        <td><b>Created At</b></td>
+                        <td>Flight Number</td>
+                        <td>Owner</td>
+                        <td>Pilot</td>
+                        <td>Drone</td>
+                        <td>Coordinates</td>
+                        <td>Created At</td>
                     </tr>
                 </thead>
 
