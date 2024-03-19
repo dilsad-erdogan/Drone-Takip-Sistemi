@@ -66,6 +66,18 @@ class Flight{
         }
     }
 
+    async fetchTotalUserFlight(userId){
+        try{
+            const response = await fetch(`http://localhost:3000/flight/total/${userId}`);
+            const data = await response.json();
+
+            return data;
+        } catch(error){
+            console.error('Error in fetchTotalUserFlight:', error.message);
+            throw error;
+        }
+    }
+
     getFlights(){
         return this.flight;
     }
