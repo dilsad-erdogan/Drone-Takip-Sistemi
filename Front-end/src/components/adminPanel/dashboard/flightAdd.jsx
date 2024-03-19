@@ -118,7 +118,6 @@ const flightAdd = ({ socket }) => {
 
         const newPermission = {
             user_id: userId,
-            owner_id: userId,
             pilot_id: pilotId,
             drone_id: droneId,
             date_and_time: dateAndTime,
@@ -163,12 +162,6 @@ const flightAdd = ({ socket }) => {
 
             <div className="addPanel">
                 <form action="" className="addForm" onSubmit={submitEvent}>
-                    <select name='cat' id='id' onChange={(e) => [setUserId(e.target.value)]}>
-                        <option>Select a user</option>
-                        {users && users.map((user) => (
-                            user.is_active === true ? (<option key={user.user_id} value={user.user_id}>{user.name}</option>) : (console.log())
-                        ))}
-                    </select>
                     <select name='cat' id='id' onChange={(e) => [setUserId(e.target.value)]}>
                         <option>Select a owner</option>
                         {users && users.map((user) => (

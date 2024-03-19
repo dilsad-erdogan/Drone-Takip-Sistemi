@@ -99,7 +99,6 @@ const flightAdd = ({ socket }) => {
 
         const newPermission = {
             user_id: localStorage.getItem("userId"),
-            owner_id: localStorage.getItem("userId"),
             pilot_id: pilotId,
             drone_id: droneId,
             date_and_time: dateAndTime,
