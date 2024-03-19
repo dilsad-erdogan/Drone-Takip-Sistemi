@@ -49,7 +49,7 @@ exports.getPilotById = catchAsyncErrors(async (req, res) => {
         console.log(error);
         res.status(500).json({ success: false, error: 'Internal server error!' })
     }
-})
+})//çalışmıyo
 
 exports.getTotalPilotCount = catchAsyncErrors(async (req, res) => {
     try {
@@ -95,7 +95,7 @@ exports.update = catchAsyncErrors(async (req, res) => {
         console.log(error);
         res.status(500).json({ success: false, error: 'Internal server error!' })
     }
-})
+})//boş
 
 exports.deletePilot = catchAsyncErrors(async (req, res) => {
     try {
