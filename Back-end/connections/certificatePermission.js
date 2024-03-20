@@ -17,7 +17,7 @@ class CertificatePermission{
                 throw new Error('API yanıtı beklenen formatta bir dizi içermiyor.');
             }
 
-            this.permission = responseData.data;
+            this.certificatePermission = responseData.data;
         } catch(error){
             console.error('Hata:', error.message);
             throw error;

@@ -27,7 +27,6 @@ import ModelAdd from './droneModel/modelPanel/modelAdd';
 import TypeAdd from './droneType/typePanel/typeAdd';
 import RoleAdd from './userRoleType/rolePanel/roleAdd';
 import CertificateAdd from './certificate/certificatePanel/certificateAdd';
-import CertificatePermissionAdd from './certificatePermission/certificatePermissionPanel/certificatePermissionUpdate';
 
 import UserUpdate from './user/userPanel/userUpdate';
 import PilotUpdate from './pilot/pilotPanel/pilotUpdate';
@@ -36,8 +35,6 @@ import ModelUpdate from './droneModel/modelPanel/modelUpdate';
 import TypeUpdate from './droneType/typePanel/typeUpdate';
 import RoleUpdate from './userRoleType/rolePanel/roleUpdate';
 import CertificateUpdate from './certificate/certificatePanel/certificateUpdate';
-import CertificatePermissionUpdate from './certificatePermission/certificatePermissionPanel/certificatePermissionUpdate';
-
 
 const adminPanel = ({ screen, socket }) => {
   const navigate = useNavigate();
@@ -98,8 +95,6 @@ const adminPanel = ({ screen, socket }) => {
         return <RoleAdd></RoleAdd>; 
       case 'certificateAdd':
         return <CertificateAdd></CertificateAdd>;
-      case 'certificatePermissionAdd':
-        return <CertificatePermissionAdd></CertificatePermissionAdd>;
       case 'userUpdate':
         return <UserUpdate></UserUpdate>;
       case 'pilotUpdate':
@@ -114,8 +109,6 @@ const adminPanel = ({ screen, socket }) => {
         return <RoleUpdate></RoleUpdate>;
       case 'certificateUpdate':
         return <CertificateUpdate></CertificateUpdate>;
-      case 'certificatePermissionUpdate':
-        return <CertificatePermissionUpdate></CertificatePermissionUpdate>;
       default:
         return null;
     }
