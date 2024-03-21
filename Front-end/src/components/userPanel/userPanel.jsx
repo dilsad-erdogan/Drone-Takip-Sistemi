@@ -9,6 +9,7 @@ import Dashboard from './dashboard/dashboard';
 import Map from './map/map';
 import Drone from './drone/drone';
 import Permissions from './permission/permission';
+import Settings from './settings/settings';
 import DroneAdd from './drone/dronePanel/droneAdd';
 import FlightAdd from './dashboard/flightAdd';
 
@@ -36,6 +37,8 @@ const userPanel = ({ screen, socket }) => {
         return <Drone></Drone>;
       case 'permissions':
         return <Permissions></Permissions>;
+      case 'settings':
+        return <Settings></Settings>;
       case 'droneAdd':
         return <DroneAdd></DroneAdd>;
       case 'flightAdd':

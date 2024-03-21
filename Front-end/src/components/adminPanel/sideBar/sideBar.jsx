@@ -90,7 +90,7 @@ const menuItems = [
     list: [
       {
         title: "Settings",
-        path: "#",
+        path: "/admin/settings",
         icon: <IoSettingsOutline></IoSettingsOutline>
       },
       {

@@ -17,6 +17,7 @@ import DroneType from './droneType/droneType';
 import UserRoleType from './userRoleType/userRoleType';
 import Certificate from './certificate/certificate';
 import CertificatePermission from './certificatePermission/certificatePermission';
+import Settings from './settings/settings';
 
 import UserAdd from './user/userPanel/userAdd';
 import PilotAdd from './pilot/pilotPanel/pilotAdd';
@@ -77,6 +78,8 @@ const adminPanel = ({ screen, socket }) => {
         return <Certificate></Certificate>;
       case 'certificatePermission':
         return <CertificatePermission></CertificatePermission>;
+      case 'settings':
+        return <Settings></Settings>;
       case 'userAdd':
         return <UserAdd></UserAdd>;
       case 'pilotAdd':
