@@ -127,6 +127,7 @@ exports.update = catchAsyncErrors(async (req, res) => {
             permission.pilot_id = pilot_id || permission.pilot_id;
             permission.certificate_id = certificate_id || permission.certificate_id;
             permission.permission_status = permission_status || permission.permission_status;
+            permission.is_active = false;
 
             await permission.save()
             if (permission_status === true) {

@@ -15,29 +15,29 @@ const certificatePermission = () => {
   const [pilotNames, setPilotNames] = useState({});
 
   useEffect(() => {
-    const fetchData = async () => {
-      try{
-        await certificatePermissionModel.fetchCertificatePermissionData();
-        const certificates = certificatePermissionModel.getCertificatePermission();
-
-        if(Array.isArray(certificates)) {
-          setCertificateData(certificates);
-
-          const pilots = {};
-          for(const pilot of certificates){
-            pilots[pilot.pilot_id] = await getUserById(pilot.pilot_id);
-          }
-          setPilotNames(pilots);
-        } else{
-          console.error('Hata: getCertificate dizi döndürmedi.');
-        }
-      } catch(error){
-        console.error('Error:', error);
-      }
-    };
-
     fetchData();
   }, []);
+
+  const fetchData = async () => {
+    try{
+      await certificatePermissionModel.fetchCertificatePermissionData();
+      const certificates = certificatePermissionModel.getCertificatePermission();
+
+      if(Array.isArray(certificates)) {
+        setCertificateData(certificates);
+
+        const pilots = {};
+        for(const pilot of certificates){
+          pilots[pilot.pilot_id] = await getUserById(pilot.pilot_id);
+        }
+        setPilotNames(pilots);
+      } else{
+        console.error('Hata: getCertificate dizi döndürmedi.');
+      }
+    } catch(error){
+      console.error('Error:', error);
+    }
+  };
 
   async function getUserById(userId){
     if (!userId) {
@@ -73,12 +73,34 @@ const certificatePermission = () => {
   }
 
   const approveButtonClick = (certificatePermission) => {
-    console.log("Onaylama");
-  }
+    const newCertificate = {
+      pilot_id: certificatePermission.pilot_id,
+      certificate_id: certificatePermission.certificate_id,
+      permission_status: true,
+    };
 
-  const disapproveButtonClick = (certificatePermission_id) => {
-    console.log("Onay reddi");
-  }
+    certificatePermissionModel.updateCertificatePermission(certificatePermission.certificate_id, newCertificate).then(() => {
+      alert('Certificate ataması onaylandı.');
+      fetchData();
+    }).catch((error) => {
+      console.error('Hata:', error.message);
+    });
+  };
+
+  const disapproveButtonClick = (certificatePermission) => {
+    const newCertificate = {
+      pilot_id: certificatePermission.pilot_id,
+      certificate_id: certificatePermission.certificate_id,
+      permission_status: false,
+    };
+
+    certificatePermissionModel.updateCertificatePermission(certificatePermission.certificate_id, newCertificate).then(() => {
+      alert('Certificate ataması reddedildi.');
+      fetchData();
+    }).catch((error) => {
+      console.error('Hata:', error.message);
+    });
+  };
   
   return (
     <div className='topPanel'>
@@ -116,7 +138,7 @@ const certificatePermission = () => {
                 (
                   <div className="buttons">
                     <button className="button update" onClick={() => { approveButtonClick(certificate) }}>Approve</button>
-                    <button className="button delete" onClick={() => { disapproveButtonClick(certificate.permission_id) }}>Disapprove</button>
+                    <button className="button delete" onClick={() => { disapproveButtonClick(certificate) }}>Disapprove</button>
                   </div>
                 )
                 :

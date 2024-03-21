@@ -98,6 +98,26 @@ class CertificatePermission{
         }
     }
 
+    async updateCertificatePermission(certificatePermissionId, newCertificatePermission){
+        try{
+            const response = await fetch(`http://localhost:3000/certificatePermission/update/${certificatePermissionId}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(newCertificatePermission),
+            });
+
+            if(!response.ok){
+                throw new Error('Certificate Permission güncellenirken hata oldu.');
+            }
+
+            await this.fetchCertificatePermissionData();
+        } catch(error){
+            console.error('Hata:', error.message);
+        }
+    }
+
     async deleteCertificatePermission(certificatePermissionId){
         try{
             const response = await fetch(`http://localhost:3000/certificatePermission/delete/${certificatePermissionId}`, {
