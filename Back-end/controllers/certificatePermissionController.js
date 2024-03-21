@@ -119,7 +119,7 @@ exports.update = catchAsyncErrors(async (req, res) => {
         const id = req.params.id
         const { pilot_id, certificate_id, permission_status } = req.body
 
-        const permission = await CertificatePermission.findById(id)
+        const permission = await CertificatePermission.findByPk(id)
 
         if(!permission) {
             res.status(404).json({ success: false, message: 'Permission not found!'})
@@ -139,7 +139,7 @@ exports.update = catchAsyncErrors(async (req, res) => {
         console.log(error);
         res.status(500).json({ success: false, error: 'Internal server error!' })
     }
-})//hata veriyor bende
+})
 
 exports.deletePermission = catchAsyncErrors(async (req, res) => {
     try {

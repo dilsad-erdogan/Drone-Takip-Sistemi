@@ -90,7 +90,7 @@ class PilotCertificate{
     async updateCertificate(certificateId, newCertificate){
         try{
             const response = await fetch(`http://localhost:3000/certificate/update/${certificateId}`, {
-                method: 'PATCH',
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },

@@ -5,11 +5,14 @@ import { useEffect, useState } from "react";
 import DeleteModal from '../../ui/commonUsage/modal.jsx';
 import CertificatePermissionModel from '../../../../../Back-end/connections/certificatePermission.js';
 const certificatePermissionModel = new CertificatePermissionModel();
+import UserModel from '../../../../../Back-end/connections/user.js';
+const userModel = new UserModel();
 
 const certificatePermission = () => {
   const [deleteModal, setDeleteModal] = useState(false);
   const [deletedCertificate, setDeletedCertificate] = useState();
   const [certificateData, setCertificateData] = useState([]);
+  const [pilotNames, setPilotNames] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
@@ -19,6 +22,12 @@ const certificatePermission = () => {
 
         if(Array.isArray(certificates)) {
           setCertificateData(certificates);
+
+          const pilots = {};
+          for(const pilot of certificates){
+            pilots[pilot.pilot_id] = await getUserById(pilot.pilot_id);
+          }
+          setPilotNames(pilots);
         } else{
           console.error('Hata: getCertificate dizi döndürmedi.');
         }
@@ -29,6 +38,20 @@ const certificatePermission = () => {
 
     fetchData();
   }, []);
+
+  async function getUserById(userId){
+    if (!userId) {
+      return null;
+    }
+
+    try{
+      const userName = await userModel.getUserByName(userId);
+      return userName;
+    } catch(error){
+      console.error('Hata:', error.message);
+      return userId;
+    }
+  }
 
   const deleteButtonClick = async (certificateId) => {
     setDeletedCertificate(certificateId);
@@ -79,18 +102,13 @@ const certificatePermission = () => {
         <tbody>
           {certificateData && certificateData.map((certificate) => (
             <tr key={certificate.permission_id}>
-              <td>{certificate.pilot_id}</td>
+              <td>{pilotNames[certificate.pilot_id]}</td>
               <td>{certificate.certificate_id}</td>
               <td>{certificate.permission_status === true ? 'true' : 'false'}</td>
               <td>{certificate.date_and_time}</td>
               <td>
                 <div className='form-check form-switch'>
                   <input className='form-check-input' type='checkbox' checked={certificate.is_active} onChange={() => {}}></input>
-                </div>
-              </td>
-              <td>
-                <div className='buttons'>
-                  <button className='button delete' onClick={() => {deleteButtonClick(certificate.permission_id)}}>Delete</button>
                 </div>
               </td>
               <td>
@@ -108,6 +126,11 @@ const certificatePermission = () => {
                     <button className='button off'>Disapprove</button>
                   </div>
                 )}
+              </td>
+              <td>
+                <div className='buttons'>
+                  <button className='button delete' onClick={() => {deleteButtonClick(certificate.permission_id)}}>Delete</button>
+                </div>
               </td>
             </tr>
           ))}
