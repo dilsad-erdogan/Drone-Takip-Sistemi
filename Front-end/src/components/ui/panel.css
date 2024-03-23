@@ -336,6 +336,7 @@ a{
     border: 2px solid var(--tableAndHover);
     border-radius: 5px;
     margin-bottom: 30px;
+    margin-top: 20px;
 }
 
 .addForm input{
