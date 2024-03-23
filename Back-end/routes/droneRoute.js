@@ -4,6 +4,7 @@ const {
     getAll,
     getActiveAll,
     getDroneById,
+    getSerialNumberById,
     add,
     update,
     deleteDrone,
@@ -17,6 +18,7 @@ const router = express.Router();
 router.route('/all').get(getAll);
 router.route('/activeAll').get(getActiveAll);
 router.route('/total').get(getTotalDroneCount);
+router.route('/serialNumber/:id').get(getSerialNumberById)
 router.route('/:id').get(getDroneById);
 router.route('/add').post(add);
 router.route('/update/:id').put(update);

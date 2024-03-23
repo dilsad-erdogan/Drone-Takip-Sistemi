@@ -206,7 +206,6 @@ exports.deleteDrone = catchAsyncErrors(async (req, res)=> {
     }
 })
 
-//total drone count
 exports.getTotalDroneCount = catchAsyncErrors(async (req, res) => {
     try{
         const drones = await Drone.findAll();
@@ -248,6 +247,23 @@ exports.getTotalUserDroneCount = catchAsyncErrors(async (req, res) => {
             success: false,
             error: 'Internal server error'
         });
+    }
+});
+
+exports.getSerialNumberById = catchAsyncErrors(async (req, res) => {
+    try {
+        const id = req.params.id
+        const serialNumber = await Drone.findByPk(id);
+
+
+        if(serialNumber){
+            res.status(200).json({ success: true, message: serialNumber.dataValues.serial_number });
+        } else {
+            res.status(404).json({ success: false, message: 'Drone not found!' });
+        }
+
+    } catch(error) {
+        res.status(500).json({error: error.message});
     }
 });
 
