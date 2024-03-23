@@ -7,11 +7,14 @@ import DroneModel from '../../../../../../Back-end/connections/drone.js';
 const droneConnectionModel = new DroneModel();
 import DroneBrandModel from '../../../../../../Back-end/connections/droneBrand.js';
 const droneBrandModel = new DroneBrandModel();
+import UserModel from '../../../../../../Back-end/connections/user.js';
+const userModel = new UserModel();
 
 const droneAdd = () => {
   const[droneTypeData, setDroneTypeData] = useState([]);
   const[droneBrandData, setDroneBrandData] = useState([]);
   const[droneModelData, setDroneModelData] = useState([]);
+  const[userData, setUserData] = useState([]);
   const navigate = useNavigate();
 
   const[serialNumber, setSerialNumber] = useState('');
@@ -58,10 +61,27 @@ const droneAdd = () => {
         console.error('Error fetching drone brand data:', error.message);
         console.error('Full error:', error);
       }
+    };
+
+    const fetchUserData = async () => {
+      try{
+        await userModel.fetchUserData();
+        const user = userModel.getUsers();
+
+        if(Array.isArray(user)){
+          setUserData(user);
+        } else{
+          console.error('Hata getDroneBrands bir dizi döndürmedi.');
+        }
+      } catch(error) {
+        console.error('Error fetching drone brand data:', error.message);
+        console.error('Full error:', error);
+      }
     }
 
     fetchDataType();
     fetchDataBrand();
+    fetchUserData();
   }, []);
 
   const fetchDataModel = (brandId) => {
@@ -137,6 +157,12 @@ const droneAdd = () => {
                     <option key={data.model_id} value={data.model_id}>{data.model_name}</option>
                   ))} 
                 </select>
+                <select name='cat' id='cat' value={ownerId} onChange={(e) => {setOwnerId(e.target.value)}}>
+                  <option>Select a owner</option>
+                  {userData && userData.map((data) => (
+                    <option key={data.user_id} value={data.user_id}>{data.name}</option>
+                  ))} 
+                </select>
                 <input type='number' placeholder='Drone Size Height' value={sizeHeight} onChange={(e) => {setSizeHeight(e.target.value)}}></input>
                 <input type='number' placeholder='Drone Size Width' value={sizeWidth} onChange={(e) => {setSizeWidth(e.target.value)}}></input>
                 <input type='number' placeholder='Drone Size Dept' value={sizeDept} onChange={(e) => {setSizeDept(e.target.value)}}></input>
@@ -144,7 +170,6 @@ const droneAdd = () => {
                 <input type='text' placeholder='Drone Airframe Name' value={airframe} onChange={(e) => {setAirframe(e.target.value)}}></input>
                 <input type='text' placeholder='Drone Propeller Size' value={propeller} onChange={(e) => {setPropeller(e.target.value)}}></input>
                 <input type='text' placeholder='Drone Material' value={material} onChange={(e) => {setMaterial(e.target.value)}}></input>
-                <input type='text' placeholder='Drone Owner' value={ownerId} onChange={(e) => {setOwnerId(e.target.value)}}></input>
                 <input type='text' placeholder='Drone Serial Number' value={serialNumber} onChange={(e) => {setSerialNumber(e.target.value)}}></input>
                 <button type='submit'>Submit</button>
             </form>
