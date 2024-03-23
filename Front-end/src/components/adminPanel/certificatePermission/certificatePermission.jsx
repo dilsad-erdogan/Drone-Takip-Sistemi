@@ -7,12 +7,15 @@ import CertificatePermissionModel from '../../../../../Back-end/connections/cert
 const certificatePermissionModel = new CertificatePermissionModel();
 import UserModel from '../../../../../Back-end/connections/user.js';
 const userModel = new UserModel();
+import PilotCertificate from '../../../../../Back-end/connections/pilotCertificate.js';
+const pilotCertificate = new PilotCertificate();
 
 const certificatePermission = () => {
   const [deleteModal, setDeleteModal] = useState(false);
   const [deletedCertificate, setDeletedCertificate] = useState();
   const [certificateData, setCertificateData] = useState([]);
   const [pilotNames, setPilotNames] = useState({});
+  const [certidifateName, setCertificateName] = useState({});
 
   useEffect(() => {
     fetchData();
@@ -26,11 +29,13 @@ const certificatePermission = () => {
       if(Array.isArray(certificates)) {
         setCertificateData(certificates);
 
-        const pilots = {};
+        const pilots = {}, certificate = {};
         for(const pilot of certificates){
           pilots[pilot.pilot_id] = await getUserById(pilot.pilot_id);
+          certificate[pilot.certificate_id] = await getCertificateById(pilot.certificate_id)
         }
         setPilotNames(pilots);
+        setCertificateName(certificate);
       } else{
         console.error('Hata: getCertificate dizi döndürmedi.');
       }
@@ -50,6 +55,20 @@ const certificatePermission = () => {
     } catch(error){
       console.error('Hata:', error.message);
       return userId;
+    }
+  }
+
+  async function getCertificateById(id){
+    if(!id){
+      return null;
+    }
+
+    try{
+      const certificate = await pilotCertificate.getCertificateById(id);
+      return certificate;
+    } catch(error){
+      console.error('Hata:', error.message);
+      return id;
     }
   }
 
@@ -125,7 +144,7 @@ const certificatePermission = () => {
           {certificateData && certificateData.map((certificate) => (
             <tr key={certificate.permission_id}>
               <td>{pilotNames[certificate.pilot_id]}</td>
-              <td>{certificate.certificate_id}</td>
+              <td>{certidifateName[certificate.certificate_id]}</td>
               <td>{certificate.permission_status === true ? 'true' : 'false'}</td>
               <td>{certificate.date_and_time}</td>
               <td>

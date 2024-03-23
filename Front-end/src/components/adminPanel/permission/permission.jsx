@@ -8,12 +8,15 @@ import FlightModel from '../../../../../Back-end/connections/flight.js';
 const flightModel = new FlightModel();
 import UserModel from '../../../../../Back-end/connections/user.js';
 const userModel = new UserModel();
+import DroneModel from '../../../../../Back-end/connections/drone.js';
+const droneModel = new DroneModel();
 
 const permission = () => {
   const [permissions, setPermissions] = useState([]);
   const [userNames, setUserNames] = useState({});
   const [pilotNames, setPilotNames] = useState({});
   const [adminNames, setAdminNames] = useState({});
+  const [serialNumbers, setSerialNumbers] = useState({});
 
   const fetchData = async () => {
     try {
@@ -24,15 +27,17 @@ const permission = () => {
         setPermissions(data);
 
         // Kullanıcı isimlerini önceden yükleme
-        const users = {}, pilots = {}, admins = {};
+        const users = {}, pilots = {}, admins = {}, serial = {};
         for (const flight of data) {
           users[flight.owner_id] = await getUserById(flight.owner_id);
           pilots[flight.pilot_id] = await getUserById(flight.pilot_id);
           admins[flight.admin_id] = await getUserById(flight.admin_id);
+          serial[flight.drone_id] = await getSerialNumberById(flight.drone_id);
         }
         setUserNames(users);
         setPilotNames(pilots);
         setAdminNames(admins);
+        setSerialNumbers(serial);
       } else {
         console.error('Hata getPermission bir dizi döndürmedi.');
       }
@@ -108,6 +113,20 @@ const permission = () => {
     }
   }
 
+  async function getSerialNumberById(droneId){
+    if(!droneId){
+        return null;
+    }
+
+    try{
+        const droneSerial = await droneModel.getSerialNumberById(droneId);
+        return droneSerial;
+    } catch(error){
+        console.error('Hata:', error.message);
+        return droneId;
+    }
+}
+
   return (
     <div className="topPanel">
       <div className="top">
@@ -133,7 +152,7 @@ const permission = () => {
             <tr key={flight._id}>
               <td>{userNames[flight.owner_id]}</td>
               <td>{pilotNames[flight.pilot_id]}</td>
-              <td>{flight.drone_id}</td>
+              <td>{serialNumbers[flight.drone_id]}</td>
               <td>{adminNames[flight.admin_id]}</td>
               <td>{flight.permission_status === true ? 'true' : 'false'}</td>
               <td>{flight.date_and_time}</td>

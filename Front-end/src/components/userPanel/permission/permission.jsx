@@ -63,7 +63,7 @@ const permission = () => {
       <div className="permissionsCard">
         {permissions && permissions.map((flight) => (
           <div key={flight._id} className='permissionCard'>
-            {flight.is_active === true ? (<TbDrone></TbDrone>) : (<TbDroneOff></TbDroneOff>)}
+            {flight.is_active === true ? (<TbDrone style={{width: 30, height: 30}}></TbDrone>) : (<TbDroneOff style={{width: 30, height: 30}}></TbDroneOff>)}
             <div className='texts-permission'>
               <span className='title'>Pilot Name: {userNames[flight.pilot_id]}</span>
               <span className='title'>Drone Serial Number: {flight.drone_id}</span>
