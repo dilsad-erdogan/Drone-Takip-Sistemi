@@ -73,7 +73,6 @@ const User = () => {
           <tr>
             <td>Name</td>
             <td>Email</td>
-            <td>Certificate</td>
             <td>Drone Owner</td>
             <td>Active</td>
             <td>Action</td>
@@ -85,7 +84,6 @@ const User = () => {
             <tr key={user.user_id}>
               <td>{user.name}</td>
               <td>{user.email}</td>
-              <td>{user.pilot_certificate}</td>
               <td>{user.drone_owner === true ? 'true' : 'false'}</td>
               <td>
                 <div className='form-check form-switch'>
