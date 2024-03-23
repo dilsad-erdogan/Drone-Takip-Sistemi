@@ -108,6 +108,29 @@ class Drone{
         }
     }
 
+    async getSerialNumberById(droneId){
+        try{
+            const response = await fetch(`http://localhost:3000/drone/serialNumber/${droneId}`, {
+                method: "GET"
+            });
+
+            if(!response.ok){
+                throw new Error('API isteği başarısız oldu.');
+            }
+
+            const result = await response.json();
+            if(!result.success || !result.message) {
+                throw new Error('API yanıtı beklenen formatta değil.');
+            }
+
+            const droneData = result.message;
+            return droneData;
+        } catch (error){
+            console.error('Hata:', error.message);
+            throw error;
+        }
+    }
+
     getDrones() {
         return this.drones;
     }
