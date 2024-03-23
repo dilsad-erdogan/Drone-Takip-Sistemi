@@ -25,7 +25,7 @@ const App = () => {
         <Route path="/admin/pilot" element={<AdminPanel screen="pilot" socket={socket}/>} />
         <Route path="/admin/drone" element={<AdminPanel screen="drone" socket={socket}/>} />
         <Route path="/admin/permissions" element={<AdminPanel screen="permissions" socket={socket}/>} />
-        <Route path='/admin/settings' element={<UserPanel screen="settings" socket={socket}/>} />
+        <Route path='/admin/settings' element={<AdminPanel screen="settings" socket={socket}/>} />
 
         <Route path="/admin/drone-brand" element={<AdminPanel screen="brand" socket={socket}/>} />
         <Route path="/admin/drone-model" element={<AdminPanel screen="model" socket={socket}/>} />
