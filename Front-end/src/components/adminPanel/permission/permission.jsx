@@ -68,8 +68,14 @@ const permission = () => {
       user_id: permission.owner_id,
       pilot_id: permission.pilot_id,
       drone_id: permission.drone_id,
-      startPoint: permission.startPoint,
-      endPoint: permission.endPoint,
+      startPoint: {
+        type: "Point",
+        coordinates: [permission.startPoint.coordinates[0], permission.startPoint.coordinates[1]]
+      },
+      endPoint: {
+        type: "Point",
+        coordinates: [permission.endPoint.coordinates[0], permission.endPoint.coordinates[1]]
+      },
       coordinates: {
         type: "Point",
         coordinates: [permission.startPoint.coordinates[0], permission.startPoint.coordinates[1]]
