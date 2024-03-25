@@ -2,9 +2,11 @@ import { useState, useEffect, useRef } from 'react'
 import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
 import icon from '/pageFont.png';
 import MapModal from '../../ui/commonUsage/mapModal.jsx';
+import { MarkerClusterer } from "@googlemaps/markerclusterer";
 import UserModel from '../../../../../Back-end/connections/user.js';
 const userModel = new UserModel();
-import { MarkerClusterer } from "@googlemaps/markerclusterer";
+import FlightModel from '../../../../../Back-end/connections/flight.js';
+const flightModel = new FlightModel();
 
 const containerStyle = {
   width: '100%',
@@ -28,22 +30,22 @@ const googleMap = () => {
     googleMapsApiKey: "AIzaSyA4Iplfzhel3DioSkxnZjF9bcGXR-ORItw"
   });
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try{
-        const flightData = await userModel.getFlightById(localStorage.getItem('userId'));
-        
-        if(Array.isArray(flightData)) {
-          setFlightsData(flightData);
-        } else {
-          console.error('Hata: getDrones bir dizi döndürmedi.');
-        }
-      } catch (error) {
-        console.error('Error fetching drone data:', error.message);
-        console.error('Full error:', error);
+  const fetchData = async () => {
+    try{
+      const flightData = await userModel.getFlightById(localStorage.getItem('userId'));
+      
+      if(Array.isArray(flightData)) {
+        setFlightsData(flightData);
+      } else {
+        console.error('Hata: getDrones bir dizi döndürmedi.');
       }
-    };
-  
+    } catch (error) {
+      console.error('Error fetching drone data:', error.message);
+      console.error('Full error:', error);
+    }
+  };
+
+  useEffect(() => {  
     fetchData();
   }, [localStorage.getItem('userId')]);
 
@@ -73,6 +75,32 @@ const googleMap = () => {
       })
     }
   }, [isLoaded, flightsData, map]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      clusterer.current.clearMarkers();
+      
+      flightsData.forEach(flight => {
+        const newCoordinates = {
+          coordinates: {
+            type: "Point",
+            coordinates: [flight.coordinates.coordinates[0]+1, flight.coordinates.coordinates[1]+1]
+          }
+        };
+
+        flightModel.updateFlight(flight._id, newCoordinates).then(() => {
+          console.log("updated coordinates");
+        }).catch((error) => {
+          console.error('Error:', error);
+        });
+      });
+
+      fetchData();
+    }, 30000); //yarı Dakika başı güncelleme
+
+    return () => clearInterval(interval);
+  }, [flightsData]);
+  //Airsim algoritması
 
   const closeMapModal = () => {
     setMapModal(false);

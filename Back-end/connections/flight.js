@@ -36,7 +36,7 @@ class Flight{
 
     async updateFlight(flightId, flight){
         try{
-            const response = await this.fetch(`http://localhost:3000/flight/flight/${flightId}/coordinates`, {
+            const response = await fetch(`http://localhost:3000/flight/flight/${flightId}/coordinates`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
