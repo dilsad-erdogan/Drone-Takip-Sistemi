@@ -97,13 +97,10 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
       });
     }
 
-    // generate a random reset token
     const resetToken = user.getResetPasswordToken();
 
-    // email link
     const resetUrl = `https://auth-controller/password/reset/${resetToken}`;
 
-    // email message
     const message = `
           <p>Merhaba ${user.name},</p>
           <p>Şifre yenileme talebini aldık. Alttaki linke tıklayarak şifreni yenileyebilirsin.</p>
@@ -112,7 +109,6 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
           `;
     
     try {
-      // email gönderme işlemi 
       await sendEmail({
         to: user.email,
         subject: "Şifre Yenileme isteği",
