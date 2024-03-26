@@ -98,6 +98,21 @@ const googleMap = () => {
 
         flightModel.updateFlight(flight._id, newCoordinates).then(() => {
           console.log("updated coordinates");
+
+          // Eski ve yeni koordinatlar arasında bir çizgi oluştur
+          const flightPath = new window.google.maps.Polyline({
+            path: [
+              { lat: flight.coordinates.coordinates[0], lng: flight.coordinates.coordinates[1] },
+              { lat: newCoordinates.coordinates.coordinates[0], lng: newCoordinates.coordinates.coordinates[1] }
+            ],
+            geodesic: true,
+            strokeColor: '#FF0000',
+            strokeOpacity: 1.0,
+            strokeWeight: 2
+          });
+
+          // Çizgiyi haritaya ekle
+          flightPath.setMap(map);
         }).catch((error) => {
           console.error('Error:', error);
         });
