@@ -81,10 +81,18 @@ const googleMap = () => {
       clusterer.current.clearMarkers();
       
       flightsData.forEach(flight => {
+        const startPoint = flight.startPoint.coordinates;
+        const endPoint = flight.endPoint.coordinates;
+        const distanceX = endPoint[0] - startPoint[0];
+        const distanceY = endPoint[1] - startPoint[1];
+        const totalDistance = Math.sqrt(distanceX ** 2 + distanceY ** 2);
+        const step = 0.001;
+
         const newCoordinates = {
           coordinates: {
             type: "Point",
-            coordinates: [flight.coordinates.coordinates[0]+1, flight.coordinates.coordinates[1]+1]
+            //coordinates: [flight.coordinates.coordinates[0]+1, flight.coordinates.coordinates[1]+1]
+            coordinates: [flight.coordinates.coordinates[0] + (distanceX / totalDistance) * step, flight.coordinates.coordinates[1] + (distanceY / totalDistance) * step]
           }
         };
 
