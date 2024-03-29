@@ -1,5 +1,5 @@
 require("dotenv").config();
-const { createLogger, transports, format } = require('winston');
+const { transports, format } = require('winston');
 require('winston-mongodb');
 const expressWinston = require('express-winston');
 const logger = require('../config/loggerConfig');
@@ -17,11 +17,16 @@ const mongoTransport = new transports.MongoDB({
     ),
 });
 
-// Express-Winston için logger'ı ayarla
 const expressWinstonLogger = expressWinston.logger({
-    transports: [
+  transports: [
       mongoTransport,  // MongoDB transportunu ekleyin
-    ],
+  ],
+  metaField: 'express',
+  msg: "HTTP {{req.method}} {{req.url}}",
+  expressFormat: true,
+  colorize: false,
+  level: 'silly', // Düşük bir seviye belirleyin
+  handleExceptions: true // İstisnaları loglamak için
 });
 
 module.exports = {

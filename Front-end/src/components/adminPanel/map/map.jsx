@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
-import icon from '/drone.jpeg';
+import icon from '/drone.png';
 import MapModal from '../../ui/commonUsage/mapModal.jsx';
 import { MarkerClusterer } from "@googlemaps/markerclusterer";
 import FlightModel from '../../../../../Back-end/connections/flight.js';
@@ -91,7 +91,6 @@ const googleMap = () => {
         const newCoordinates = {
           coordinates: {
             type: "Point",
-            //coordinates: [flight.coordinates.coordinates[0]+1, flight.coordinates.coordinates[1]+1]
             coordinates: [flight.coordinates.coordinates[0] + (distanceX / totalDistance) * step, flight.coordinates.coordinates[1] + (distanceY / totalDistance) * step]
           }
         };
@@ -99,10 +98,14 @@ const googleMap = () => {
         flightModel.updateFlight(flight._id, newCoordinates).then(() => {
           console.log("updated coordinates");
 
+          if(flight.flightPath){
+            flight.flightPath.setMap(null);
+          }
+
           // Eski ve yeni koordinatlar arasında bir çizgi oluştur
           const flightPath = new window.google.maps.Polyline({
             path: [
-              { lat: flight.coordinates.coordinates[0], lng: flight.coordinates.coordinates[1] },
+              { lat: flight.startPoint.coordinates[0], lng: flight.startPoint.coordinates[1] },
               { lat: newCoordinates.coordinates.coordinates[0], lng: newCoordinates.coordinates.coordinates[1] }
             ],
             geodesic: true,
@@ -113,6 +116,10 @@ const googleMap = () => {
 
           // Çizgiyi haritaya ekle
           flightPath.setMap(map);
+
+          if(Math.abs(newCoordinates.coordinates.coordinates[0] - endPoint[0]) < step && Math.abs(newCoordinates.coordinates.coordinates[1] - endPoint[1]) < step) {
+            alert("Uçuş hedef noktasına ulaştı.");
+          }
         }).catch((error) => {
           console.error('Error:', error);
         });
