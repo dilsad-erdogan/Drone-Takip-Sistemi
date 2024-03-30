@@ -7,7 +7,8 @@ const {
     totalFlight,
     totalFlightByUserId,
     flightByUserId,
-    updateCoordinates
+    updateCoordinates,
+    endFlight
 } = require("../controllers/flightController");
 
 const router = express.Router()
@@ -19,5 +20,6 @@ router.route('/total').get(totalFlight)
 router.route('/total/:id').get(totalFlightByUserId)
 router.route('/:id').get(flightByUserId)
 router.route('/flight/:flightId/coordinates').put(updateCoordinates)
+router.route('/end/:id').patch(endFlight)
 
 module.exports = router
