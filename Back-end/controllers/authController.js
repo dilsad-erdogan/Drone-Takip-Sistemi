@@ -166,10 +166,7 @@ exports.resetPassword = catchAsyncErrors(async (req, res, next) => {
     // yeni şifre bi önceki şifreyle aynı olmamalı
 
     if (req.body.password !== req.body.confirm_password) {
-      return res.status(400).json({
-        success: false,
-        error: "Şifreler uyuşmuyor",
-      });
+      return res.status(400).json({ success: false, error: "Passwords don't match!" });
     }
 
     user.password = req.body.password;
@@ -178,11 +175,10 @@ exports.resetPassword = catchAsyncErrors(async (req, res, next) => {
 
     await user.save();
 
-    return res.status(201).json({
-      success: true,
-      message: "Şifreniz Başariyla güncellendi ",
-    });
+    return res.status(201).json({ success: true, message: "Password updated successfully." });
+
   } catch (error) {
-    next(error);
+    console.log(error);
+    res.status(500).json({ success: false, error: 'Internal server error!' })
   }
 }); 
