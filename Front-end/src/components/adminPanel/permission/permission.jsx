@@ -58,7 +58,7 @@ const permission = () => {
     };
 
     permissionModel.updatePermission(permission._id, newPermission).then(() => {
-      alert('Uçuş onaylandı.');
+      console.log();
     }).catch((error) => {
       console.error('Hata:', error.message);
     });
@@ -81,8 +81,6 @@ const permission = () => {
         coordinates: [permission.startPoint.coordinates[0], permission.startPoint.coordinates[1]]
       }
     }
-
-    console.log(newFlight);
 
     flightModel.addFlight(newFlight).then(() => {
       alert("Uçuş başarıyla onaylandı.");

@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const http = require('http');
 const PORT = process.env.PORT || 3000;
-const { expressWinstonLogger, logger } = require('./controllers/logController');
+const { expressWinstonLogger } = require('./controllers/logController');
 
 require('dotenv').config()
 var connectDB = require("./config/mongoDb");
@@ -35,8 +35,6 @@ app.get('/', (req, res) => {
   res.setHeader("Access-Control-Allow-Credentials", "true");
   res.send("Homepage");
 });
-
-app.use(require('./logRoute')); 
 
 const server = http.createServer(app);
 const io = require('./socket');

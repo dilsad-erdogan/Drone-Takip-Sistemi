@@ -2,7 +2,6 @@ require("dotenv").config();
 const { transports, format } = require('winston');
 require('winston-mongodb');
 const expressWinston = require('express-winston');
-const logger = require('../config/loggerConfig');
 
 // MongoDB transportunu oluştur
 const mongoTransport = new transports.MongoDB({
@@ -17,19 +16,23 @@ const mongoTransport = new transports.MongoDB({
     ),
 });
 
+// Winston middleware'i oluştur
 const expressWinstonLogger = expressWinston.logger({
   transports: [
-      mongoTransport,  // MongoDB transportunu ekleyin
+    mongoTransport,  // MongoDB transportunu ekleyin
   ],
+  format: format.combine(
+      format.timestamp(),
+      format.json()
+  ),
   metaField: 'express',
   msg: "HTTP {{req.method}} {{req.url}}",
   expressFormat: true,
   colorize: false,
-  level: 'silly', // Düşük bir seviye belirleyin
-  handleExceptions: true // İstisnaları loglamak için
+  level: 'info', // Düşük bir seviye belirleyin
+  handleExceptions: true, // İstisnaları loglamak için
 });
 
 module.exports = {
-    expressWinstonLogger,
-    logger,  // Diğer rotalarda kullanmak için logger'ı da ekleyin
+  expressWinstonLogger,
 };
