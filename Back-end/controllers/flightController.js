@@ -176,6 +176,33 @@ async function flightByUserId(req, res) {
     }
 } 
 
+async function endFlight(req, res) {
+    try {
+        const id = req.params.id;
+        const { endPoint } = req.body;
+
+        const flight = await Flight.findById(id);
+
+        if (!flight) {
+            return res.status(404).json({ success: false, message: 'Flight not found!' });
+        } else {
+            // Flight bulundu, ancak endPoint koordinatları kontrol edilmeli
+            if (flight.endPoint && flight.endPoint.coordinates &&
+                flight.endPoint.coordinates[0] === endPoint.coordinates[0] &&
+                flight.endPoint.coordinates[1] === endPoint.coordinates[1]) {
+                await Flight.updateOne({ _id: id }, { endPoint: endPoint, is_active: false });
+                return res.status(200).json({ success: true, message: 'Flight finished.' });
+            } else {
+                // endPoint uygun değil
+                return res.status(400).json({ success: false, message: 'End point does not match!' });
+            }
+        }
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({ error: 'Internal server error!' })
+    }
+}
+
   module.exports = { 
     add, 
     updateCoordinates, 
@@ -183,5 +210,6 @@ async function flightByUserId(req, res) {
     getFromMongo, 
     totalFlight,
     totalFlightByUserId,
-    flightByUserId
+    flightByUserId,
+    endFlight
 } 

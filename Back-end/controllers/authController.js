@@ -84,37 +84,31 @@ exports.login = catchAsyncErrors(async (req, res, next) => {
   // res.status(200).json("OK");
 });
 
-// şifremi unuttum işlemi 
 exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
   const { email } = req.body;
 
   try {
-    const user = await User.findOne({ where: {email} });
+    const user = await User.findOne({where: {email} });
 
     if (!user) {
       res.status(404).json({
         success: false,
-        error: "Email Bulunamadı tekrar deneyiniz lütfen",
+        error: "Email not found!",
       });
     }
 
-    // resetToken oluşturma
     const resetToken = user.getResetPasswordToken();
 
-    // email link
-    const resetUrl = `https://akinsoftanket-admin.onrender.com/password/reset/${resetToken}`;
+    const resetUrl = `https://auth-controller/password/reset/${resetToken}`;
 
-    // email message
     const message = `
-          <h1>Sifre yenilemek için istek attınız </h1>
-          <p>Merhaba ${user.email}</p>
-          <p>Sifrenizi yenilemek için alttaki linke tıklayınız lütfen</p>
+          <p>Merhaba ${user.name},</p>
+          <p>Şifre yenileme talebini aldık. Alttaki linke tıklayarak şifreni yenileyebilirsin.</p>
           
           <a href=${resetUrl} clicktracking=off>${resetUrl}</a>
           `;
-
+    
     try {
-      // email gönderme işlemi 
       await sendEmail({
         to: user.email,
         subject: "Şifre Yenileme isteği",
@@ -122,63 +116,69 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
       });
       res.status(200).json({
         success: true,
-        message: `Email başarılı şekilde gönderildi ${user.email}`,
+        message: `Email sent successfully ${user.email}`,
       });
     } catch (error) {
-      user.resetPasswordToken = undefined;
-      user.resetPasswordExpire = undefined;
+      console.log(error);
+      user.reset_password_token = undefined;
+      user.reset_password_expire = undefined;
 
       await user.save();
 
       res.status(500).json({
-        error: "Maalesef Email gönderilemedi ",
+        error: "Email not sent",
       });
-    }
+    } 
   } catch (error) {
     next(error);
   }
 });
 
-// şifre yenileme 
+
 exports.resetPassword = catchAsyncErrors(async (req, res, next) => {
-  const reset_password_token = crypto
+  const resetPasswordToken = crypto
     .createHash("sha256")
-    .update(req.params.resetToken)
+    .update(req.params.resetToken, "utf-8")
     .digest("hex");
+
+    console.log("Reset Token from Request:", req.params.resetToken);
+    console.log("Hashed Reset Token:", resetPasswordToken);
 
   try {
     const user = await User.findOne({
       where: {
-        reset_password_token: reset_password_token,
+        reset_password_token: resetPasswordToken,
         reset_password_expire: { $gt: Date.now() }
       }
     });
+    
+    console.log("User from Database:", user);
+    
+    console.log("\n\nCalculated Expire Time:", new Date(user.reset_password_expire));
 
     if (!user) {
-      res.status(400).json({
+      return res.status(400).json({
         success: false,
         error: "Geçersiz reset Token , lütfen tekrar mail hesabinizi girin",
       });
     }
 
-    if (req.body.password !== req.body.confirmPassword) {
-      res.status(400).json({
-        success: false,
-        error: "Şifreler uyuşmuyor",
-      });
+    // yeni şifre bi önceki şifreyle aynı olmamalı
+
+    if (req.body.password !== req.body.confirm_password) {
+      return res.status(400).json({ success: false, error: "Passwords don't match!" });
     }
 
     user.password = req.body.password;
-    user.resetPasswordToken = undefined;
-    user.resetPasswordExpire = undefined;
+    user.reset_password_token = undefined;
+    user.reset_password_expire = undefined;
 
     await user.save();
 
-    res.status(201).json({
-      success: true,
-      message: "Şifreniz Başariyla güncellendi ",
-    });
+    return res.status(201).json({ success: true, message: "Password updated successfully." });
+
   } catch (error) {
-    next(error);
+    console.log(error);
+    res.status(500).json({ success: false, error: 'Internal server error!' })
   }
-});
+}); 
