@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
-import icon from '/pageFont.png';
+import icon from '/drone.png';
 import MapModal from '../../ui/commonUsage/mapModal.jsx';
 import { MarkerClusterer } from "@googlemaps/markerclusterer";
 import UserModel from '../../../../../Back-end/connections/user.js';
@@ -81,15 +81,38 @@ const googleMap = () => {
       clusterer.current.clearMarkers();
       
       flightsData.forEach(flight => {
+        const startPoint = flight.startPoint.coordinates;
+        const endPoint = flight.endPoint.coordinates;
+        const distanceX = endPoint[0] - startPoint[0];
+        const distanceY = endPoint[1] - startPoint[1];
+        const totalDistance = Math.sqrt(distanceX ** 2 + distanceY ** 2);
+        const step = 0.001;
+
         const newCoordinates = {
           coordinates: {
             type: "Point",
-            coordinates: [flight.coordinates.coordinates[0]+1, flight.coordinates.coordinates[1]+1]
+            //coordinates: [flight.coordinates.coordinates[0]+1, flight.coordinates.coordinates[1]+1]
+            coordinates: [flight.coordinates.coordinates[0] + (distanceX / totalDistance) * step, flight.coordinates.coordinates[1] + (distanceY / totalDistance) * step]
           }
         };
 
         flightModel.updateFlight(flight._id, newCoordinates).then(() => {
           console.log("updated coordinates");
+
+          // Eski ve yeni koordinatlar arasında bir çizgi oluştur
+          const flightPath = new window.google.maps.Polyline({
+            path: [
+              { lat: flight.coordinates.coordinates[0], lng: flight.coordinates.coordinates[1] },
+              { lat: newCoordinates.coordinates.coordinates[0], lng: newCoordinates.coordinates.coordinates[1] }
+            ],
+            geodesic: true,
+            strokeColor: '#FF0000',
+            strokeOpacity: 1.0,
+            strokeWeight: 2
+          });
+
+          // Çizgiyi haritaya ekle
+          flightPath.setMap(map);
         }).catch((error) => {
           console.error('Error:', error);
         });

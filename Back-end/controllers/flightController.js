@@ -43,8 +43,8 @@ async function add(req, res) {
                 owner_id: _owner.user_id,
                 pilot_id: _pilot.pilot_id,
                 drone_id: _drone.drone_id,
-                start_point: start_point,
-                end_point: end_point,
+                startPoint: start_point,
+                endPoint: end_point,
                 date_and_time: Date.now(),
                 coordinates: coordinates,
                 is_active: true
