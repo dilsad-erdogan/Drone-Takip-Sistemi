@@ -54,6 +54,26 @@ class Flight{
         }
     }
 
+    async updateEndFlight(flightId, coordinates){
+        try{
+            const response = await fetch(`http://localhost:3000/flight/end/${flightId}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(coordinates),
+            });
+
+            if(!response.ok){
+                throw new Error('Flight güncellenirken bir hata oluştu.');
+            };
+
+            await this.fetchFlightData();
+        } catch(error){
+            console.error('Hata:', error.message);
+        }
+    }
+
     async fetchTotalFlight() {
         try{
             const response = await fetch('http://localhost:3000/flight/total');

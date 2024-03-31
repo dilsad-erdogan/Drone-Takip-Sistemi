@@ -123,6 +123,15 @@ const googleMap = () => {
         }).catch((error) => {
           console.error('Error:', error);
         });
+
+        // const newEndPoint = {
+        //   type: "Point",
+        //   coordinates: [flight.coordinates.coordinates[0], flight.coordinates.coordinates[1]]
+        // };
+
+        // flightModel.updateEndFlight(flight._id, newEndPoint).then(() => {
+        //   alert(`${flight.drone_id}, seri numaralı drone hedefine ulaştı.`);
+        // });
       });
 
       fetchData();
