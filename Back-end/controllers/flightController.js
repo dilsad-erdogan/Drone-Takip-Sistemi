@@ -192,9 +192,6 @@ async function endFlight(req, res) {
                 flight.endPoint.coordinates[1] === endPoint.coordinates[1]) {
                 await Flight.updateOne({ _id: id }, { endPoint: endPoint, is_active: false });
                 return res.status(200).json({ success: true, message: 'Flight finished.' });
-            } else {
-                // endPoint uygun değil
-                return res.status(400).json({ success: false, message: 'End point does not match!' });
             }
         }
     } catch (error) {

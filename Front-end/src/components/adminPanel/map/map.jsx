@@ -125,8 +125,10 @@ const googleMap = () => {
         });
 
         // const newEndPoint = {
-        //   type: "Point",
-        //   coordinates: [flight.coordinates.coordinates[0], flight.coordinates.coordinates[1]]
+        //   endPoint: {
+        //     type: "Point",
+        //     coordinates: [flight.coordinates.coordinates[0], flight.coordinates.coordinates[1]]
+        //   }
         // };
 
         // flightModel.updateEndFlight(flight._id, newEndPoint).then(() => {
