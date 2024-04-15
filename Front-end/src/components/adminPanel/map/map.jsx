@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
-import icon from '/drone.png';
+import icon from '/dronePic.png';
 import MapModal from '../../ui/commonUsage/mapModal.jsx';
 import { MarkerClusterer } from "@googlemaps/markerclusterer";
 import FlightModel from '../../../../../Back-end/connections/flight.js';
@@ -65,7 +65,7 @@ const googleMap = () => {
             },
             icon: {
               url: icon,
-              scaledSize: {width: 30, height: 30}
+              scaledSize: {width: 40, height: 40}
             }
           });
           
