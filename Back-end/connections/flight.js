@@ -63,12 +63,12 @@ class Flight{
                 },
                 body: JSON.stringify(coordinates),
             });
-
+    
             if(!response.ok){
                 throw new Error('Flight güncellenirken bir hata oluştu.');
             };
-
-            await this.fetchFlightData();
+    
+            await this.fetchFlightData(); // Uçuş verilerini güncelleyin
         } catch(error){
             console.error('Hata:', error.message);
         }

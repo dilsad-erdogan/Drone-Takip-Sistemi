@@ -2,10 +2,13 @@ import { Button, Modal, Row, Col } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
 import UserModel from '../../../../../Back-end/connections/user.js';
 const userModel = new UserModel();
+import DroneModel from '../../../../../Back-end/connections/drone.js';
+const droneModel = new DroneModel();
 
 const MapModal = ({ show, onClose, data }) => {
     const [ownerNames, setOwnerNames] = useState('');
     const [pilotNames, setPilotNames] = useState('');
+    const [droneSerial, setDroneSerial] = useState('');
 
     const handleExit = () => {
         onClose();
@@ -19,7 +22,8 @@ const MapModal = ({ show, onClose, data }) => {
         try{
             if( data != null ){
                setOwnerNames(await getUserById(data.owner_id));
-               setPilotNames(await getUserById(data.pilot_id));             
+               setPilotNames(await getUserById(data.pilot_id));  
+               setDroneSerial(await getSerialNumberById(data.drone_id));           
             }
 
         } catch (error) {
@@ -40,6 +44,20 @@ const MapModal = ({ show, onClose, data }) => {
             return userId;
         }
     }
+
+    async function getSerialNumberById(droneId){
+        if(!droneId){
+            return null;
+        }
+
+        try{
+            const droneSerial = await droneModel.getSerialNumberById(droneId);
+            return droneSerial;
+        } catch(error){
+            console.error('Hata:', error.message);
+            return droneId;
+        }
+    }
     
     return (
         <div>
@@ -52,9 +70,9 @@ const MapModal = ({ show, onClose, data }) => {
                     {data ? (
                         <>
                         <Row><Col>Drone uçuş numarası:</Col><Col><strong>{data.flight_number}</strong></Col></Row>
-                        <Row><Col>Owner id:</Col><Col><strong>{ownerNames}</strong></Col></Row>
-                        <Row><Col>Pilot id:</Col><Col><strong>{pilotNames}</strong></Col></Row>
-                        <Row><Col>Drone id:</Col><Col><strong>{data.drone_id}</strong></Col></Row>
+                        <Row><Col>Owner:</Col><Col><strong>{ownerNames}</strong></Col></Row>
+                        <Row><Col>Pilot:</Col><Col><strong>{pilotNames}</strong></Col></Row>
+                        <Row><Col>Drone Serial Number:</Col><Col><strong>{droneSerial}</strong></Col></Row>
                         <Row><Col>Drone tarih ve saat:</Col><Col><strong>{data.date_and_time}</strong></Col></Row>
                     </>
                     ) : (

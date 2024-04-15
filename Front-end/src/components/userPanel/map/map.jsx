@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
-import icon from '/drone.png';
+import icon from '/dronePic.png';
 import MapModal from '../../ui/commonUsage/mapModal.jsx';
 import { MarkerClusterer } from "@googlemaps/markerclusterer";
 import UserModel from '../../../../../Back-end/connections/user.js';

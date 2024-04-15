@@ -87,6 +87,7 @@ const googleMap = () => {
         const distanceY = endPoint[1] - startPoint[1];
         const totalDistance = Math.sqrt(distanceX ** 2 + distanceY ** 2);
         const step = 0.001;
+        //const distanceThreshold = 0.001; // Uçuşun bitiş noktasına ulaştığını kabul etmek için eşik değeri
 
         const newCoordinates = {
           coordinates: {
@@ -117,23 +118,21 @@ const googleMap = () => {
           // Çizgiyi haritaya ekle
           flightPath.setMap(map);
 
-          if(Math.abs(newCoordinates.coordinates.coordinates[0] - endPoint[0]) < step && Math.abs(newCoordinates.coordinates.coordinates[1] - endPoint[1]) < step) {
-            alert("Uçuş hedef noktasına ulaştı.");
-          }
+          // if (Math.abs(newCoordinates.coordinates.coordinates[0] - endPoint[0]) < distanceThreshold && Math.abs(newCoordinates.coordinates.coordinates[1] - endPoint[1]) < distanceThreshold) {
+          //   const newEndPoint = {
+          //     endPoint: {
+          //       type: "Point",
+          //       coordinates: [flight.coordinates.coordinates[0], flight.coordinates.coordinates[1]]
+          //     }
+          //   };
+          
+          //   flightModel.updateEndFlight(flight._id, newEndPoint).then(() => {
+          //     alert(`${flight.drone_id}, seri numaralı drone hedefine ulaştı.`);
+          //   });
+          // }
         }).catch((error) => {
           console.error('Error:', error);
         });
-
-        // const newEndPoint = {
-        //   endPoint: {
-        //     type: "Point",
-        //     coordinates: [flight.coordinates.coordinates[0], flight.coordinates.coordinates[1]]
-        //   }
-        // };
-
-        // flightModel.updateEndFlight(flight._id, newEndPoint).then(() => {
-        //   alert(`${flight.drone_id}, seri numaralı drone hedefine ulaştı.`);
-        // });
       });
 
       fetchData();

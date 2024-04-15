@@ -18,21 +18,61 @@ const transactions = ({ flights }) => {
         navigate(newPath);
     };
 
-    const fetchData = async () => {
-        const owners = {}, pilots= {}, serials = {};
-        for (const flight of flights) {
-            owners[flight.owner_id] = await getUserById(flight.owner_id);
-            pilots[flight.pilot_id] = await getUserById(flight.pilot_id);
-            serials[flight.drone_id] = await getSerialNumberById(flight.drone_id);
-        }
-        setOwnerNames(owners);
-        setPilotNames(pilots);
-        setSerialNumbers(serials);
-    }
+    // const fetchData = async () => {
+    //     const owners = {}, pilots= {}, serials = {};
+    //     for (const flight of flights) {
+    //         owners[flight.owner_id] = await getUserById(flight.owner_id);
+    //         pilots[flight.pilot_id] = await getUserById(flight.pilot_id);
+    //         serials[flight.drone_id] = await getSerialNumberById(flight.drone_id);
+    //     }
+    //     setOwnerNames(owners);
+    //     setPilotNames(pilots);
+    //     setSerialNumbers(serials);
+    // }
+
+    // useEffect(() => {
+    //     fetchData();
+    // }, [flights]);    
 
     useEffect(() => {
+        // Veri tabanından kullanıcı ve drone bilgilerini tek seferde alıp saklayın
+        const fetchData = async () => {
+            try {
+                const ownerIds = flights.map(flight => flight.owner_id);
+                const pilotIds = flights.map(flight => flight.pilot_id);
+                const droneIds = flights.map(flight => flight.drone_id);
+
+                const [ownerResults, pilotResults, droneResults] = await Promise.all([
+                    Promise.all(ownerIds.map(id => getUserById(id))),
+                    Promise.all(pilotIds.map(id => getUserById(id))),
+                    Promise.all(droneIds.map(id => getSerialNumberById(id)))
+                ]);
+
+                const owners = ownerIds.reduce((acc, id, index) => {
+                    acc[id] = ownerResults[index];
+                    return acc;
+                }, {});
+
+                const pilots = pilotIds.reduce((acc, id, index) => {
+                    acc[id] = pilotResults[index];
+                    return acc;
+                }, {});
+
+                const serials = droneIds.reduce((acc, id, index) => {
+                    acc[id] = droneResults[index];
+                    return acc;
+                }, {});
+
+                setOwnerNames(owners);
+                setPilotNames(pilots);
+                setSerialNumbers(serials);
+            } catch (error) {
+                console.error('Error fetching user or drone data:', error.message);
+            }
+        };
+
         fetchData();
-    }, [flights]);    
+    }, [flights]);
 
     async function getUserById(userId){
         if (!userId) {
