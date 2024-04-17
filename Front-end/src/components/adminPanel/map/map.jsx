@@ -80,15 +80,14 @@ const googleMap = () => {
     const interval = setInterval(() => {
       clusterer.current.clearMarkers();
       
-      flightsData.forEach(flight => {
+      flightsData.forEach(async flight => {
         const startPoint = flight.startPoint.coordinates;
         const endPoint = flight.endPoint.coordinates;
         const distanceX = endPoint[0] - startPoint[0];
         const distanceY = endPoint[1] - startPoint[1];
         const totalDistance = Math.sqrt(distanceX ** 2 + distanceY ** 2);
         const step = 0.001;
-        //const distanceThreshold = 0.001; // Uçuşun bitiş noktasına ulaştığını kabul etmek için eşik değeri
-
+      
         const newCoordinates = {
           coordinates: {
             type: "Point",
@@ -96,47 +95,41 @@ const googleMap = () => {
           }
         };
 
-        flightModel.updateFlight(flight._id, newCoordinates).then(() => {
-          console.log("updated coordinates");
-
-          if(flight.flightPath){
-            flight.flightPath.setMap(null);
-          }
-
-          // Eski ve yeni koordinatlar arasında bir çizgi oluştur
-          const flightPath = new window.google.maps.Polyline({
-            path: [
-              { lat: flight.startPoint.coordinates[0], lng: flight.startPoint.coordinates[1] },
-              { lat: newCoordinates.coordinates.coordinates[0], lng: newCoordinates.coordinates.coordinates[1] }
-            ],
-            geodesic: true,
-            strokeColor: '#FF0000',
-            strokeOpacity: 1.0,
-            strokeWeight: 2
-          });
-
-          // Çizgiyi haritaya ekle
-          flightPath.setMap(map);
-
-          // if (Math.abs(newCoordinates.coordinates.coordinates[0] - endPoint[0]) < distanceThreshold && Math.abs(newCoordinates.coordinates.coordinates[1] - endPoint[1]) < distanceThreshold) {
-          //   const newEndPoint = {
-          //     endPoint: {
-          //       type: "Point",
-          //       coordinates: [flight.coordinates.coordinates[0], flight.coordinates.coordinates[1]]
-          //     }
-          //   };
-          
-          //   flightModel.updateEndFlight(flight._id, newEndPoint).then(() => {
-          //     alert(`${flight.drone_id}, seri numaralı drone hedefine ulaştı.`);
-          //   });
-          // }
-        }).catch((error) => {
-          console.error('Error:', error);
+        const flightPath = new window.google.maps.Polyline({
+          path: [
+            { lat: flight.coordinates.coordinates[0], lng: flight.coordinates.coordinates[1] },
+            { lat: newCoordinates.coordinates.coordinates[0], lng: newCoordinates.coordinates.coordinates[1] }
+          ],
+          geodesic: true,
+          strokeColor: '#FF0000',
+          strokeOpacity: 1.0,
+          strokeWeight: 2
         });
+
+        if (Math.abs(newCoordinates.coordinates.coordinates[0] - endPoint[0]) < step && Math.abs(newCoordinates.coordinates.coordinates[1] - endPoint[1]) < step) {
+          const newEndPoint = {
+            endPoint: {
+              type: "Point",
+              coordinates: [flight.coordinates.coordinates[0], flight.coordinates.coordinates[1]]
+            }
+          };
+        
+          flightModel.updateEndFlight(flight._id, newEndPoint).then(() => {
+            alert(`${flight.drone_id}, seri numaralı drone hedefine ulaştı.`);
+            flightPath.setVisible(false);
+          });
+        } else {
+          flightModel.updateFlight(flight._id, newCoordinates).then(() => {
+            // Çizgiyi haritaya ekle
+            flightPath.setMap(map);
+          }).catch((error) => {
+            console.error('Error:', error);
+          });
+        }
       });
 
       fetchData();
-    }, 30000); //yarı Dakika başı güncelleme
+    }, 1000); //1 saniyede bir güncelleme
 
     return () => clearInterval(interval);
   }, [flightsData]);

@@ -178,21 +178,14 @@ async function flightByUserId(req, res) {
 
 async function endFlight(req, res) {
     try {
-        const id = req.params.id;
-        const { endPoint } = req.body;
+        const flight_id = req.params.id
+        const flight = await Flight.findById(flight_id)
 
-        const flight = await Flight.findById(id);
-
-        if (!flight) {
-            return res.status(404).json({ success: false, message: 'Flight not found!' });
+        if(!flight){
+            res.status(404).json({ success: false, message: 'Flight not found!'})
         } else {
-            // Flight bulundu, ancak endPoint koordinatları kontrol edilmeli
-            if (flight.endPoint && flight.endPoint.coordinates &&
-                flight.endPoint.coordinates[0] === endPoint.coordinates[0] &&
-                flight.endPoint.coordinates[1] === endPoint.coordinates[1]) {
-                await Flight.updateOne({ _id: id }, { endPoint: endPoint, is_active: false });
-                return res.status(200).json({ success: true, message: 'Flight finished.' });
-            }
+            await flight.updateOne({ is_active: false })
+            res.status(200).json({ success: true, message: 'Flight deleted successfully.'})
         }
     } catch (error) {
         console.error(error)
