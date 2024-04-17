@@ -2,6 +2,8 @@ const catchAsyncErrors = require('../middleware/catchAsyncErrors');
 const CertificatePermission = require("../models/CertificatePermission");
 const Pilot = require('../models/Pilot');
 const PilotCertificate = require('../models/PilotCertificate')
+const fs = require('fs');
+const multer = require('multer');
 
 exports.getAll = catchAsyncErrors(async(req, res) => {
     try {
@@ -81,9 +83,20 @@ exports.getTotalPermissionCount = catchAsyncErrors(async (req, res) => {
     }
 })
 
-exports.add = catchAsyncErrors(async (req, res) => {
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, 'uploads/'); // Yüklenen dosyaların kaydedileceği dizin
+    },
+    filename: function (req, file, cb) {
+      cb(null, Date.now() + '-' + file.originalname); // Yükleme sırasında dosya adını ayarla
+    }
+  });
+  const upload = multer({ storage: storage });
+
+exports.add = upload.single('pdf'), async (req, res, next) => {
     try {
         const { pilot_id, certificate_id, permission_status } = req.body
+        const pdfPath = req.file.path;
         const _pilot = await Pilot.findByPk(pilot_id)
         const _certificate_id = await PilotCertificate.findByPk(certificate_id)
 
@@ -98,6 +111,7 @@ exports.add = catchAsyncErrors(async (req, res) => {
             certificate_id: certificate_id,
             permission_status: permission_status,
             date_and_time: Date.now(),
+            pdf_data: pdfPath,
             is_active: true
         })
 
@@ -112,7 +126,7 @@ exports.add = catchAsyncErrors(async (req, res) => {
         console.log(error);
         res.status(500).json({ success: false, error: 'Internal server error!' })
     }
-})
+}
 
 exports.update = catchAsyncErrors(async (req, res) => {
     try {
