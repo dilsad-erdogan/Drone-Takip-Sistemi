@@ -171,6 +171,8 @@ class User{
             }
     
             const responseData = await response.json();
+            console.log(responseData);
+
             const { user, token } = responseData;
             const id = user.user_id;
             const role = user.roletype_id;

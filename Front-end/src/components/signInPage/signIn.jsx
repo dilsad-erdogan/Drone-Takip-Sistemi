@@ -43,22 +43,29 @@ const signIn = () => {
                     handleTokenExpiration();
                 }, expirationTime);
 
+                console.log("Log in successfully");
+                console.log(role);
+                console.log(token);
+
                 if(role){
                     if(role === 1 || role === 2){
+                        console.log("Admin panele gidiyo.");
                         navigate('/admin');
                     } else if(role === 3){
+                        console.log("User panele gidiyor.");
                         navigate('/user');
                     } else{
-                        alert("Bilinmeyen role.");
+                        console.log("Bilinmeyen role.");
                     }
                 } else{
-                    alert("Kullanıcı bilgilerinde bir hata oldu lütfen tekrar deneyiniz.");
+                    console.log("Kullanıcı bilgileri alınamadı veya roletype bulunamadı.");
                 }
 
             } else{
                 alert("Giriş değerlerinizi kontrol ediniz.");
             }
         } catch (error){
+            console.error("Giriş sırasında bir hata oluştu:", error.message);
             alert("Giriş sırasında bir hata oluştu. Hata: " + error.message);
         }
     };

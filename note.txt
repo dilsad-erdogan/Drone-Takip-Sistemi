@@ -1,6 +1,5 @@
 * pilot update controller yapılacak
-* transparan png bulunacak
 * log dashboard
 * Web socket bağlantısını kontrol et direkt açılınca bilgiler gelsin
 * bütün tablolara search için name vb bilgi sorgulama backend
-* flight end olma
+* flight end olma ( line kalıyor silinsin )

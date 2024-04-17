@@ -22,10 +22,6 @@ const CertificatePermission = sequelize.define("certificate_permissions", {
       date_and_time: {
         type: DataTypes.DATE
       },
-      pdf_data: {
-        type: DataTypes.BLOB, 
-        allowNull: true,
-    },
       is_active: {
         type: DataTypes.BOOLEAN,
         defaultValue: true
