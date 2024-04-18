@@ -37,6 +37,9 @@ import TypeUpdate from './droneType/typePanel/typeUpdate';
 import RoleUpdate from './userRoleType/rolePanel/roleUpdate';
 import CertificateUpdate from './certificate/certificatePanel/certificateUpdate';
 
+import LogModel from '../../../../Back-end/connections/log.js';
+const logModel = new LogModel();
+
 const adminPanel = ({ screen, socket }) => {
   const navigate = useNavigate();
 
@@ -51,6 +54,21 @@ const adminPanel = ({ screen, socket }) => {
       navigate('/');
     }
   }, [navigate]);
+
+  useEffect(() => {
+    const fetchLog = async () => {
+      try{
+        await logModel.fetchLogData();
+        const logs = logModel.getLogs();
+
+        console.log(logs);
+      } catch(error){
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchLog();
+  });
 
   const content = () => {
     switch (screen) {
