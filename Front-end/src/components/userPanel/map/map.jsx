@@ -49,80 +49,102 @@ const googleMap = () => {
     fetchData();
   }, [localStorage.getItem('userId')]);
 
+  const updateClusterer = () => {
+    clusterer.current.clearMarkers();
+    flightsData.forEach(marker => {
+      if (marker.is_active) {
+        const googleMarker = new window.google.maps.Marker({
+          map: map,
+          position: {
+            lat: marker.coordinates.coordinates[0],
+            lng: marker.coordinates.coordinates[1]
+          },
+          icon: {
+            url: icon,
+            scaledSize: {width: 40, height: 40}
+          }
+        });
+  
+        googleMarker.addListener('click', () => markerClick(marker));
+        clusterer.current.addMarker(googleMarker);
+      }
+    });
+  };
+
   useEffect(() => {
-    if(isLoaded && map){
-      if(!clusterer.current){
+    if (isLoaded && map) {
+      if (!clusterer.current) {
         clusterer.current = new MarkerClusterer({ map });
       }
-
-      flightsData.forEach(marker => {
-        if(marker.is_active){
-          const googleMarker = new window.google.maps.Marker({
-            map: map,
-            position: {
-              lat: marker.coordinates.coordinates[0],
-              lng: marker.coordinates.coordinates[1]
-            },
-            icon: {
-              url: icon,
-              scaledSize: {width: 30, height: 30}
-            }
-          });
-
-          googleMarker.addListener('click', () => markerClick(marker));
-          clusterer.current.addMarker(googleMarker);
-        }
-      })
+  
+      updateClusterer();
     }
   }, [isLoaded, flightsData, map]);
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    const interval = setInterval(async () => {
       clusterer.current.clearMarkers();
-      
-      flightsData.forEach(flight => {
+  
+      let alerts = {}; // Uçuşların bitip bitmediğini kontrol etmek için bir nesne oluşturulur
+      flightsData.forEach(async flight => {
         const startPoint = flight.startPoint.coordinates;
         const endPoint = flight.endPoint.coordinates;
         const distanceX = endPoint[0] - startPoint[0];
         const distanceY = endPoint[1] - startPoint[1];
         const totalDistance = Math.sqrt(distanceX ** 2 + distanceY ** 2);
         const step = 0.001;
-
+  
         const newCoordinates = {
           coordinates: {
             type: "Point",
-            //coordinates: [flight.coordinates.coordinates[0]+1, flight.coordinates.coordinates[1]+1]
             coordinates: [flight.coordinates.coordinates[0] + (distanceX / totalDistance) * step, flight.coordinates.coordinates[1] + (distanceY / totalDistance) * step]
           }
         };
-
-        flightModel.updateFlight(flight._id, newCoordinates).then(() => {
-          console.log("updated coordinates");
-
-          // Eski ve yeni koordinatlar arasında bir çizgi oluştur
-          const flightPath = new window.google.maps.Polyline({
-            path: [
-              { lat: flight.coordinates.coordinates[0], lng: flight.coordinates.coordinates[1] },
-              { lat: newCoordinates.coordinates.coordinates[0], lng: newCoordinates.coordinates.coordinates[1] }
-            ],
-            geodesic: true,
-            strokeColor: '#FF0000',
-            strokeOpacity: 1.0,
-            strokeWeight: 2
-          });
-
-          // Çizgiyi haritaya ekle
-          flightPath.setMap(map);
-        }).catch((error) => {
-          console.error('Error:', error);
+  
+        const flightPath = new window.google.maps.Polyline({
+          path: [
+            { lat: flight.coordinates.coordinates[0], lng: flight.coordinates.coordinates[1] },
+            { lat: newCoordinates.coordinates.coordinates[0], lng: newCoordinates.coordinates.coordinates[1] }
+          ],
+          geodesic: true,
+          strokeColor: '#FF0000',
+          strokeOpacity: 1.0,
+          strokeWeight: 2
         });
+
+        if (Math.abs(newCoordinates.coordinates.coordinates[0] - endPoint[0]) < step && Math.abs(newCoordinates.coordinates.coordinates[1] - endPoint[1]) < step) {
+          if (!alerts[flight._id]) {
+            alerts[flight._id] = true;
+            const newEndPoint = {
+              endPoint: {
+                type: "Point",
+                coordinates: [flight.coordinates.coordinates[0], flight.coordinates.coordinates[1]]
+              }
+            };
+            await flightModel.updateEndFlight(flight._id, newEndPoint);
+            alert(`${flight.drone_id}, seri numaralı drone hedefine ulaştı.`);
+          }
+        } else {
+          flightModel.updateFlight(flight._id, newCoordinates).then(() => {
+            // Çizgiyi haritaya ekle
+            flightPath.setMap(map);
+          }).catch((error) => {
+            console.error('Error:', error);
+          });
+        }
+  
+        clusterer.current.addMarker(new window.google.maps.Marker({
+          map: map,
+          position: { lat: newCoordinates.coordinates.coordinates[0], lng: newCoordinates.coordinates.coordinates[1] }
+        }));
       });
-
+  
+      updateClusterer();
       fetchData();
-    }, 30000); //yarı Dakika başı güncelleme
-
+    }, 500); //0,5 saniyede bir güncelleme
+  
     return () => clearInterval(interval);
-  }, [flightsData]);
+  }, [flightsData]);  
   //Airsim algoritması
 
   const closeMapModal = () => {
