@@ -7,6 +7,7 @@ import { IoSettingsOutline, IoHelp } from "react-icons/io5";
 import { RiCopilotFill } from "react-icons/ri";
 import { LiaCertificateSolid } from "react-icons/lia";
 import { AiOutlineSafetyCertificate } from "react-icons/ai";
+import { SlNote } from "react-icons/sl";
 import MenuLink from '../../ui/commonUsage/menuLink.jsx';
 import '../../ui/panel.css';
 import { useNavigate } from 'react-router-dom';
@@ -88,6 +89,11 @@ const menuItems = [
   {
     title: "User",
     list: [
+      {
+        title: "Log Dashboard",
+        path: "/admin/logging",
+        icon: <SlNote></SlNote>
+      },
       {
         title: "Settings",
         path: "/admin/settings",

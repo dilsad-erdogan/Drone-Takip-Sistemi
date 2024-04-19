@@ -17,6 +17,7 @@ import DroneType from './droneType/droneType';
 import UserRoleType from './userRoleType/userRoleType';
 import Certificate from './certificate/certificate';
 import CertificatePermission from './certificatePermission/certificatePermission';
+import LogDashboard from './logDashboard/logDashboard.jsx';
 import Settings from './settings/settings';
 
 import UserAdd from './user/userPanel/userAdd';
@@ -37,9 +38,6 @@ import TypeUpdate from './droneType/typePanel/typeUpdate';
 import RoleUpdate from './userRoleType/rolePanel/roleUpdate';
 import CertificateUpdate from './certificate/certificatePanel/certificateUpdate';
 
-import LogModel from '../../../../Back-end/connections/log.js';
-const logModel = new LogModel();
-
 const adminPanel = ({ screen, socket }) => {
   const navigate = useNavigate();
 
@@ -54,21 +52,6 @@ const adminPanel = ({ screen, socket }) => {
       navigate('/');
     }
   }, [navigate]);
-
-  useEffect(() => {
-    const fetchLog = async () => {
-      try{
-        await logModel.fetchLogData();
-        const logs = logModel.getLogs();
-
-        console.log(logs);
-      } catch(error){
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    fetchLog();
-  });
 
   const content = () => {
     switch (screen) {
@@ -96,6 +79,8 @@ const adminPanel = ({ screen, socket }) => {
         return <Certificate></Certificate>;
       case 'certificatePermission':
         return <CertificatePermission></CertificatePermission>;
+      case 'logDashboard':
+        return <LogDashboard></LogDashboard>;
       case 'settings':
         return <Settings></Settings>;
       case 'userAdd':

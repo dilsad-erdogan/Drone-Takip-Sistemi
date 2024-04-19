@@ -14,8 +14,8 @@ const HomePage = () => {
       </div>
 
       <div className='pages'>
-        <h1>Drone Takip Sistemine Hoşgeldiniz.</h1>
-        <p>Burada bizim bilgilerimizi göreceksiniz.</p>
+        <h1>Drone Takip Sistemine</h1>
+        <h1>Hoşgeldiniz</h1>
       </div>
     </div>
   );
