@@ -12,6 +12,7 @@ const userRoleType = () => {
   const[roleData, setRoleData] = useState([]);
   const[deleteModal, setDeleteModal] = useState(false);
   const[deletedRole, setDeletedRole] = useState([]);
+  const [searchValue, setSearchValue] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,7 +32,12 @@ const userRoleType = () => {
     };
 
     fetchData();
-  })
+  });
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    setSearchValue(params.get("q") || "");
+  }, [location.search]);
 
   const addNewRole = () => {
     navigate('/admin/roleAdd');
@@ -60,6 +66,10 @@ const userRoleType = () => {
     navigate(`/admin/roleUpdate/${roleId}`);
   }
 
+  const filteredData = roleData.filter((type) =>
+    type.role_type.toLowerCase().includes(searchValue.toLowerCase())
+  );
+
   return (
     <div className='topPanel'>
       <div className='top'>
@@ -79,7 +89,7 @@ const userRoleType = () => {
         </thead>
 
         <tbody>
-          {roleData && roleData.map((role) => (
+          {filteredData.map((role) => (
             <tr key={role.roletype_id}>
               <td>{role.role_type}</td>
               <td>{role.explanation}</td>

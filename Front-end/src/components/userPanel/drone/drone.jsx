@@ -22,6 +22,7 @@ const drone = () => {
   const [deletedDrone, setDeletedDrone] = useState();
   const [modelNames, setModelNames] = useState({});
   const [typeNames, setTypeNames] = useState({});
+  const [searchValue, setSearchValue] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -80,6 +81,11 @@ const drone = () => {
     }
   }, [localStorage.getItem('userId')]);
 
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    setSearchValue(params.get("q") || "");
+  }, [location.search]);
+
   const addNewDrone = () => {
     navigate('/user/droneAdd');
   }
@@ -103,6 +109,10 @@ const drone = () => {
     }
   }
 
+  const filteredData = droneData.filter((type) =>
+    type.drone.serial_number.toLowerCase().includes(searchValue.toLowerCase())
+  );
+
   return (
     <div className='topPanel'>
       <div className='top'>
@@ -125,7 +135,7 @@ const drone = () => {
         </thead>
 
         <tbody>
-          {droneData && droneData.map((data) => (
+          {filteredData.map((data) => (
             data.drone.is_active === true ? (
               <tr key={data.drone.drone_id}>
                 <td>{data.drone.serial_number}</td>

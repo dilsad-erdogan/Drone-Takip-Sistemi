@@ -5,6 +5,7 @@ const logModel = new LogModel();
 
 const logDashboard = () => {
     const [logs, setLogs] = useState([]);
+    const [searchValue, setSearchValue] = useState("");
 
     useEffect(() => {
         const fetchLog = async () => {
@@ -21,10 +22,19 @@ const logDashboard = () => {
         fetchLog();
     }, []);
 
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        setSearchValue(params.get("q") || "");
+    }, [location.search]);
+
+    const filteredData = logs.filter((type) =>
+        type.message.toLowerCase().includes(searchValue.toLowerCase())
+    );
+
     return (
         <div className='topPanel'>
             <div className='top'>
-                <Search placeholder="Search for a log"></Search>
+                <Search placeholder="Search for a log message"></Search>
             </div>
 
             <table className='dataTable'>
@@ -37,7 +47,7 @@ const logDashboard = () => {
                 </thead>
 
                 <tbody>
-                    {logs && logs.map((log) => (
+                    {filteredData.map((log) => (
                         <tr key={log._id}>
                             <td>{log.level}</td>
                             <td>{log.message}</td>

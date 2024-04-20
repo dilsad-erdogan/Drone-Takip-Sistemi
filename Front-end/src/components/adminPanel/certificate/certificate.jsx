@@ -12,6 +12,7 @@ const certificate = () => {
   const [deleteModal, setDeleteModal] = useState(false);
   const [deletedCertificate, setDeletedCertificate] = useState();
   const [certificateData, setCertificateData] = useState([]);
+  const [searchValue, setSearchValue] = useState("");
   
   useEffect(() => {
     const fetchData = async () => {
@@ -31,6 +32,11 @@ const certificate = () => {
 
     fetchData();
   }, []);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    setSearchValue(params.get("q") || "");
+  }, [location.search]);
 
   const addNewCertificate = () => {
     navigate('/admin/certificateAdd');
@@ -59,6 +65,10 @@ const certificate = () => {
     }
   }
 
+  const filteredData = certificateData.filter((type) =>
+    type.certificate_name.toLowerCase().includes(searchValue.toLowerCase())
+  );
+
   return (
     <div className='topPanel'>
       <div className="top">
@@ -76,7 +86,7 @@ const certificate = () => {
         </thead>
 
         <tbody>
-          {certificateData && certificateData.map((certificate) => (
+          {filteredData.map((certificate) => (
             <tr key={certificate.certificate_id}>
               <td>{certificate.certificate_name}</td>
               <td>

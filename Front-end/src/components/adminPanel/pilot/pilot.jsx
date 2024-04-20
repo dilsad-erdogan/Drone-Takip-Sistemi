@@ -15,6 +15,7 @@ const pilot = () => {
   const [deleteModal, setDeleteModal] = useState(false);
   const [deletedPilot, setDeletedPilot] = useState();
   const [userNames, setUserNames] = useState('');
+  const [searchValue, setSearchValue] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -40,6 +41,11 @@ const pilot = () => {
 
     fetchData();
   }, []);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    setSearchValue(params.get("q") || "");
+  }, [location.search]);
 
   async function getUserById(userId){
     try{
@@ -78,10 +84,14 @@ const pilot = () => {
     navigate(`/admin/pilotUpdate/${pilotId}`);
   }
 
+  const filteredData = pilotsData.filter((type) =>
+    type.pilot_certificate.toLowerCase().includes(searchValue.toLowerCase())
+  );
+
   return (
     <div className='topPanel'>
       <div className="top">
-        <Search placeholder="Search for a pilot"></Search>
+        <Search placeholder="Search for a pilot certificate"></Search>
         <button className="btn btn-outline-light" onClick={() => {addNewPilot()}}>Add New Pilot</button>
       </div>
 
@@ -96,7 +106,7 @@ const pilot = () => {
         </thead>
 
         <tbody>
-          {pilotsData && pilotsData.map((pilot) => (
+          {filteredData.map((pilot) => (
             <tr key={pilot.pilot_id}>
               <td>{userNames[pilot.user_id]}</td>
               <td>{pilot.pilot_certificate}</td>

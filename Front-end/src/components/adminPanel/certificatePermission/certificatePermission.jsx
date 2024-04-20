@@ -123,9 +123,6 @@ const certificatePermission = () => {
   
   return (
     <div className='topPanel'>
-      <div className="top">
-        <Search placeholder="Search for a pilot"></Search>
-      </div>
 
       <table className="dataTable">
         <thead>

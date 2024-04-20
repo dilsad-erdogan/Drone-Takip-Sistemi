@@ -15,6 +15,7 @@ const droneModel = () => {
   const [deleteModal, setDeleteModal] = useState(false);
   const [deletedModel, setDeletedModel] = useState([]);
   const [brandNames, setBrandNames]= useState('');
+  const [searchValue, setSearchValue] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -41,7 +42,12 @@ const droneModel = () => {
     };
 
     fetchData();
-  }, [])
+  }, []);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    setSearchValue(params.get("q") || "");
+  }, [location.search]);
 
   async function getBrandById(brandId){
     try{
@@ -80,6 +86,10 @@ const droneModel = () => {
     navigate(`/admin/modelUpdate/${modelId}`);
   }
 
+  const filteredData = droneModelData.filter((type) =>
+    type.model_name.toLowerCase().includes(searchValue.toLowerCase())
+  );
+
   return (
     <div className='topPanel'>
       <div className='top'>
@@ -99,7 +109,7 @@ const droneModel = () => {
         </thead>
 
         <tbody>
-          {droneModelData && droneModelData.map((model) => (
+          {filteredData.map((model) => (
             <tr key={model.model_id}>
               <td>{brandNames[model.brand_id]}</td>
               <td>{model.model_name}</td>

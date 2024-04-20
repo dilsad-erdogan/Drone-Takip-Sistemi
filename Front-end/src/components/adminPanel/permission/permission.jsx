@@ -129,14 +129,10 @@ const permission = () => {
         console.error('Hata:', error.message);
         return droneId;
     }
-}
+  }
 
   return (
     <div className="topPanel">
-      <div className="top">
-        <Search placeholder="Search for a permission"></Search>
-      </div>
-
       <table className='dataTable'>
         <thead>
           <tr>

@@ -23,6 +23,7 @@ const drone = () => {
   const[modelNames, setModelNames] = useState({});
   const[typeNames, setTypeNames] = useState({});
   const[ownerName, setOwnerName] = useState({});
+  const [searchValue, setSearchValue] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -107,6 +108,11 @@ const drone = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    setSearchValue(params.get("q") || "");
+  }, [location.search]);
+
   const addNewDrone = () => {
     navigate('/admin/droneAdd');
   }
@@ -130,10 +136,14 @@ const drone = () => {
     }
   }
 
+  const filteredData = droneData.filter((type) =>
+    type.serial_number.toLowerCase().includes(searchValue.toLowerCase())
+  );
+
   return (
     <div className='topPanel'>
       <div className='top'>
-        <Search placeholder="Search for a drone"></Search>
+        <Search placeholder="Search for a drone serial number"></Search>
         <button className='btn btn-outline-light' onClick={() => {addNewDrone()}}>Add New Drone</button>
       </div>
 
@@ -154,7 +164,7 @@ const drone = () => {
         </thead>
 
         <tbody>
-          {droneData && droneData.map((drone) => (
+          {filteredData.map((drone) => (
             <tr key={drone.drone_id}>
               <td>{ownerName[drone.owner_id]}</td>
               <td>{drone.serial_number}</td>

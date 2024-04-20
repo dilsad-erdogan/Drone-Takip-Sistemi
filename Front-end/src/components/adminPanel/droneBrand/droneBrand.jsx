@@ -12,6 +12,7 @@ const droneBrand = () => {
   const[droneBrandData, setDroneBrandData] = useState([]);
   const[deleteModal, setDeleteModal] = useState(false);
   const[deletedBrand, setDeletedBrand] = useState();
+  const [searchValue, setSearchValue] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,6 +33,11 @@ const droneBrand = () => {
 
     fetchData();
   }, []);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    setSearchValue(params.get("q") || "");
+  }, [location.search]);
 
   const addNewBrand = () => {
     navigate('/admin/brandAdd');
@@ -60,6 +66,10 @@ const droneBrand = () => {
     navigate(`/admin/brandUpdate/${brandId}`);
   }// burada brandId değerinin update linkinde nasıl alınacağına bakmalıyım
 
+  const filteredData = droneBrandData.filter((type) =>
+    type.brand_name.toLowerCase().includes(searchValue.toLowerCase())
+  );
+
   return (
     <div className='topPanel'>
       <div className='top'>
@@ -78,7 +88,7 @@ const droneBrand = () => {
         </thead>
 
         <tbody>
-          {droneBrandData && droneBrandData.map((brand) => (
+          {filteredData.map((brand) => (
             <tr key={brand.brand_id}>
               <td>{brand.brand_name}</td>
               <td>

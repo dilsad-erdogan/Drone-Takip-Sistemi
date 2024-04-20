@@ -9,9 +9,10 @@ import DeleteModal from '../../ui/commonUsage/modal.jsx';
 
 const droneType = () => {
   const navigate = useNavigate();
-  const[droneTypeData, setDroneTypeData] = useState([]);
-  const[deleteModal, setDeleteModal] = useState(false);
-  const[deletedType, setDeletedType] = useState([]);
+  const [droneTypeData, setDroneTypeData] = useState([]);
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [deletedType, setDeletedType] = useState([]);
+  const [searchValue, setSearchValue] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,6 +33,11 @@ const droneType = () => {
 
     fetchData();
   }, []);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    setSearchValue(params.get("q") || "");
+  }, [location.search]);
 
   const addNewType = () => {
     navigate('/admin/typeAdd');
@@ -60,6 +66,10 @@ const droneType = () => {
     navigate(`/admin/typeUpdate/${typeId}`);
   }
 
+  const filteredDroneTypeData = droneTypeData.filter((type) =>
+    type.type_name.toLowerCase().includes(searchValue.toLowerCase())
+  );
+
   return (
     <div className='topPanel'>
       <div className='top'>
@@ -78,7 +88,7 @@ const droneType = () => {
         </thead>
 
         <tbody>
-          {droneTypeData && droneTypeData.map((type) => (
+          {filteredDroneTypeData.map((type) => (
             <tr key={type.dronetype_id}>
               <td>{type.type_name}</td>
               <td>

@@ -12,6 +12,7 @@ const User = () => {
   const [userData, setUserData] = useState([]);
   const [deleteModal, setDeleteModal] = useState(false);
   const [deletedUser, setDeletedUser] = useState();
+  const [searchValue, setSearchValue] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,6 +33,11 @@ const User = () => {
 
     fetchData();
   }, []);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    setSearchValue(params.get("q") || "");
+  }, [location.search]);
 
   const addNewUser = () => {
     navigate('/admin/userAdd');
@@ -60,6 +66,10 @@ const User = () => {
     navigate(`/admin/userUpdate/${userId}`);
   } //tabloda update butonuna tıklayınca
 
+  const filteredData = userData.filter((data) =>
+    data.name.toLowerCase().includes(searchValue.toLowerCase())
+  );
+
   return (
     <div className='topPanel'>
       <div className='top'>
@@ -80,7 +90,7 @@ const User = () => {
         </thead>
 
         <tbody>
-          {userData && userData.map((user) => (
+          {filteredData.map((user) => (
             <tr key={user.user_id}>
               <td>{user.name}</td>
               <td>{user.email}</td>
