@@ -3,6 +3,7 @@ import HomePage from './components/homePage/homePage';
 import SignIn from './components/signInPage/signIn';
 import SignUp from './components/signUpPage/signUp';
 import ForgotPassword from './components/signInPage/forgotPassword';
+import EnterPassword from './components/signInPage/enterPassword';
 import UserPanel from './components/userPanel/userPanel';
 import AdminPanel from './components/adminPanel/adminPanel';
 
@@ -18,6 +19,7 @@ const App = () => {
         <Route path="/signIn" element={<SignIn />} />
         <Route path="/signUp" element={<SignUp />} />
         <Route path="/forgotPassword" element={<ForgotPassword />} />
+        <Route path="/enterPassword" element={<EnterPassword />} />
 
         <Route path="/admin" element={<AdminPanel screen="dashboard" socket={socket}/>} />
         <Route path="/admin/map" element={<AdminPanel screen="map" socket={socket}/>} />
