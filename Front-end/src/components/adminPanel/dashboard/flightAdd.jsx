@@ -1,6 +1,8 @@
 import '../../ui/panel.css';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api';
+
 import DroneModel from '../../../../../Back-end/connections/drone.js';
 const droneModel = new DroneModel();
 import PermissionModel from '../../../../../Back-end/connections/permission.js';
@@ -9,7 +11,6 @@ import PilotModel from '../../../../../Back-end/connections/pilot.js';
 const pilotModel = new PilotModel();
 import UserModel from '../../../../../Back-end/connections/user.js';
 const userModel = new UserModel();
-import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api';
 
 const containerStyle = {
     width: '100%',
@@ -181,6 +182,7 @@ const flightAdd = ({ socket }) => {
                         ))}
                     </select>
                     <input type='datetime-local' placeholder='Flight Date and Time' value={dateAndTime} onChange={(e) => {setDateAndTime(e.target.value)}}></input>
+                    {/* <Datetime value={dateAndTime} onChange={setDateAndTime} inputProps={{ placeholder: 'Flight Date and Time' }}></Datetime> */}
                     <div className='container-fluid'>
                         {isLoaded ? (
                             <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={6} onClick={handleMapClick}>
