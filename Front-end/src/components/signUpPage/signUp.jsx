@@ -53,33 +53,33 @@ const signUp = () => {
         <div className='pages'>
           <Form className='formContainer' onSubmit={submitEvent}>
             <Form.Group className='formGroup' controlId='formNameId'>
-              <Form.Label className='label'>İsminizi giriniz</Form.Label>
-              <Form.Control className='input' type='name' placeholder='İsminizi giriniz.' value={name} onChange={(e) => {setName(e.target.value)}}></Form.Control>
+              <Form.Label className='label'>Name</Form.Label>
+              <Form.Control className='input' type='name' placeholder='Enter your name.' value={name} onChange={(e) => {setName(e.target.value)}}></Form.Control>
             </Form.Group>
 
             <Form.Group className='formGroup' controlId='formEmailId'>
-              <Form.Label className='label'>Email adresinizi giriniz</Form.Label>
-              <Form.Control className='input' type='email' placeholder='Email adresinizi giriniz.' value={email} onChange={(e) => {setEmail(e.target.value)}}></Form.Control>
+              <Form.Label className='label'>Email Address</Form.Label>
+              <Form.Control className='input' type='email' placeholder='Enter your email address.' value={email} onChange={(e) => {setEmail(e.target.value)}}></Form.Control>
             </Form.Group>
 
             <Form.Group className='formGroup' controlId='formPasswordId'>
-              <Form.Label className='label'>Şifrenizi giriniz</Form.Label>
-              <Form.Control className='input' type='password' placeholder='Şifrenizi giriniz.' value={password} onChange={(e) => {setPassword(e.target.value)}}></Form.Control>
+              <Form.Label className='label'>Password</Form.Label>
+              <Form.Control className='input' type='password' placeholder='Enter your password.' value={password} onChange={(e) => {setPassword(e.target.value)}}></Form.Control>
             </Form.Group>
 
             <Form.Group className='formGroup' controlId='formPasswordAgainId'>
-              <Form.Label className='label'>Şifrenizi tekrardan giriniz</Form.Label>
-              <Form.Control className='input' type='password' placeholder='Şifrenizi tekrardan giriniz.' value={password2} onChange={(e) => {setPassword2(e.target.value)}}></Form.Control>
+              <Form.Label className='label'>Password Again</Form.Label>
+              <Form.Control className='input' type='password' placeholder='Enter your password again.' value={password2} onChange={(e) => {setPassword2(e.target.value)}}></Form.Control>
             </Form.Group>
 
             <Form.Group className='formGroup' controlId='formSubmit'>
-              <Button className='button' variant='success' type='submit'>Kayıt Ol</Button>
+              <Button className='button' variant='success' type='submit'>Sign Up</Button>
             </Form.Group>
 
             <div className='hr'></div>
 
             <Form.Group className='foot-lnk'>
-              <p>If you have an account, <Link to="/signIn">Giriş Yap</Link></p>
+              <p>If you have an account, <Link to="/signIn">Sign In</Link></p>
             </Form.Group>
           </Form>
         </div>

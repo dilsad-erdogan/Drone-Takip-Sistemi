@@ -10,6 +10,8 @@ a{
     flex-wrap: wrap;
     margin: 0;
     padding: 0;
+    width: 100%;
+    height: 100vh;
 }
 
 .toggle-button{
@@ -19,13 +21,13 @@ a{
 }
 
 .menu{
-    flex: 1;
+    flex: 0.75;
     background-color: var(--bgSoft);
     border-radius: 10px;
     padding: 20px;
 }
 
-@media (max-width: 960px){
+@media (max-width: 1000px){
     .menu{
         display: none;
     }
@@ -40,7 +42,7 @@ a{
 }
 
 .content{
-    flex: 4;
+    flex: 4.25;
     padding: 20px;
 }
 
@@ -213,6 +215,7 @@ a{
 .sideBar{
     position: sticky;
     top: 40px;
+    height: 100%;
 }
 
 .user{
@@ -326,11 +329,11 @@ a{
 .addForm{
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: space-around;
 }
 
 .addForm input, .addForm select, .addForm option{
-    padding: 15px;
+    padding: 20px;
     background-color: var(--bg);
     color: var(--text);
     border: 2px solid var(--tableAndHover);
@@ -340,11 +343,11 @@ a{
 }
 
 .addForm input{
-    width: 45%;
+    width: 40%;
 }
 
 .addForm select{
-    width: 45%;
+    width: 40%;
 }
 
 .addForm button{

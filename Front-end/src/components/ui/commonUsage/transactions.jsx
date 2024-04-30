@@ -116,7 +116,6 @@ const transactions = ({ flights }) => {
                         <td>Owner</td>
                         <td>Pilot</td>
                         <td>Drone</td>
-                        <td>Coordinates</td>
                         <td>Created At</td>
                     </tr>
                 </thead>
@@ -128,7 +127,6 @@ const transactions = ({ flights }) => {
                             <td>{ownerNames[flight.owner_id]}</td>
                             <td>{pilotNames[flight.pilot_id]}</td>
                             <td>{serialNumbers[flight.drone_id]}</td>
-                            <td>{flight.coordinates.coordinates[0] + '-' + flight.coordinates.coordinates[0]}</td>
                             <td>{flight.createdAt}</td>
                         </tr>
                     ))}
