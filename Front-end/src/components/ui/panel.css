@@ -173,20 +173,23 @@ a{
 }
 
 .dataTable{
-    background-color: var(--tableAndHover);
-    padding: 20px;
+    background-color: var(--tableAndHover) !important;
+    padding: 25px;
     border-radius: 10px;
     margin-top: 20px;
     width: 100%;
+    border-collapse: collapse;
 }
 
 .dataTable thead{
-    font-size: 19px;
+    font-size: 25px;
     font-weight: bold;
+    border-bottom: 5px solid var(--bgSoft);
 }
 
-.dataTable td{
+.dataTable td {
     padding: 10px;
+    border-bottom: 1px solid var(--bgSoft);
 }
 
 .buttons{
