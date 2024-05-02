@@ -12,7 +12,7 @@ a{
     padding: 0;
     width: 100%;
     height: 100vh;
-    position: fixed; /* Arka planın sabit kalmasını sağlar */
+    position: fixed;
     overflow: hidden;
 }
 
@@ -183,11 +183,6 @@ a{
 .dataTable thead{
     font-size: 19px;
     font-weight: bold;
-}
-
-.dataTable tbody{
-    height: 100vh;
-    overflow-y: auto;
 }
 
 .dataTable td{
