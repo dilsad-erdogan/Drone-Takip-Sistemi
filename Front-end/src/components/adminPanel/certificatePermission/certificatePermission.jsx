@@ -1,5 +1,4 @@
 import '../../ui/panel.css';
-import Search from '../../ui/commonUsage/search.jsx';
 import Pagination from '../../ui/commonUsage/pagination.jsx';
 import { useEffect, useState } from "react";
 import DeleteModal from '../../ui/commonUsage/modal.jsx';

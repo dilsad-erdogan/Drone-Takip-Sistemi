@@ -37,21 +37,23 @@ const userUpdate = () => {
   }
 
   return (
-    <div className='topPanel'>
-      <div className='top'>
-        <h2>User Update Page</h2>
-      </div>
+    <div className='addUpdatePage'>
+      <div className='topPanel'>
+        <div className='top'>
+          <h2>User Update Page</h2>
+        </div>
 
-      <div className='addPanel'>
-        <form action='' className='addForm' onSubmit={submitEvent}>
-          <input type='text' placeholder='Role Type' value={roleName} onChange={(e) => {setRoleName(e.target.value)}}></input>
-          <input type='text' placeholder='User Name' value={name} onChange={(e) => {setName(e.target.value)}}></input>
-          <input type='text' placeholder='User Email' value={email} onChange={(e) => {setEmail(e.target.value)}}></input>
-          <input type='text' placeholder='User Password' value={password} onChange={(e) => {setPassword(e.target.value)}}></input>
-          <input type='text' placeholder='User Pilot Certificate' value={pilotCertificate} onChange={(e) => {setPilotCertificate(e.target.value)}}></input>
-          <input type='text' placeholder='User Drone Owner' value={droneOwner} onChange={(e) => {setDroneOwner(e.target.value)}}></input>
-          <button type='submit'>Submit</button>
-        </form>
+        <div className='addPanel'>
+          <form action='' className='addForm' onSubmit={submitEvent}>
+            <input type='text' placeholder='Role Type' value={roleName} onChange={(e) => {setRoleName(e.target.value)}}></input>
+            <input type='text' placeholder='User Name' value={name} onChange={(e) => {setName(e.target.value)}}></input>
+            <input type='text' placeholder='User Email' value={email} onChange={(e) => {setEmail(e.target.value)}}></input>
+            <input type='text' placeholder='User Password' value={password} onChange={(e) => {setPassword(e.target.value)}}></input>
+            <input type='text' placeholder='User Pilot Certificate' value={pilotCertificate} onChange={(e) => {setPilotCertificate(e.target.value)}}></input>
+            <input type='text' placeholder='User Drone Owner' value={droneOwner} onChange={(e) => {setDroneOwner(e.target.value)}}></input>
+            <button type='submit'>Submit</button>
+          </form>
+        </div>
       </div>
     </div>
   )

@@ -2,7 +2,7 @@ import '../../../ui/panel.css';
 
 const pilotUpdate = () => {
   return (
-    <div>pilotUpdate controllerı yok</div>
+    <div className='addUpdatePage'>pilotUpdate controllerı yok</div>
   )
 }
 

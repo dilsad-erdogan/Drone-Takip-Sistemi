@@ -25,16 +25,18 @@ const brandUpdate = () => {
   };
 
   return (
-    <div className='topPanel'>
-      <div className='top'>
-        <h2>Drone Brand Update Page</h2>
-      </div>
+    <div className='addUpdatePage'>
+      <div className='topPanel'>
+        <div className='top'>
+          <h2>Drone Brand Update Page</h2>
+        </div>
 
-      <div className='addPanel'>
-        <form action='' className='addForm' onSubmit={submitEvent}>
-          <input type='text' placeholder='Brand Name' value={brandName} onChange={(e) => {setBrandName(e.target.value)}}></input>
-          <button type='submit'>Submit</button>
-        </form>
+        <div className='addPanel'>
+          <form action='' className='addForm' onSubmit={submitEvent}>
+            <input type='text' placeholder='Brand Name' value={brandName} onChange={(e) => {setBrandName(e.target.value)}}></input>
+            <button type='submit'>Submit</button>
+          </form>
+        </div>
       </div>
     </div>
   )

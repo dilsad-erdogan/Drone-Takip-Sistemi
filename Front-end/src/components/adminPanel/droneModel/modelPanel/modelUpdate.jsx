@@ -25,16 +25,18 @@ const modelUpdate = () => {
   };
 
   return (
-    <div className='topPanel'>
-      <div className='top'>
-        <h2>Drone Model Update Page</h2>
-      </div>
+    <div className='addUpdatePage'>
+      <div className='topPanel'>
+        <div className='top'>
+          <h2>Drone Model Update Page</h2>
+        </div>
 
-      <div className='addPanel'>
-        <form action='' className='addForm' onSubmit={submitEvent}>
-          <input type='text' placeholder='Drone Model Name' value={modelName} onChange={(e) => {setModelName(e.target.value)}}></input>
-          <button type='submit'>Submit</button>
-        </form>
+        <div className='addPanel'>
+          <form action='' className='addForm' onSubmit={submitEvent}>
+            <input type='text' placeholder='Drone Model Name' value={modelName} onChange={(e) => {setModelName(e.target.value)}}></input>
+            <button type='submit'>Submit</button>
+          </form>
+        </div>
       </div>
     </div>
   )

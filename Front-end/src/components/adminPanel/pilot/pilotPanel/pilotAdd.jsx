@@ -49,6 +49,7 @@ const pilotAdd = () => {
     }
 
     return (
+      <div className='addUpdatePage'>
         <div className='topPanel'>
             <div className='top'>
                 <h2>Pilot Add Page</h2>
@@ -67,6 +68,7 @@ const pilotAdd = () => {
                 </form>
             </div>
         </div>
+      </div>
     )
 }
 

@@ -49,22 +49,24 @@ const modelAdd = () => {
   }
 
   return (
-    <div className='topPanel'>
-        <div className='top'>
-            <h2>Drone Model Add Page</h2>
-        </div>
+    <div className='addUpdatePage'>
+      <div className='topPanel'>
+          <div className='top'>
+              <h2>Drone Model Add Page</h2>
+          </div>
 
-        <div className='addPanel'>
-            <form action='' className='addForm' onSubmit={submitEvent}>
-              <select name='cat' id='cat' onChange={(e) => {setModelBrand(e.target.value)}}>
-                {droneBrandData && droneBrandData.map((brand) => (
-                  <option key={brand.brand_id} value={brand.brand_id}>{brand.brand_name}</option>
-                ))}
-              </select>
-              <input type='text' placeholder='Model Name' value={modelName} onChange={(e) => {setModelName(e.target.value)}}></input>
-              <button type='submit'>Submit</button>
-            </form>
-        </div>
+          <div className='addPanel'>
+              <form action='' className='addForm' onSubmit={submitEvent}>
+                <select name='cat' id='cat' onChange={(e) => {setModelBrand(e.target.value)}}>
+                  {droneBrandData && droneBrandData.map((brand) => (
+                    <option key={brand.brand_id} value={brand.brand_id}>{brand.brand_name}</option>
+                  ))}
+                </select>
+                <input type='text' placeholder='Model Name' value={modelName} onChange={(e) => {setModelName(e.target.value)}}></input>
+                <button type='submit'>Submit</button>
+              </form>
+          </div>
+      </div>
     </div>
   )
 }

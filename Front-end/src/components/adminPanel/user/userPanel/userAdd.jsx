@@ -38,21 +38,23 @@ const userAdd = () => {
     });
   }
   return (
-    <div className='topPanel'>
-      <div className='top'>
-        <h2>User Add Page</h2>
-      </div>
+    <div className='addUpdatePage'>
+      <div className='topPanel'>
+        <div className='top'>
+          <h2>User Add Page</h2>
+        </div>
 
-      <div className='addPanel'>
-        <form action='' className='addForm' onSubmit={submitEvent}>
-            <input type='text' placeholder='User Role Type' value={role} onChange={(e) => {setRole(e.target.value)}}></input>
-            <input type='text' placeholder='User Name'value={name} onChange={(e) => {setName(e.target.value)}}></input>
-            <input type='text' placeholder='User Email' value={email} onChange={(e) => {setEmail(e.target.value)}}></input>
-            <input type='password' placeholder='User Password' value={password} onChange={(e) => {setPassword(e.target.value)}}></input>
-            <input type='password' placeholder='User Password Again' value={password2} onChange={(e) => {setPassword2(e.target.value)}}></input>
-            <input type='text' placeholder='User Certificate' value={certificate} onChange={(e) => {setCertificate(e.target.value)}}></input>
-            <button type='submit'>Submit</button>
-        </form>
+        <div className='addPanel'>
+          <form action='' className='addForm' onSubmit={submitEvent}>
+              <input type='text' placeholder='User Role Type' value={role} onChange={(e) => {setRole(e.target.value)}}></input>
+              <input type='text' placeholder='User Name'value={name} onChange={(e) => {setName(e.target.value)}}></input>
+              <input type='text' placeholder='User Email' value={email} onChange={(e) => {setEmail(e.target.value)}}></input>
+              <input type='password' placeholder='User Password' value={password} onChange={(e) => {setPassword(e.target.value)}}></input>
+              <input type='password' placeholder='User Password Again' value={password2} onChange={(e) => {setPassword2(e.target.value)}}></input>
+              <input type='text' placeholder='User Certificate' value={certificate} onChange={(e) => {setCertificate(e.target.value)}}></input>
+              <button type='submit'>Submit</button>
+          </form>
+        </div>
       </div>
     </div>
   )

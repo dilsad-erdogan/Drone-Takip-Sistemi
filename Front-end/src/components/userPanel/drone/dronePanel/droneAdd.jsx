@@ -111,42 +111,44 @@ const droneAdd = () => {
   }
 
   return (
-    <div className='topPanel'>
-        <div className='top'>
-            <h2>Drone Add Page</h2>
-        </div>
+    <div className='addUpdatePage'>
+      <div className='topPanel'>
+          <div className='top'>
+              <h2>Drone Add Page</h2>
+          </div>
 
-        <div className='addPanel'>
-            <form action='' className='addForm' onSubmit={submitEvent}>
-                <select name='cat' id='cat' onChange={(e) => {setDroneType(e.target.value)}}>
-                  <option>Select a drone type</option>
-                  {droneTypeData && droneTypeData.map((type) => (
-                    <option key={type.dronetype_id} value={type.dronetype_id}>{type.type_name}</option>
-                  ))}
-                </select>
-                <select name='cat' id='cat' value={droneBrand} onChange={(e) => {onChangeBrand(e.target.value)}}>
-                  <option>Select a brand</option>
-                  {droneBrandData && droneBrandData.map((brand) => (
-                    <option key={brand.brand_id} value={brand.brand_id}>{brand.brand_name}</option>
-                  ))}
-                </select>
-                <select name='cat' id='cat' value={droneModel} onChange={(e) => {setDroneModel(e.target.value)}}>
-                  <option>Select a model</option>
-                  {droneModelData && droneModelData.map((data) => (
-                    <option key={data.model_id} value={data.model_id}>{data.model_name}</option>
-                  ))} 
-                </select>
-                <input type='number' placeholder='Drone Size Height' value={sizeHeight} onChange={(e) => {setSizeHeight(e.target.value)}}></input>
-                <input type='number' placeholder='Drone Size Width' value={sizeWidth} onChange={(e) => {setSizeWidth(e.target.value)}}></input>
-                <input type='number' placeholder='Drone Size Dept' value={sizeDept} onChange={(e) => {setSizeDept(e.target.value)}}></input>
-                <input type='number' placeholder='Drone Weight' value={weight} onChange={(e) => {setWeight(e.target.value)}}></input>
-                <input type='text' placeholder='Drone Airframe Name' value={airframe} onChange={(e) => {setAirframe(e.target.value)}}></input>
-                <input type='text' placeholder='Drone Propeller Size' value={propeller} onChange={(e) => {setPropeller(e.target.value)}}></input>
-                <input type='text' placeholder='Drone Material' value={material} onChange={(e) => {setMaterial(e.target.value)}}></input>
-                <input type='text' placeholder='Drone Serial Number' value={serialNumber} onChange={(e) => {setSerialNumber(e.target.value)}}></input>
-                <button type='submit'>Submit</button>
-            </form>
-        </div>
+          <div className='addPanel'>
+              <form action='' className='addForm' onSubmit={submitEvent}>
+                  <select name='cat' id='cat' onChange={(e) => {setDroneType(e.target.value)}}>
+                    <option>Select a drone type</option>
+                    {droneTypeData && droneTypeData.map((type) => (
+                      <option key={type.dronetype_id} value={type.dronetype_id}>{type.type_name}</option>
+                    ))}
+                  </select>
+                  <select name='cat' id='cat' value={droneBrand} onChange={(e) => {onChangeBrand(e.target.value)}}>
+                    <option>Select a brand</option>
+                    {droneBrandData && droneBrandData.map((brand) => (
+                      <option key={brand.brand_id} value={brand.brand_id}>{brand.brand_name}</option>
+                    ))}
+                  </select>
+                  <select name='cat' id='cat' value={droneModel} onChange={(e) => {setDroneModel(e.target.value)}}>
+                    <option>Select a model</option>
+                    {droneModelData && droneModelData.map((data) => (
+                      <option key={data.model_id} value={data.model_id}>{data.model_name}</option>
+                    ))} 
+                  </select>
+                  <input type='number' placeholder='Drone Size Height' value={sizeHeight} onChange={(e) => {setSizeHeight(e.target.value)}}></input>
+                  <input type='number' placeholder='Drone Size Width' value={sizeWidth} onChange={(e) => {setSizeWidth(e.target.value)}}></input>
+                  <input type='number' placeholder='Drone Size Dept' value={sizeDept} onChange={(e) => {setSizeDept(e.target.value)}}></input>
+                  <input type='number' placeholder='Drone Weight' value={weight} onChange={(e) => {setWeight(e.target.value)}}></input>
+                  <input type='text' placeholder='Drone Airframe Name' value={airframe} onChange={(e) => {setAirframe(e.target.value)}}></input>
+                  <input type='text' placeholder='Drone Propeller Size' value={propeller} onChange={(e) => {setPropeller(e.target.value)}}></input>
+                  <input type='text' placeholder='Drone Material' value={material} onChange={(e) => {setMaterial(e.target.value)}}></input>
+                  <input type='text' placeholder='Drone Serial Number' value={serialNumber} onChange={(e) => {setSerialNumber(e.target.value)}}></input>
+                  <button type='submit'>Submit</button>
+              </form>
+          </div>
+      </div>
     </div>
   )
 }

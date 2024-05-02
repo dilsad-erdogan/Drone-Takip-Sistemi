@@ -24,17 +24,19 @@ const certificateAdd = () => {
   }
 
   return (
-    <div className='topPanel'>
-      <div className='top'>
-          <h2>Certificate Add Page</h2>
-      </div>
+    <div className='addUpdatePage'>
+      <div className='topPanel'>
+        <div className='top'>
+            <h2>Certificate Add Page</h2>
+        </div>
 
-      <div className='addPanel'>
-          <form action='' className='addForm' onSubmit={submitEvent}>
-              <input type='text' placeholder='Certificate Name' value={certificateName} onChange={(e) => {setCertificateName(e.target.value)}}></input>
-              <button type='submit'>Submit</button>
-          </form>
-      </div>
+        <div className='addPanel'>
+            <form action='' className='addForm' onSubmit={submitEvent}>
+                <input type='text' placeholder='Certificate Name' value={certificateName} onChange={(e) => {setCertificateName(e.target.value)}}></input>
+                <button type='submit'>Submit</button>
+            </form>
+        </div>
+    </div>
   </div>
   )
 }
