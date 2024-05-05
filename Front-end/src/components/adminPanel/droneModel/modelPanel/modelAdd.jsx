@@ -50,7 +50,7 @@ const modelAdd = () => {
 
   return (
     <div className='addUpdatePage'>
-      <div className='topPanel'>
+      <div className='addUpdatePanel'>
           <div className='top'>
               <h2>Drone Model Add Page</h2>
           </div>

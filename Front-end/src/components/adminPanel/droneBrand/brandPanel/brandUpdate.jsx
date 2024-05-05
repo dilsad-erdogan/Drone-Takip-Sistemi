@@ -26,7 +26,7 @@ const brandUpdate = () => {
 
   return (
     <div className='addUpdatePage'>
-      <div className='topPanel'>
+      <div className='addUpdatePanel'>
         <div className='top'>
           <h2>Drone Brand Update Page</h2>
         </div>

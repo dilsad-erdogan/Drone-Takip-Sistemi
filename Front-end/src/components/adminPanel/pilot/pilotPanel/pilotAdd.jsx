@@ -50,7 +50,7 @@ const pilotAdd = () => {
 
     return (
       <div className='addUpdatePage'>
-        <div className='topPanel'>
+        <div className='addUpdatePanel'>
             <div className='top'>
                 <h2>Pilot Add Page</h2>
             </div>

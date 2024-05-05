@@ -28,7 +28,7 @@ const roleUpdate = () => {
 
   return (
     <div className='addUpdatePage'>
-      <div className='topPanel'>
+      <div className='addUpdatePanel'>
         <div className='top'>
           <h2>User Role Type Update Page</h2>
         </div>

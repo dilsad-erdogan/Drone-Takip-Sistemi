@@ -25,7 +25,7 @@ const certificateAdd = () => {
 
   return (
     <div className='addUpdatePage'>
-      <div className='topPanel'>
+      <div className='addUpdatePanel'>
         <div className='top'>
             <h2>Certificate Add Page</h2>
         </div>
