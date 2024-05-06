@@ -1,5 +1,5 @@
 import '../../../ui/panel.css';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CertificateModel from '../../../../../../Back-end/connections/pilotCertificate';
 const certificateModel = new CertificateModel();
@@ -7,9 +7,14 @@ const certificateModel = new CertificateModel();
 const certificateAdd = () => {
   const navigate = useNavigate();
   const [certificateName, setCertificateName] = useState('');
+  const [error, setError] = useState('');
 
   const submitEvent = (event) => {
     event.preventDefault();
+
+    if(!validateInput(certificateName)) {
+      return;
+    }
 
     const newCertificate = {
       certificate_name: certificateName
@@ -23,6 +28,22 @@ const certificateAdd = () => {
     });
   }
 
+  const validateInput = (value) => {
+    if(!value) {
+      setError('Certificate Name boş olamaz.');
+      return false;
+    }
+
+    setError('');
+    return true;
+  };
+
+  const handleChange = (e) => {
+    const { value } = e.target;
+    setCertificateName(value);
+    validateInput(value);
+  };
+
   return (
     <div className='addUpdatePage'>
       <div className='addUpdatePanel'>
@@ -32,8 +53,11 @@ const certificateAdd = () => {
 
         <div className='addPanel'>
             <form action='' className='addForm' onSubmit={submitEvent}>
-                <input type='text' placeholder='Certificate Name' value={certificateName} onChange={(e) => {setCertificateName(e.target.value)}}></input>
-                <button type='submit'>Submit</button>
+              <div className='inputContainer'>
+                <input type='text' placeholder='Certificate Name' value={certificateName} onChange={handleChange}></input>
+                {error && <p style={{color: 'red'}}>{error}</p>}
+              </div>
+              <button type='submit'>Submit</button>
             </form>
         </div>
     </div>

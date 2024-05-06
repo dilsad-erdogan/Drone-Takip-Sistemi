@@ -3,3 +3,5 @@
 * flight end olma ( line kalıyor silinsin )
 * dashboard grafik için backend ve frontend ayarlaması yapılacak
 * açık ve koyu tema yapılacak
+* formlara validate eklenecek
+* modal güzellenecek

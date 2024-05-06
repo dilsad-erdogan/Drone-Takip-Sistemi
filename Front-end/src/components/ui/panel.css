@@ -382,6 +382,17 @@ a{
     margin-top: 20px;
 }
 
+.inputContainer {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px; /* Adjust as needed */
+}
+
+.addForm p {
+    font-size: 10px;
+    margin-top: 5px;
+}
+
 .addForm input{
     width: 40%;
 }
@@ -402,6 +413,7 @@ a{
     margin-top: 15px;
     justify-content: center;
     align-items: center;
+    margin: 0 auto;
 }
 
 /***************PERMISSION***************/
