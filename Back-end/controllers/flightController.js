@@ -141,6 +141,38 @@ async function totalFlight(req, res) {
     }
 }
 
+async function weeklyFlight(req, res) { 
+    try {
+
+        const startOfWeek = moment().startOf('isoWeek');
+        const endOfWeek = moment().endOf('isoWeek');
+
+         // Uçuşları haftalık periyotta filtreleme
+        const weeklyFlights = await Flight.find({
+            date_and_time: {
+                $gte: startOfWeek.toDate(),
+                $lte: endOfWeek.toDate()
+            }
+        });
+
+        // Haftalık uçuş sayısını döndürme
+        if(weeklyFlights.length > -1) {
+            res.status(200).json({ 
+                success: true, 
+                message: weeklyFlights.length
+            });
+        } else {
+            res.status(404).json({ 
+                success: true, 
+                message: weeklyFlights
+            });
+        } 
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({ error: 'Internal server error!' })
+    }
+}
+
 // user icin kendi ucus sayısı
 async function totalFlightByUserId(req, res) {
     try {
@@ -199,6 +231,7 @@ async function endFlight(req, res) {
     allActiveFlight,
     getFromMongo, 
     totalFlight,
+    weeklyFlight,
     totalFlightByUserId,
     flightByUserId,
     endFlight
