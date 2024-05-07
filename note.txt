@@ -5,3 +5,4 @@
 * açık ve koyu tema yapılacak
 * formlara validate eklenecek
 * modal güzellenecek
+* ekran büyüdükçe side bar kaymalı
