@@ -362,8 +362,10 @@ a{
     }
 }
 
-.addPanel{
-    justify-content: center;
+.addPanel {
+    display: flex;
+    flex-direction: column; /* Elemanları dikey olarak sırala */
+    align-items: center; /* Elemanları ortala */
 }
 
 .addForm{
@@ -378,31 +380,32 @@ a{
     color: var(--text);
     border: 2px solid var(--tableAndHover);
     border-radius: 5px;
-    margin-bottom: 30px;
     margin-top: 20px;
 }
 
 .inputContainer {
     display: flex;
     flex-direction: column;
-    margin-bottom: 10px; /* Adjust as needed */
+    margin-top: 25px;
+    margin-bottom: 30px;
+    width: 100%;
 }
 
 .addForm p {
-    font-size: 10px;
-    margin-top: 5px;
+    font-size: 12px;
+    margin-top: 1px;
 }
 
 .addForm input{
-    width: 40%;
+    width: 100%;
 }
 
 .addForm select{
-    width: 40%;
+    width: 100%;
 }
 
 .addForm button{
-    width: 25%;
+    width: 20%;
     height: 40%;
     padding: 15px;
     background-color: #468f43;
@@ -414,6 +417,8 @@ a{
     justify-content: center;
     align-items: center;
     margin: 0 auto;
+    width: 50%; /* Butonun genişliğini %100 yap */
+    margin-top: 15px;
 }
 
 /***************PERMISSION***************/

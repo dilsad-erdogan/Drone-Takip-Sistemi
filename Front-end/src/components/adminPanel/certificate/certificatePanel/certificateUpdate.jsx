@@ -8,9 +8,14 @@ const certificateUpdate = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [certificateName, setCertificateName] = useState('');
+  const [error, setError] = useState('');
 
   const submitEvent = (event) => {
     event.preventDefault();
+
+    if(!validateInput(certificateName)) {
+      return;
+    }
 
     const updatedCertificate = {
       certificate_name: certificateName
@@ -24,6 +29,22 @@ const certificateUpdate = () => {
     });
   };
 
+  const validateInput = (value) => {
+    if(!value) {
+      setError('Bu alan boş olamaz.');
+      return false;
+    }
+
+    setError('');
+    return true;
+  };
+
+  const handleChange = (e) => {
+    const { value } = e.target;
+    setCertificateName(value);
+    validateInput(value);
+  };
+
   return (
     <div className='addUpdatePage'>
       <div className='addUpdatePanel'>
@@ -33,7 +54,10 @@ const certificateUpdate = () => {
 
         <div className='addPanel'>
           <form action='' className='addForm' onSubmit={submitEvent}>
-            <input type='text' placeholder='Certificate Name' value={certificateName} onChange={(e) => {setCertificateName(e.target.value)}}></input>
+            <div className='inputContainer'>
+              <input type='text' placeholder='Certificate Name' value={certificateName} onChange={handleChange}></input>
+              {error && <p style={{color: 'red'}}>{error}</p>}
+            </div>
             <button type='submit'>Submit</button>
           </form>
         </div>

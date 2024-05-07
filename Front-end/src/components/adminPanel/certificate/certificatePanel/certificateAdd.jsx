@@ -30,7 +30,7 @@ const certificateAdd = () => {
 
   const validateInput = (value) => {
     if(!value) {
-      setError('Certificate Name boş olamaz.');
+      setError('Bu alan boş olamaz.');
       return false;
     }
 
@@ -60,8 +60,8 @@ const certificateAdd = () => {
               <button type='submit'>Submit</button>
             </form>
         </div>
+      </div>
     </div>
-  </div>
   )
 }
 
