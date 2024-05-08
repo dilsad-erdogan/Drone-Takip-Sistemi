@@ -8,6 +8,7 @@ const certificatePermissionModel = new CertificatePermissionModel();
 const settings = () => {
   const [certificateId, setCertificateId] = useState('');
   const [certificate, setCertificate] = useState([]);
+  const [selectedFile, setSelectedFile] = useState(null);
 
   useEffect(() => {
     const fetchCertificateData = async () => {
@@ -33,7 +34,8 @@ const settings = () => {
     const newCertificate = {
       pilot_id: localStorage.getItem("userId"),
       certificate_id: certificateId,
-      permission_status: false
+      permission_status: false,
+      certificate_file: selectedFile
     };
 
     certificatePermissionModel.addCertificatePermission(newCertificate).then(() => {
@@ -42,6 +44,10 @@ const settings = () => {
       alert("İzin sırasında bir hata oluştu." + error);
     });
   }
+
+  const handleFileChange = (e) => {
+    setSelectedFile(e.target.files[0]);
+  };
 
   return (
     <div className='topPanel'>
@@ -57,7 +63,7 @@ const settings = () => {
             data.is_active === true ? (<option key={data.certificate_id} value={data.certificate_id}>{data.certificate_name}</option>) : (console.log())
           ))}
         </select>
-        <input type='file'></input>
+        <input type='file' onChange={handleFileChange}></input>
       </div>
       
     </div>
