@@ -21,6 +21,10 @@ const userAdd = () => {
       return;
     }
 
+    if(!validateForm()) {
+      return;
+    }
+
     const newUser = {
       roletype_id: role,
       name: name,
@@ -37,6 +41,17 @@ const userAdd = () => {
       alert('Ekleme işlemi sırasında bir hata oluştu:' + error.message);
     });
   }
+
+  const validateForm = () => {
+    if (!role.trim()) {alert("User role is required.")} 
+    else if (!name.trim()) {alert("User name is required.")}
+    else if (!email.trim()) {alert("User email is required.")}
+    else if (!password.trim()) {alert("User password is required.")}
+    else if (!password2.trim()) {alert("User password again is required.")}
+    else if (!certificate.trim()) {alert("Certificate is required.")}
+    else { return 1 }
+  }
+
   return (
     <div className='addUpdatePage'>
       <div className='addUpdatePanel'>

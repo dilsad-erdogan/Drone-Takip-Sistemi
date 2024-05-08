@@ -136,7 +136,7 @@ const droneAdd = () => {
   }
 
   const validateForm = () => {
-    if(!serialNumber.trim()) {alert("Serial number is required.")} 
+    if (!serialNumber.trim()) {alert("Serial number is required.")} 
     else if (!ownerId.trim()) {alert("Owner is required.")}
     else if (!droneType.trim()) {alert("Drone type is required.")}
     else if (!droneBrand.trim()) {alert("Drone brand is required.")}
@@ -148,7 +148,7 @@ const droneAdd = () => {
     else if (!airframe.trim()) {alert("Airframe is required.")}
     else if (!propeller.trim()) {alert("Propeller is required.")}
     else if (!material.trim()) {alert("Material is required.")}
-    else {return 1}
+    else { return 1 }
   }
 
   return (

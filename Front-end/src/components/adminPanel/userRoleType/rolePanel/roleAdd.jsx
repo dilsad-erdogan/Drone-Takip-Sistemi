@@ -12,6 +12,10 @@ const roleAdd = () => {
   const submitEvent = (event) => {
     event.preventDefault();
 
+    if(!validateForm()) {
+      return;
+    }
+
     const newRole = {
       role_type: roleName,
       explanation: explanation
@@ -23,6 +27,12 @@ const roleAdd = () => {
     }).catch((error) => {
       alert('Ekleme işlemi sırasında bir hata oluştu:' + error.message);
     });
+  }
+
+  const validateForm = () => {
+    if (!roleName.trim()) {alert("Role name is required.")} 
+    else if (!explanation.trim()) {alert("Explanation is required.")}
+    else { return 1 }
   }
 
   return (

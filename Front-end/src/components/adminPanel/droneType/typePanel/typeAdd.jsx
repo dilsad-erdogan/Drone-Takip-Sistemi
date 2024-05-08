@@ -11,6 +11,10 @@ const typeAdd = () => {
   const submitEvent = (event) => {
     event.preventDefault();
 
+    if(!validateForm()) {
+      return;
+    }
+
     const newType = {
       type_name: typeName
     };
@@ -21,6 +25,11 @@ const typeAdd = () => {
     }).catch((error) => {
       alert('Ekleme işlemi sırasında bir hata oluştu:' + error.message);
     });
+  }
+
+  const validateForm = () => {
+    if (!typeName.trim()) {alert("Type name is required.")} 
+    else { return 1 }
   }
 
   return (

@@ -35,6 +35,10 @@ const modelAdd = () => {
   const submitEvent = (event) => {
     event.preventDefault();
 
+    if(!validateForm()) {
+      return;
+    }
+
     const newModel = {
       brand_id: modelBrand,
       model_name: modelName
@@ -46,6 +50,12 @@ const modelAdd = () => {
     }).catch((error) => {
       alert('Ekleme işlemi sırasında bir hata oluştu:' + error.message);
     });
+  }
+
+  const validateForm = () => {
+    if (!modelBrand.trim()) {alert("Model brand is required.")} 
+    else if (!modelName.trim()) {alert("Model name is required.")}
+    else { return 1 }
   }
 
   return (

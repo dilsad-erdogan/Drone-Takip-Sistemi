@@ -12,6 +12,10 @@ const typeUpdate = () => {
   const submitEvent = (event) => {
     event.preventDefault();
 
+    if(!validateForm()) {
+      return;
+    }
+
     const updatedType = {
       type_name: typeName
     };
@@ -23,6 +27,11 @@ const typeUpdate = () => {
       console.error('Hata:', error.message);
     });
   };
+
+  const validateForm = () => {
+    if (!typeName.trim()) {alert("Type name is required.")}
+    else { return 1 }
+  }
 
   return (
     <div className='addUpdatePage'>

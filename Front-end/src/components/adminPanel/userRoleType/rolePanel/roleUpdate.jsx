@@ -13,6 +13,10 @@ const roleUpdate = () => {
   const submitEvent = (event) => {
     event.preventDefault();
 
+    if(!validateForm()) {
+      return;
+    }
+
     const updatedRole = {
       role_type: roleName,
       explanation: explanation
@@ -25,6 +29,12 @@ const roleUpdate = () => {
       console.error('Hata:', error.message);
     });
   };
+
+  const validateForm = () => {
+    if (!roleName.trim()) {alert("Role name is required.")} 
+    else if (!explanation.trim()) {alert("Explanation is required.")}
+    else { return 1 }
+  }
 
   return (
     <div className='addUpdatePage'>

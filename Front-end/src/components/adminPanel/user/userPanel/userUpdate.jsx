@@ -18,6 +18,10 @@ const userUpdate = () => {
   const submitEvent = (event) => {
     event.preventDefault();
 
+    if(!validateForm()) {
+      return;
+    }
+
     const updatedUser = {
       roletype_id: roleName,
       name: name,
@@ -34,6 +38,16 @@ const userUpdate = () => {
     }).catch((error) => {
       console.error('Hata:', error.message);
     });
+  }
+
+  const validateForm = () => {
+    if (!roleName.trim()) {alert("User role is required.")} 
+    else if (!name.trim()) {alert("User name is required.")}
+    else if (!email.trim()) {alert("User email is required.")}
+    else if (!password.trim()) {alert("USer password is required.")}
+    else if (!pilotCertificate.trim()) {alert("Pilot certificate is required.")}
+    else if (!droneOwner.trim()) {alert("Drone owner is required.")}
+    else { return 1 }
   }
 
   return (

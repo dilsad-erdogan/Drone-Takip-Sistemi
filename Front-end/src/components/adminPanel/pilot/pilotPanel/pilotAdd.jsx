@@ -8,65 +8,75 @@ const userModel = new UserModel();
 
 const pilotAdd = () => {
     const [userData, setUserData] = useState([]);
-    const [userId, setUderId] = useState('');
+    const [userId, setUserId] = useState('');
     const [certificate, setCertificate] = useState('');
     const navigate = useNavigate();
 
     useEffect(() => {
-        const fetchData = async () => {
-          try{
-            await userModel.fetchUserData();
-            const user = userModel.getUsers();
+      const fetchData = async () => {
+        try{
+          await userModel.fetchUserData();
+          const user = userModel.getUsers();
     
-            if(Array.isArray(user)) {
-              setUserData(user);
-            } else{
-              console.error('Hata: getDroneBrands bir dizi döndürmedi.');
-            }
-          } catch(error) {
-            console.error('Error fetching drone brand data:', error.message);
-            console.error('Full error:', error);
+          if(Array.isArray(user)) {
+            setUserData(user);
+          } else{
+            console.error('Hata: getDroneBrands bir dizi döndürmedi.');
           }
-        };
+        } catch(error) {
+          console.error('Error fetching drone brand data:', error.message);
+          console.error('Full error:', error);
+        }
+      };
     
-        fetchData();
+      fetchData();
     }, []);
 
     const submitEvent = (event) => {
-        event.preventDefault();
+      event.preventDefault();
+
+      if(!validateForm()) {
+        return;
+      }
     
-        const newPilot = {
-          user_id: userId,
-          pilot_certificate: certificate
-        };
+      const newPilot = {
+        user_id: userId,
+        pilot_certificate: certificate
+      };
     
-        pilotModel.addPilot(newPilot).then(() => {
-          alert("Pilot ekleme işlemi başarıyla tamamlandı.");
-          navigate('/admin/pilot');
-        }).catch((error) => {
-          alert('Ekleme işlemi sırasında bir hata oluştu:' + error.message);
-        });
+      pilotModel.addPilot(newPilot).then(() => {
+        alert("Pilot ekleme işlemi başarıyla tamamlandı.");
+        navigate('/admin/pilot');
+      }).catch((error) => {
+        alert('Ekleme işlemi sırasında bir hata oluştu:' + error.message);
+      });
+    }
+
+    const validateForm = () => {
+      if (!userId.trim()) {alert("User is required.")} 
+      else if (!certificate.trim()) {alert("Certificate is required.")}
+      else { return 1 }
     }
 
     return (
       <div className='addUpdatePage'>
         <div className='addUpdatePanel'>
-            <div className='top'>
-                <h2>Pilot Add Page</h2>
-            </div>
+          <div className='top'>
+              <h2>Pilot Add Page</h2>
+          </div>
     
-            <div className='addPanel'>
-                <form action='' className='addForm' onSubmit={submitEvent}>
-                    <select name='cat' id='cat' onChange={(e) => {setUderId(e.target.value)}}>
-                        <option>Select a user</option>
-                        {userData && userData.map((user) => (
-                            <option key={user.user_id} value={user.user_id}>{user.name}</option>
-                        ))}
-                    </select>
-                    <input type='text' placeholder='Pilot Certificate' value={certificate} onChange={(e) => {setCertificate(e.target.value)}}></input>
-                    <button type='submit'>Submit</button>
-                </form>
-            </div>
+          <div className='addPanel'>
+            <form action='' className='addForm' onSubmit={submitEvent}>
+              <select name='cat' id='cat' onChange={(e) => {setUserId(e.target.value)}}>
+                <option>Select a user</option>
+                {userData && userData.map((user) => (
+                  <option key={user.user_id} value={user.user_id}>{user.name}</option>
+                ))}
+              </select>
+              <input type='text' placeholder='Pilot Certificate' value={certificate} onChange={(e) => {setCertificate(e.target.value)}}></input>
+              <button type='submit'>Submit</button>
+            </form>
+          </div>
         </div>
       </div>
     )

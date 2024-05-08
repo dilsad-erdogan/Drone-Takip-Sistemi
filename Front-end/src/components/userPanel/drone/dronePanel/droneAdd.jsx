@@ -87,6 +87,10 @@ const droneAdd = () => {
   const submitEvent = async (event) => {
     event.preventDefault();
 
+    if(!validateForm()) {
+      return;
+    }
+
     const newDrone = {
       serial_number: serialNumber,
       owner_id: localStorage.getItem('userId'),
@@ -108,6 +112,21 @@ const droneAdd = () => {
     }).catch((error) => {
       alert('Ekleme işleminde hata:' + error.message);
     });
+  }
+
+  const validateForm = () => {
+    if (!serialNumber.trim()) {alert("Serial number is required.")} 
+    else if (!droneType.trim()) {alert("Drone type is required.")}
+    else if (!droneBrand.trim()) {alert("Drone brand is required.")}
+    else if (!droneModel.trim()) {alert("Drone model is required.")}
+    else if (!sizeHeight.trim()) {alert("Size height is required.")}
+    else if (!sizeWidth.trim()) {alert("Size width is required.")}
+    else if (!sizeDept.trim()) {alert("Size dept is required.")}
+    else if (!weight.trim()) {alert("Weight is required.")}
+    else if (!airframe.trim()) {alert("Airframe is required.")}
+    else if (!propeller.trim()) {alert("Propeller is required.")}
+    else if (!material.trim()) {alert("Material is required.")}
+    else { return 1 }
   }
 
   return (

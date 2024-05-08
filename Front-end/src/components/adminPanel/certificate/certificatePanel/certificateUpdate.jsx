@@ -12,6 +12,10 @@ const certificateUpdate = () => {
   const submitEvent = (event) => {
     event.preventDefault();
 
+    if(!validateForm()) {
+      return;
+    }
+
     const updatedCertificate = {
       certificate_name: certificateName
     };
@@ -23,6 +27,11 @@ const certificateUpdate = () => {
       console.error('Hata:', error.message);
     });
   };
+
+  const validateForm = () => {
+    if (!certificateName.trim()) { alert("Certificate name is required.") }
+    else { return 1 }
+  }
 
   return (
     <div className='addUpdatePage'>

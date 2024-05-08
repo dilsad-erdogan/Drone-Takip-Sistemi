@@ -11,6 +11,10 @@ const brandAdd = () => {
   const submitEvent = (event) => {
     event.preventDefault();
 
+    if(!validateForm()) {
+      return;
+    }
+
     const newBrand = {
       brand_name: brandName
     };
@@ -21,6 +25,11 @@ const brandAdd = () => {
     }).catch((error) => {
       alert('Ekleme işlemi sırasında bir hata oluştu:' + error.message);
     });
+  }
+
+  const validateForm = () => {
+    if (!brandName.trim()) {alert("Brand name is required.")}
+    else { return 1 }
   }
 
   return (

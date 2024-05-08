@@ -12,6 +12,10 @@ const brandUpdate = () => {
   const submitEvent = (event) => {
     event.preventDefault();
 
+    if(!validateForm()) {
+      return;
+    }
+
     const updatedBrand = {
       brand_name: brandName
     };
@@ -23,6 +27,11 @@ const brandUpdate = () => {
       console.error('Hata:', error.message);
     }); //id değerinin buraya link veya başka şekilde gelmesi lazım ki tıklanan değer değişsin.
   };
+
+  const validateForm = () => {
+    if (!brandName.trim()) {alert("Brand name is required.")}
+    else { return 1 }
+  }
 
   return (
     <div className='addUpdatePage'>

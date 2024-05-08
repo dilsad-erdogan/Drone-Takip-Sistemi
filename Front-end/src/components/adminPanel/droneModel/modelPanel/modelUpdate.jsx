@@ -12,6 +12,10 @@ const modelUpdate = () => {
   const submitEvent = (event) => {
     event.preventDefault();
 
+    if(!validateForm()) {
+      return;
+    }
+
     const updatedModel = {
       model_name: modelName
     };
@@ -23,6 +27,11 @@ const modelUpdate = () => {
       console.error('Hata:', error.message);
     });
   };
+
+  const validateForm = () => {
+    if (!modelName.trim()) {alert("Model name is required.")}
+    else { return 1 }
+  }
 
   return (
     <div className='addUpdatePage'>
