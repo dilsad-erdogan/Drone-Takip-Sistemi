@@ -397,11 +397,11 @@ a{
 }
 
 .addForm input{
-    width: 100%;
+    width: 40%;
 }
 
 .addForm select{
-    width: 100%;
+    width: 40%;
 }
 
 .addForm button{

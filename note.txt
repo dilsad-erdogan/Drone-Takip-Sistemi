@@ -6,3 +6,4 @@
 * formlara validate eklenecek
 * modal güzellenecek
 * ekran büyüdükçe side bar kaymalı
+* pdf ekleme olayları
