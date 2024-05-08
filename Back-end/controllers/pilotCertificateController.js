@@ -72,14 +72,14 @@ exports.add = catchAsyncErrors(async(req, res, next) => {
         success: false,
         error: "This certificate already exists!"
       });
+    } else {
+        const certificate = await PilotCertificate.create({
+            certificate_name,
+        });
+    
+        await certificate.save();
+        res.status(201).json({ message: "Certificate successfully registered.", data: certificate });
     }
-
-    const certificate = await PilotCertificate.create({
-        certificate_name,
-    });
-
-    await certificate.save();
-    res.status(201).json({ message: "Certificate successfully registered.", data: certificate });
 
     } catch (error) {
         console.error('Error:', error);

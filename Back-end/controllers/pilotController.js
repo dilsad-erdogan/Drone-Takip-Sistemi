@@ -38,7 +38,7 @@ exports.getActiveAll = catchAsyncErrors( async (req, res) => {
 exports.getPilotById = catchAsyncErrors(async (req, res) => {
     try {
         const pilot_id = req.params.pilot_id
-        const pilot = await Pilot.findOne({ where: {pilot_id}})
+        const pilot = await Pilot.findByPk(pilot_id)
 
         if(pilot && pilot.is_active===true) {
             res.status(200).json({ success: true, data: pilot })
@@ -49,7 +49,7 @@ exports.getPilotById = catchAsyncErrors(async (req, res) => {
         console.log(error);
         res.status(500).json({ success: false, error: 'Internal server error!' })
     }
-})//çalışmıyo
+})
 
 exports.getTotalPilotCount = catchAsyncErrors(async (req, res) => {
     try {

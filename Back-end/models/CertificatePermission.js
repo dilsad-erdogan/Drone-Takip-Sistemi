@@ -16,6 +16,11 @@ const CertificatePermission = sequelize.define("certificate_permissions", {
       certificate_id: {
         type: DataTypes.INTEGER
       },
+      
+    certificate_file: {
+        type: DataTypes.STRING, // Dosyanın yolunu ya da adını saklamak için string kullanılabilir
+        allowNull: true // Opsiyonel olarak, bu alana bir dosya atanmayabilir
+    },
       permission_status: {
         type: DataTypes.BOOLEAN
       },
@@ -28,6 +33,4 @@ const CertificatePermission = sequelize.define("certificate_permissions", {
       },
     }, { timestamps: false });
 
-    //CertificatePermission.belongsTo(PilotCertificate, { foreignKey: 'certificate_id', targetKey: 'certificate_id' })
-    //CertificatePermission.belongsTo(Pilot, {foreignKey: 'pilot_id', targetKey: 'pilot_id' })
 module.exports = CertificatePermission;  

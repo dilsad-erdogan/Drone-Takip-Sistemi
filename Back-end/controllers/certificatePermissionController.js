@@ -2,6 +2,7 @@ const catchAsyncErrors = require('../middleware/catchAsyncErrors');
 const CertificatePermission = require("../models/CertificatePermission");
 const Pilot = require('../models/Pilot');
 const PilotCertificate = require('../models/PilotCertificate')
+const fs = require('fs');
 
 exports.getAll = catchAsyncErrors(async(req, res) => {
     try {
@@ -83,36 +84,52 @@ exports.getTotalPermissionCount = catchAsyncErrors(async (req, res) => {
 
 exports.add = catchAsyncErrors(async (req, res) => {
     try {
-        const { pilot_id, certificate_id, permission_status } = req.body
+        const { pilot_id, certificate_id } = req.body
         const _pilot = await Pilot.findByPk(pilot_id)
+        console.log(pilot_id)
+        console.log(certificate_id)
         const _certificate_id = await PilotCertificate.findByPk(certificate_id)
 
         if(!_pilot) {
             res.status(404).json({ success: false, message: 'Pilot not found!'})
+            return;
         } else if(!_certificate_id) {
             res.status(404).json({ success: false, message: 'Certificate not found!'})
+            return;
         } 
 
-        const permission = new CertificatePermission({
-            pilot_id: pilot_id,
-            certificate_id: certificate_id,
-            permission_status: permission_status,
-            date_and_time: Date.now(),
-            is_active: true
-        })
+        // Önce PDF dosyasını kaydedelim
+        const pdfFile = req.files.certificate_file; // Kullanıcının yüklediği PDF dosyası
+        const filePath = `uploads/${pdfFile.name}`; // Dosyanın kaydedileceği yol
+        pdfFile.mv(filePath, async (err) => {
+            if (err) {
+                console.error(err);
+                return res.status(500).json({ success: false, message: 'File upload error!' });
+            }
 
-        const savedPermission = await permission.save()
+            // PDF dosyasının yolu ile birlikte izinlerin kaydedilmesi
+            const permission = new CertificatePermission({
+                pilot_id: pilot_id,
+                certificate_id: certificate_id,
+                permission_status: true,
+                date_and_time: Date.now(),
+                is_active: true,
+                certificate_file: filePath // PDF dosyasının yolu
+            });
 
-        if(savedPermission){
-            res.status(201).json({ success: true, message: savedPermission })
-        } else {
-            res.status(400).json({ success: false, message: 'Permission error!'})
-        }
+            try {
+                const savedPermission = await permission.save();
+                res.status(201).json({ success: true, message: savedPermission });
+            } catch (error) {
+                console.error(error);
+                res.status(400).json({ success: false, message: 'Permission error!' });
+            }
+        });
     } catch(error) {
-        console.log(error);
-        res.status(500).json({ success: false, error: 'Internal server error!' })
+        console.error(error);
+        res.status(500).json({ success: false, error: 'Internal server error!' });
     }
-})
+});
 
 exports.update = catchAsyncErrors(async (req, res) => {
     try {
