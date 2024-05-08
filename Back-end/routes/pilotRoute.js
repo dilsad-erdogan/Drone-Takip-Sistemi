@@ -14,7 +14,7 @@ const {
 router.route('/all').get(getAll)
 router.route('/activeAll').get(getActiveAll)
 router.route('/total').get(getTotalPilotCount)
-router.route('/:id').get(getPilotById)
+router.route('/:pilot_id').get(getPilotById)
 router.route('/add').post(add)
 router.route('/update/:id').put(update)
 router.route('/delete/:id').patch(deletePilot)
