@@ -27,6 +27,8 @@ a{
     background-color: var(--bgSoft);
     border-radius: 10px;
     padding: 20px;
+    height: 100vh;
+    overflow-y: auto;
 }
 
 @media (max-width: 1000px){
@@ -459,4 +461,11 @@ a{
 .texts-permission{
     display: flex;
     flex-direction: column;
+}
+
+/***************MODAL***************/
+
+.line {
+    border-bottom: 1px solid #ccc;
+    margin: 10px 0;
 }
