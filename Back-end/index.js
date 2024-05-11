@@ -1,7 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const http = require('http');
 const PORT = process.env.PORT || 3000;
 const { expressWinstonLogger } = require('./controllers/logController');
 
@@ -37,10 +36,6 @@ app.get('/', (req, res) => {
   res.send("Homepage");
 });
 
-const server = http.createServer(app);
-const io = require('./socket');
-io.attach(server);
-
-server.listen(PORT, () => {
+app.listen(PORT, () => {
   console.log(`Server Started at Port ${PORT}`);
 });

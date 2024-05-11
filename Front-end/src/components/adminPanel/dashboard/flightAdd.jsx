@@ -22,7 +22,7 @@ const center = {
     lng: 35.243247985839844
 };
 
-const flightAdd = ({ socket }) => {
+const flightAdd = () => {
     const[users, setUsers] = useState([]);
     const[drones, setDrones] = useState([]);
     const[pilots, setPilots] = useState([]);
