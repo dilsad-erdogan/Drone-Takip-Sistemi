@@ -3,6 +3,7 @@ const CertificatePermission = require("../models/CertificatePermission");
 const Pilot = require('../models/Pilot');
 const PilotCertificate = require('../models/PilotCertificate')
 const fs = require('fs');
+const multer = require("multer")
 
 exports.getAll = catchAsyncErrors(async(req, res) => {
     try {
@@ -84,7 +85,8 @@ exports.getTotalPermissionCount = catchAsyncErrors(async (req, res) => {
 
 exports.add = catchAsyncErrors(async (req, res) => {
     try {
-        const { pilot_id, certificate_id } = req.body
+         const  pilot_id = req.body.pilot_id 
+         const certificate_id  = req.body.certificate_id
         const _pilot = await Pilot.findByPk(pilot_id)
         console.log(pilot_id)
         console.log(certificate_id)
@@ -97,24 +99,15 @@ exports.add = catchAsyncErrors(async (req, res) => {
             res.status(404).json({ success: false, message: 'Certificate not found!'})
             return;
         } 
-
-        // Önce PDF dosyasını kaydedelim
-        const pdfFile = req.files.certificate_file; // Kullanıcının yüklediği PDF dosyası
-        const filePath = `uploads/${pdfFile.name}`; // Dosyanın kaydedileceği yol
-        pdfFile.mv(filePath, async (err) => {
-            if (err) {
-                console.error(err);
-                return res.status(500).json({ success: false, message: 'File upload error!' });
-            }
-
-            // PDF dosyasının yolu ile birlikte izinlerin kaydedilmesi
+        console.log(req.file)
+        /* const pdfFile = req.files.certificate_file;
             const permission = new CertificatePermission({
-                pilot_id: pilot_id,
-                certificate_id: certificate_id,
+                pilot_id: 1,
+                certificate_id: 2,
                 permission_status: true,
                 date_and_time: Date.now(),
                 is_active: true,
-                certificate_file: filePath // PDF dosyasının yolu
+                certificate_file: filePath
             });
 
             try {
@@ -123,8 +116,8 @@ exports.add = catchAsyncErrors(async (req, res) => {
             } catch (error) {
                 console.error(error);
                 res.status(400).json({ success: false, message: 'Permission error!' });
-            }
-        });
+            } */
+        
     } catch(error) {
         console.error(error);
         res.status(500).json({ success: false, error: 'Internal server error!' });
