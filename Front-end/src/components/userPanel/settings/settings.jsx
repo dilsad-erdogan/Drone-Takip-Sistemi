@@ -28,7 +28,7 @@ const settings = () => {
     }
 
     fetchCertificateData();
-  })
+  }, []);
 
   const addCertificate = () => {
     const newCertificate = {
@@ -56,15 +56,15 @@ const settings = () => {
         <button className='btn btn-outline-light' onClick={() => {addCertificate()}}>Add Certificate</button>
       </div>
 
-      <div className='addForm'>
+      <form className='addForm' method='post' encType='multipart/form-data'>
         <select name='cat' id='id' onChange={(e) => {setCertificateId(e.target.value)}}>
           <option>Select a certificate</option>
           {certificate && certificate.map((data) => (
             data.is_active === true ? (<option key={data.certificate_id} value={data.certificate_id}>{data.certificate_name}</option>) : (console.log())
           ))}
         </select>
-        <input type='file' onChange={handleFileChange}></input>
-      </div>
+        <input type='file' name='avatar' accept='.pdf' onChange={handleFileChange}></input>
+      </form>
       
     </div>
   )

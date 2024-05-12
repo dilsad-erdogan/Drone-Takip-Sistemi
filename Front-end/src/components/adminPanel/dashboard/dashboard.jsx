@@ -78,7 +78,7 @@ const dashboard = () => {
     fetchDroneData();
     fetchFlightData();
     fetchData();
-  }, [socket]);  
+  }, []);  
 
   return (
     <div className='wrapper'>
