@@ -4,6 +4,7 @@ const Pilot = require('../models/Pilot');
 const PilotCertificate = require('../models/PilotCertificate')
 const fs = require('fs');
 const multer = require("multer")
+const path = require('path')
 
 exports.getAll = catchAsyncErrors(async(req, res) => {
     try {
@@ -83,31 +84,67 @@ exports.getTotalPermissionCount = catchAsyncErrors(async (req, res) => {
     }
 })
 
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'files');
+    },
+    filename: function (req, file, cb) {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        const ext = path.extname(file.originalname);
+        cb(null, file.fieldname + '-' + uniqueSuffix + ext);
+    }
+});
+
+// Yüklenen dosyaların filtrelenmesi
+const fileFilter = (req, file, cb) => {
+    // Sadece PDF dosyalarını kabul et
+    if (file.mimetype === 'application/pdf') {
+        cb(null, true);
+    } else {
+        cb(new Error('Only PDF files are allowed!'), false);
+    }
+};
+
+// Multer ayarlarını kullanarak dosya yükleme işlemi oluştur
+const upload = multer({ storage: storage, fileFilter: fileFilter }).single('certificate_file');
+
 exports.add = catchAsyncErrors(async (req, res) => {
     try {
-         const  pilot_id = req.body.pilot_id 
-         const certificate_id  = req.body.certificate_id
-        const _pilot = await Pilot.findByPk(pilot_id)
-        console.log(pilot_id)
-        console.log(certificate_id)
-        const _certificate_id = await PilotCertificate.findByPk(certificate_id)
 
-        if(!_pilot) {
-            res.status(404).json({ success: false, message: 'Pilot not found!'})
-            return;
-        } else if(!_certificate_id) {
-            res.status(404).json({ success: false, message: 'Certificate not found!'})
-            return;
-        } 
-        console.log(req.file)
-        /* const pdfFile = req.files.certificate_file;
+        upload(req, res, async function (err) {
+            if (err instanceof multer.MulterError) {
+                console.error(err);
+                return res.status(400).json({ success: false, message: 'File upload error!' });
+            } else if (err) {
+                console.error(err);
+                return res.status(400).json({ success: false, message: err.message });
+            }
+
+            // Dosya yüklendiğinde, dosyanın yolu `req.file.path` üzerinden erişilebilir
+            const filePath = req.file.path;
+
+            const  pilot_id = req.params.pilot_id 
+            const certificate_id  = req.params.certificate_id
+            const _pilot = await Pilot.findByPk(pilot_id)
+            console.log(pilot_id)
+            console.log(certificate_id)
+            const _certificate_id = await PilotCertificate.findByPk(certificate_id)
+    
+            if(!_pilot) {
+                res.status(404).json({ success: false, message: 'Pilot not found!'})
+                return;
+            } if(!_certificate_id) {
+                res.status(404).json({ success: false, message: 'Certificate not found!'})
+                return;
+            } 
+
             const permission = new CertificatePermission({
-                pilot_id: 1,
-                certificate_id: 2,
-                permission_status: true,
+                pilot_id: pilot_id,
+                certificate_id: certificate_id,
+                permission_status: false,
                 date_and_time: Date.now(),
                 is_active: true,
-                certificate_file: filePath
+                certificate_file: filePath // PDF dosyasının yolu
             });
 
             try {
@@ -116,8 +153,9 @@ exports.add = catchAsyncErrors(async (req, res) => {
             } catch (error) {
                 console.error(error);
                 res.status(400).json({ success: false, message: 'Permission error!' });
-            } */
-        
+            }
+        })
+
     } catch(error) {
         console.error(error);
         res.status(500).json({ success: false, error: 'Internal server error!' });

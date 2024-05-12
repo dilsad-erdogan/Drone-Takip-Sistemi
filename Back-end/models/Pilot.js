@@ -17,6 +17,10 @@ const Pilot = sequelize.define('pilots', {
         type: DataTypes.STRING,
         allowNull: false
     },
+    certificate_file: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
     is_active: {
         type: DataTypes.BOOLEAN,
         defaultValue: true
