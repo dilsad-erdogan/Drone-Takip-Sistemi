@@ -12,7 +12,7 @@ const droneModel = new DroneModel();
 import FlightModel from '../../../../../Back-end/connections/flight.js';
 const flightModel = new FlightModel();
 
-const dashboard = ({ socket }) => {
+const dashboard = () => {
   const [totalUser, setTotalUser] = useState('');
   const [totalDrone, setTotalDrone] = useState('');
   const [totalFlight, setTotalFlight] = useState('');
@@ -59,16 +59,26 @@ const dashboard = ({ socket }) => {
       } catch(error) {
         console.error('Error fetching total flight count:', error.message);
       }
-    }
-  
-    socket.on('flights', (data) => {
-        setFlights(data.message);
-    });
+    };
+
+    const fetchData = async () => {
+      try {
+        await flightModel.fetchFlightData();
+        const data = flightModel.getFlights();
+
+        if(Array.isArray(data.message)) {
+          setFlights(data.message);
+        }
+      } catch(error) {
+        console.error('Error fetching flights:', error);
+      }
+    };
 
     fetchUserData();
     fetchDroneData();
     fetchFlightData();
-  }, [socket]);  
+    fetchData();
+  }, []);  
 
   return (
     <div className='wrapper'>

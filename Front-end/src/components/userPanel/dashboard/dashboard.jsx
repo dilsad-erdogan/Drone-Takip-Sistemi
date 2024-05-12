@@ -12,7 +12,7 @@ const droneModel = new DroneModel();
 import FlightModel from '../../../../../Back-end/connections/flight.js';
 const flightModel = new FlightModel();
 
-const dashboard = ({ socket }) => {
+const dashboard = () => {
   const [totalDrone, setTotalDrone] = useState('');
   const [totalFlight, setTotalFlight] = useState('');
   const [flights, setFlights] = useState([]);

@@ -69,20 +69,17 @@ const MapModal = ({ show, onClose, data }) => {
                 <Modal.Body style={{ backgroundColor: '#182237', color: '#B7BAC1' }}>
                     {data ? (
                         <>
-                        <Row><Col>Drone uçuş numarası:</Col><Col><strong>{data.flight_number}</strong></Col></Row>
-                        <Row><Col>Owner:</Col><Col><strong>{ownerNames}</strong></Col></Row>
-                        <Row><Col>Pilot:</Col><Col><strong>{pilotNames}</strong></Col></Row>
-                        <Row><Col>Drone Serial Number:</Col><Col><strong>{droneSerial}</strong></Col></Row>
-                        <Row><Col>Drone tarih ve saat:</Col><Col><strong>{data.date_and_time}</strong></Col></Row>
+                        <Row><Col><strong>Drone uçuş numarası:</strong></Col><Col>{data.flight_number}</Col></Row>
+                        <div className='line'></div>
+                        <Row><Col><strong>Owner:</strong></Col><Col>{ownerNames}</Col></Row>
+                        <Row><Col><strong>Pilot:</strong></Col><Col>{pilotNames}</Col></Row>
+                        <Row><Col><strong>Drone Serial Number:</strong></Col><Col>{droneSerial}</Col></Row>
+                        <Row><Col><strong>Drone tarih ve saat:</strong></Col><Col>{data.date_and_time}</Col></Row>
                     </>
                     ) : (
                         <Row>Veri bulunamadı</Row>
                     )}
                 </Modal.Body>
-
-                <Modal.Footer style={{ backgroundColor: '#182237', color: '#B7BAC1' }}>
-                    <Button onClick={handleExit} style={{ backgroundColor: '#2e374a' }}>Çıkış</Button>
-                </Modal.Footer>
             </Modal>
         </div>
     );

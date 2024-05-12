@@ -13,7 +13,7 @@ import Settings from './settings/settings';
 import DroneAdd from './drone/dronePanel/droneAdd';
 import FlightAdd from './dashboard/flightAdd';
 
-const userPanel = ({ screen, socket }) => {
+const userPanel = ({ screen }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -30,7 +30,7 @@ const userPanel = ({ screen, socket }) => {
   const content = () => {
     switch (screen) {
       case 'panel':
-        return <Dashboard socket={socket}></Dashboard>;
+        return <Dashboard></Dashboard>;
       case 'map':
         return <Map></Map>;
       case 'drone':
@@ -42,7 +42,7 @@ const userPanel = ({ screen, socket }) => {
       case 'droneAdd':
         return <DroneAdd></DroneAdd>;
       case 'flightAdd':
-        return <FlightAdd socket={socket}></FlightAdd>;
+        return <FlightAdd></FlightAdd>;
       default:
         return null;
     }

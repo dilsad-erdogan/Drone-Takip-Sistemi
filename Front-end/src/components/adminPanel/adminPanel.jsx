@@ -38,7 +38,7 @@ import TypeUpdate from './droneType/typePanel/typeUpdate';
 import RoleUpdate from './userRoleType/rolePanel/roleUpdate';
 import CertificateUpdate from './certificate/certificatePanel/certificateUpdate';
 
-const adminPanel = ({ screen, socket }) => {
+const adminPanel = ({ screen }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -56,7 +56,7 @@ const adminPanel = ({ screen, socket }) => {
   const content = () => {
     switch (screen) {
       case 'dashboard':
-        return <Dashboard socket={socket}></Dashboard>;
+        return <Dashboard></Dashboard>;
       case 'map':
         return <Map></Map>;
       case 'user':
@@ -90,7 +90,7 @@ const adminPanel = ({ screen, socket }) => {
       case 'droneAdd':
         return <DroneAdd></DroneAdd>;
       case 'flightAdd':
-        return <FlightAdd socket={socket}></FlightAdd>;
+        return <FlightAdd></FlightAdd>;
       case 'brandAdd':
         return <BrandAdd></BrandAdd>;
       case 'modelAdd':
