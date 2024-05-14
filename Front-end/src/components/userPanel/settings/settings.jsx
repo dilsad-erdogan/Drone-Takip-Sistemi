@@ -35,7 +35,7 @@ const settings = () => {
       certificate_file: selectedFile
     };
 
-    certificatePermissionModel.addCertificatePermission(localStorage.getItem("userId"), certificateId, selectedFile).then(() => {
+    certificatePermissionModel.addCertificatePermission(localStorage.getItem("userId"), certificateId, newCertificate).then(() => {
       alert("Sertifika isteğiniz başarıyla yönlendirilmiştir.");
     }).catch((error) => {
       alert("İzin sırasında bir hata oluştu." + error);

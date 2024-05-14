@@ -126,8 +126,6 @@ exports.add = catchAsyncErrors(async (req, res) => {
             const  pilot_id = req.params.pilot_id 
             const certificate_id  = req.params.certificate_id
             const _pilot = await Pilot.findByPk(pilot_id)
-            console.log(pilot_id)
-            console.log(certificate_id)
             const _certificate_id = await PilotCertificate.findByPk(certificate_id)
     
             if(!_pilot) {
@@ -144,7 +142,7 @@ exports.add = catchAsyncErrors(async (req, res) => {
                 permission_status: false,
                 date_and_time: Date.now(),
                 is_active: true,
-                certificate_file: filePath // PDF dosyasının yolu
+                certificate_file: filePath
             });
 
             try {

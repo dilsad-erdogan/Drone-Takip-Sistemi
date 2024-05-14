@@ -1,5 +1,6 @@
 const catchAsyncErrors = require('../middleware/catchAsyncErrors')
 const Pilot = require('../models/Pilot')
+const PilotCertificate = require('../models/PilotCertificate')
 const User = require('../models/User')
 const multer = require("multer")
 const path = require('path')
@@ -95,14 +96,15 @@ const upload = multer({ storage: storage, fileFilter: fileFilter }).single('cert
 
 exports.add = catchAsyncErrors(async (req, res) => {
     try {
-        const { user_id, pilot_certificate } = req.body
+        const user_id = req.params.user_id 
+        const certificate_id  = req.params.certificate_id
 
         const user = await User.findByPk(user_id)
+        const certificate = await PilotCertificate.findByPk(certificate_id)
 
-        if(!user) {
-            res.status(404).json({ success: false, message: 'User not found!' })
+        if(!user || !certificate) {
+            res.status(404).json({ success: false, message: 'Not found!' })
         } else {
-
             upload(req, res, async function (err) {
                 if (err instanceof multer.MulterError) {
                     console.error(err);
@@ -112,20 +114,19 @@ exports.add = catchAsyncErrors(async (req, res) => {
                     return res.status(400).json({ success: false, message: err.message });
                 }
     
-                // Dosya yüklendiğinde, dosyanın yolu `req.file.path` üzerinden erişilebilir
                 const filePath = req.file.path;
 
-                const certificate_id  = req.params.certificate_id
+/*                 const certificate_id  = req.params.certificate_id
                 const _certificate_id = await PilotCertificate.findByPk(certificate_id)
                 
                 if(!_certificate_id) {
                     res.status(404).json({ success: false, message: 'Certificate not found!'})
                     return;
-                } 
+                }  */
     
                 const pilot = await Pilot.create({
                     user_id: user.user_id,
-                    pilot_certificate: pilot_certificate,
+                    pilot_certificate: certificate_id,
                     certificate_file: filePath,
                     is_active: true
                 })
@@ -137,7 +138,7 @@ exports.add = catchAsyncErrors(async (req, res) => {
                     console.error(error);
                     res.status(400).json({ success: false, message: 'Pilot error!' });
                 }
-            })
+            }) 
 
             
         }
@@ -154,7 +155,7 @@ exports.update = catchAsyncErrors(async (req, res) => {
         console.log(error);
         res.status(500).json({ success: false, error: 'Internal server error!' })
     }
-})//boş
+})
 
 exports.deletePilot = catchAsyncErrors(async (req, res) => {
     try {
