@@ -84,8 +84,7 @@ const googleMap = () => {
   useEffect(() => {
     const interval = setInterval(async () => {
       clusterer.current.clearMarkers();
-  
-      let alerts = {}; // Uçuşların bitip bitmediğini kontrol etmek için bir nesne oluşturulur
+
       flightsData.forEach(async flight => {
         const startPoint = flight.startPoint.coordinates;
         const endPoint = flight.endPoint.coordinates;
@@ -113,17 +112,7 @@ const googleMap = () => {
         });
 
         if (Math.abs(newCoordinates.coordinates.coordinates[0] - endPoint[0]) < step && Math.abs(newCoordinates.coordinates.coordinates[1] - endPoint[1]) < step) {
-          if (!alerts[flight._id]) {
-            alerts[flight._id] = true;
-            const newEndPoint = {
-              endPoint: {
-                type: "Point",
-                coordinates: [flight.coordinates.coordinates[0], flight.coordinates.coordinates[1]]
-              }
-            };
-            await flightModel.updateEndFlight(flight._id, newEndPoint);
-            alert(`${flight.drone_id}, seri numaralı drone hedefine ulaştı.`);
-          }
+          await flightModel.updateEndFlight(flight._id);
         } else {
           flightModel.updateFlight(flight._id, newCoordinates).then(() => {
             // Çizgiyi haritaya ekle

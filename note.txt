@@ -1,8 +1,14 @@
 * pilot update controller yapılacak
-* Web socket bağlantısını kontrol et direkt açılınca bilgiler gelsin
 * flight end olma ( line kalıyor silinsin )
 * dashboard grafik için backend ve frontend ayarlaması yapılacak
 * açık ve koyu tema yapılacak
-* modal güzellenecek
-* ekran büyüdükçe side bar kaymalı
 * pdf ekleme olayları
+
+
+
+******
+permission table tarih görünüm düzelt
+permission'da yeni gelen izinler üstte dursun
+flight end??????
+flight ekle
+******

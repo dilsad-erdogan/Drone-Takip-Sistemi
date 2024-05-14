@@ -156,7 +156,8 @@ const flightAdd = () => {
     }
 
     return (
-        <div className='topPanel'>
+        <div className='addUpdatePage'>
+        <div className='addUpdatePanel'>
             <div className="top">
                 <h2>Flight Add Page</h2>
             </div>
@@ -183,7 +184,7 @@ const flightAdd = () => {
                     </select>
                     <input type='datetime-local' placeholder='Flight Date and Time' value={dateAndTime} onChange={(e) => {setDateAndTime(e.target.value)}}></input>
                     {/* <Datetime value={dateAndTime} onChange={setDateAndTime} inputProps={{ placeholder: 'Flight Date and Time' }}></Datetime> */}
-                    <div className='container-fluid'>
+                    <div className='container-fluid' style={{marginTop: 20}}>
                         {isLoaded ? (
                             <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={6} onClick={handleMapClick}>
                                 {markers.map((marker, index) => (
@@ -196,6 +197,7 @@ const flightAdd = () => {
                     </div>
                     <button type='submit'>Submit</button>
                 </form>
+            </div>
             </div>
         </div>
     )

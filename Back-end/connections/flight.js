@@ -54,14 +54,13 @@ class Flight{
         }
     }
 
-    async updateEndFlight(flightId, coordinates){
+    async updateEndFlight(flightId){
         try{
             const response = await fetch(`http://localhost:3000/flight/end/${flightId}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(coordinates),
+                }
             });
     
             if(!response.ok){

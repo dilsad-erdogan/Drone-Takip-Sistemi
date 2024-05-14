@@ -98,6 +98,7 @@ const permission = () => {
 
     permissionModel.updatePermission(permission_id, newPermission).then(() => {
       alert('Uçuş reddedildi.');
+      fetchData();
     }).catch((error) => {
       console.error('Hata:', error.message);
     });
