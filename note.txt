@@ -7,4 +7,3 @@
 backend byte pdf
 
 add pilot istersen ayarla
-grafik front
