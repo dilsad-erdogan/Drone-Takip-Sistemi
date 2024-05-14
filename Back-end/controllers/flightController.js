@@ -2,6 +2,7 @@ const Flight = require("../models/Flight")
 const Drone = require("../models/Drone");
 const User = require("../models/User");
 const Pilot = require("../models/Pilot");
+const moment = require('moment');
 
 async function generateFlightNumber() {
     const letters = 'ABCDEFGHIJKLMNOPQRSTUVWYZ'
