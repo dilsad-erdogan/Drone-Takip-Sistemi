@@ -78,9 +78,9 @@ class CertificatePermission{
         }
     }
 
-    async addCertificatePermission(newCertificatePermission){
+    async addCertificatePermission(pilotId, certificateId, newCertificatePermission){
         try{
-            const response = await fetch('http://localhost:3000/certificatePermission/add', {
+            const response = await fetch(`http://localhost:3000/certificatePermission/add/${pilotId}/${certificateId}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
