@@ -78,14 +78,11 @@ class CertificatePermission{
         }
     }
 
-    async addCertificatePermission(pilotId, certificateId, newCertificatePermission){
+    async addCertificatePermission(pilotId, certificateId, formData){
         try{
             const response = await fetch(`http://localhost:3000/certificatePermission/add/${pilotId}/${certificateId}`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(newCertificatePermission),
+                body: formData,
             });
 
             if(!response.ok){

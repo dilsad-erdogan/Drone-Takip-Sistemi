@@ -3,12 +3,14 @@ import '../../ui/panel.css';
 import CertificateModel from '../../../../../Back-end/connections/pilotCertificate';
 const certificateModel = new CertificateModel();
 import CertificatePermissionModel from '../../../../../Back-end/connections/certificatePermission';
+import { useNavigate } from 'react-router-dom';
 const certificatePermissionModel = new CertificatePermissionModel();
 
 const settings = () => {
   const [certificateId, setCertificateId] = useState('');
   const [certificate, setCertificate] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCertificateData = async () => {
@@ -31,12 +33,14 @@ const settings = () => {
   }, []);
 
   const addCertificate = () => {
-    const newCertificate = {
-      certificate_file: selectedFile
-    };
+    const formData = new FormData();
+    formData.append('certificate_file', selectedFile);
 
     certificatePermissionModel.addCertificatePermission(localStorage.getItem("userId"), certificateId, newCertificate).then(() => {
+
       alert("Sertifika isteğiniz başarıyla yönlendirilmiştir.");
+      navigate('/user');
+      
     }).catch((error) => {
       alert("İzin sırasında bir hata oluştu." + error);
     });

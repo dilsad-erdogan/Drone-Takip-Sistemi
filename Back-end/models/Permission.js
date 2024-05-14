@@ -25,7 +25,8 @@ const permissionSchema = new mongoose.Schema({
         //default: false,
     },
     date_and_time: {
-        type: String,
+        type: Date,
+        default: Date.now,
     },
     startPoint: {
         type: {

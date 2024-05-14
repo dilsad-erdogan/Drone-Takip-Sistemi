@@ -149,7 +149,7 @@ const permission = () => {
         </thead>
 
         <tbody>
-          {permissions.map((flight) => (
+          {permissions.slice().reverse().map((flight) => (
             <tr key={flight._id}>
               <td>{userNames[flight.owner_id]}</td>
               <td>{pilotNames[flight.pilot_id]}</td>
