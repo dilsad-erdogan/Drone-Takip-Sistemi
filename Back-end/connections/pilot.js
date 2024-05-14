@@ -55,14 +55,11 @@ class Pilot{
         }
     }
 
-    async addPilot(newPilot){
+    async addPilot(userId, certificateId, formData){
         try{
-            const response = await fetch('http://localhost:3000/pilot/add', {
+            const response = await fetch(`http://localhost:3000/pilot/add/${userId}/${certificateId}`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(newPilot),
+                body: formData,
             });
 
             if(!response.ok){

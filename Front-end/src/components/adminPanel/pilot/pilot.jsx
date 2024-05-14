@@ -100,29 +100,25 @@ const pilot = () => {
           <tr>
             <td>User Name</td>
             <td>Pilot Certificate</td>
-            <td>Active</td>
             <td>Action</td>
           </tr>
         </thead>
 
         <tbody>
           {filteredData.map((pilot) => (
-            <tr key={pilot.pilot_id}>
-              <td>{userNames[pilot.user_id]}</td>
-              <td>{pilot.pilot_certificate}</td>
-              <td>
-                <div className='form-check form-switch'>
-                  <input className='form-check-input' type='checkbox' checked={pilot.is_active} onChange={() => {}}></input>
-                </div>
-              </td>
-              <td>
-                <div className='buttons'>
-                  <button className='button update' onClick={() => {updateButtonClick(pilot.pilot_id)}}>Update</button>
+            pilot.is_active ? (
+              <tr key={pilot.pilot_id}>
+                <td>{userNames[pilot.user_id]}</td>
+                <td>{pilot.pilot_certificate}</td>
+                <td>
+                  <div className='buttons'>
+                    <button className='button update' onClick={() => {updateButtonClick(pilot.pilot_id)}}>Update</button>
 
-                  <button className='button delete' onClick={() => {deleteButtonClick(pilot.pilot_id)}}>Delete</button>
-                </div>
-              </td>
-            </tr>
+                    <button className='button delete' onClick={() => {deleteButtonClick(pilot.pilot_id)}}>Delete</button>
+                  </div>
+                </td>
+              </tr>
+            ) : (console.log())
           ))}
         </tbody>
       </table>

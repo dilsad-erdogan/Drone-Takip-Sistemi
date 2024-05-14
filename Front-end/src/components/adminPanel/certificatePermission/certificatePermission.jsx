@@ -8,6 +8,8 @@ import UserModel from '../../../../../Back-end/connections/user.js';
 const userModel = new UserModel();
 import PilotCertificate from '../../../../../Back-end/connections/pilotCertificate.js';
 const pilotCertificate = new PilotCertificate();
+import PilotModel from '../../../../../Back-end/connections/pilot.js';
+const pilotModel = new PilotModel();
 
 const certificatePermission = () => {
   const [deleteModal, setDeleteModal] = useState(false);
@@ -97,9 +99,16 @@ const certificatePermission = () => {
       permission_status: true,
     };
 
+    const formData = new FormData();
+    formData.append('certificate_file', certificatePermission.certificate_file);
+
     certificatePermissionModel.updateCertificatePermission(certificatePermission.certificate_id, newCertificate).then(() => {
-      alert('Certificate ataması onaylandı.');
-      fetchData();
+      pilotModel.addPilot(localStorage.getItem("userId"), certificatePermission.certificate_id, formData).then(() => {
+        alert('Certificate ataması onaylandı.');
+        fetchData();
+      }).catch((error) => {
+        alert("İzin sırasında bir hata oluştu." + error);
+      })
     }).catch((error) => {
       console.error('Hata:', error.message);
     });

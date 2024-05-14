@@ -36,11 +36,9 @@ const settings = () => {
     const formData = new FormData();
     formData.append('certificate_file', selectedFile);
 
-    certificatePermissionModel.addCertificatePermission(localStorage.getItem("userId"), certificateId, newCertificate).then(() => {
-
+    certificatePermissionModel.addCertificatePermission(localStorage.getItem("userId"), certificateId, formData).then(() => {
       alert("Sertifika isteğiniz başarıyla yönlendirilmiştir.");
       navigate('/user');
-      
     }).catch((error) => {
       alert("İzin sırasında bir hata oluştu." + error);
     });

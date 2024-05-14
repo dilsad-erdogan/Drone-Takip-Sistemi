@@ -2,13 +2,9 @@
 * flight end olma ( line kalıyor silinsin )
 * dashboard grafik için backend ve frontend ayarlaması yapılacak
 * açık ve koyu tema yapılacak
-* pdf ekleme olayları
+* pdf ekleme olayları certifika onayında pilot tablosuna eklerken sıkıntılı
 
+backend byte pdf
 
-
-******
-permission table tarih görünüm düzelt
-permission'da yeni gelen izinler üstte dursun
-flight end??????
-flight ekle
-******
+add pilot istersen ayarla
+grafik front
