@@ -3,33 +3,21 @@ import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } f
 
 const data = [
   {
-    name: 'Monday',
-    flight: 3000,
+    name: '1st Week',
+    flight: 30,
   },
   {
-    name: 'Tuesday',
-    flight: 1400,
+    name: '2nd Week',
+    flight: 14,
   },
   {
-    name: 'Wednesday',
-    flight: 4000,
+    name: '3rd Week',
+    flight: 40,
   },
   {
-    name: 'Thursday',
-    flight: 8000,
-  },
-  {
-    name: 'Friday',
-    flight: 3500,
-  },
-  {
-    name: 'Saturday',
-    flight: 2000,
-  },
-  {
-    name: 'Sunday',
-    flight: 10000,
-  },
+    name: '4th Week',
+    flight: 80,
+  }
 ];
 
 const chart = () => {
