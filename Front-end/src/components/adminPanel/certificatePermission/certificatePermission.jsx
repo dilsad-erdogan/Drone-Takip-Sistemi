@@ -129,6 +129,7 @@ const certificatePermission = () => {
             <td>Pilot Name</td>
             <td>Certificate Name</td>
             <td>Permission Status</td>
+            <td>Certificate File</td>
             <td>Date and Time</td>
             <td>Active</td>
             <td>Action</td>
@@ -142,6 +143,7 @@ const certificatePermission = () => {
               <td>{pilotNames[certificate.pilot_id]}</td>
               <td>{certidifateName[certificate.certificate_id]}</td>
               <td>{certificate.permission_status === true ? 'true' : 'false'}</td>
+              <td>{certificate.certificate_file}</td>
               <td>{certificate.date_and_time}</td>
               <td>
                 <div className='form-check form-switch'>
