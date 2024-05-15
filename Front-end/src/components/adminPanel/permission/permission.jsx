@@ -1,5 +1,4 @@
 import '../../ui/panel.css';
-import Search from '../../ui/commonUsage/search';
 import Pagination from '../../ui/commonUsage/pagination.jsx';
 import { useEffect, useState } from 'react';
 import PermissionModel from '../../../../../Back-end/connections/permission.js';
