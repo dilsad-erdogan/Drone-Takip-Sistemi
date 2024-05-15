@@ -153,7 +153,7 @@ const googleMap = () => {
     <>
       <div className="container-fluid">
         {isLoaded ? (
-          <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={6} options={{fullscreenControl: false}} onLoad={onLoad}></GoogleMap>
+          <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={7} options={{fullscreenControl: false}} onLoad={onLoad}></GoogleMap>
         ) : (
           <p>Harita yükleniyor...</p>
         )}
